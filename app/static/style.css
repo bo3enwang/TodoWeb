@@ -27,7 +27,7 @@ body {
 }
 
 
-.task-add {
+.project-add {
     float: right;
 }
 .progress{
@@ -37,4 +37,12 @@ body {
 .modal-title{
     color: #000;
 
+}
+
+.input-group{
+    margin-bottom: 20px ;
+}
+
+.p-text{
+    color: #000;
 }

@@ -3,14 +3,13 @@
  */
 (function ($) {
 
-    $(document).ready(function() {
-		fullWidthHeight();
+    $(document).ready(function () {
+        fullWidthHeight();
+    });
 
-	});
-
-	$(window).resize(function() {
-		fullWidthHeight();
-	});
+    $(window).resize(function () {
+        fullWidthHeight();
+    });
 
     function fullWidthHeight() {
         var w = $(window).width();
@@ -21,3 +20,18 @@
         });
     }
 })(jQuery);
+
+function type_normal() {
+    $("#type").val(1);
+    $("#typeName").html("普通");
+}
+
+function type_first() {
+    $("#type").val(5);
+    $("#typeName").html("优先");
+}
+
+function addproject_submit() {
+    $("#addproject_form").submit();
+}
+

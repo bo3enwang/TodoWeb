@@ -32,9 +32,8 @@ class LoginForm(Form):
         return db.session.query(User).filter_by(username=self.username.data).first()
 
 
-class AddTaskForm(Form):
-    content = TextField('任务内容', validators=[DataRequired()])
-    type = TextField('任务优先级', validators=[DataRequired()])
-    task_all = TextField('进度总长', validators=[DataRequired()])
-    start_time = TextField('开始日期', validators=[DataRequired()])
-    end_time = TextField('结束日期', validators=[DataRequired()])
+class AddProjectForm(Form):
+    content = TextField('计划内容', validators=[DataRequired()])
+    type = TextField('计划优先级', validators=[DataRequired()])
+    project_all = TextField('计划总长', validators=[DataRequired()])
+    project_day = TextField('计划天数', validators=[DataRequired()])

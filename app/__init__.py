@@ -5,6 +5,11 @@ from flask import Flask, request, url_for, g, render_template, flash
 import os
 from flask.ext.login import LoginManager
 from flask.ext.sqlalchemy import SQLAlchemy
+import sys
+
+# convert python's encoding to utf8
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 app = Flask(__name__)
 app.config.from_object('config')
