@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <div class="index-main">
+        <div class="index-panel input-group">
+            <div class="login-title">Watch Time</div>
+            <div class="login-container">
+                <form class="form-signin" action="/login" method="post">
+                    {{ form.hidden_tag() if form.hidden_tag }}
+                    <div class="glyphicon-warning-sign">
+                        {{ get_flashed_messages()[0] }}
+                    </div>
+                    <div class="form-input">
+                        <input id="username" name="username" class="form-control" type="text" placeholder="Username" required >
+                    </div>
+                    <div class="form-input">
+                        <input id="password" name="password" class="form-control" type="password" placeholder="Password" required >
+                    </div>
+                    <div class="checkbox">
+                        <label>{{ form.remember_me(class='checkbox') }} Remember Me</label>
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="Sign In"/>
+                    <a class="btn btn-primary">Register</a>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

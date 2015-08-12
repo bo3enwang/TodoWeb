@@ -36,6 +36,9 @@ pip-delete-this-directory.txt
 # IDEA
 *.idea
 
+# db_repository
+/db_repository/*
+
 # Unit test / coverage reports
 htmlcov/
 .tox/
