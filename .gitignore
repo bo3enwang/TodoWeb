@@ -33,6 +33,9 @@ var/
 pip-log.txt
 pip-delete-this-directory.txt
 
+# IDEA
+*.idea
+
 # Unit test / coverage reports
 htmlcov/
 .tox/
