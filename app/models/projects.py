@@ -1,41 +1,23 @@
-# -*- coding:utf8 -*-
+# -*- coding:utf8 -*- 
 __author__ = 'Zovven'
 
 from app import db
 import hashlib
 from datetime import date, datetime, timedelta
+from werkzeug.utils import cached_property
+from flask_sqlalchemy import BaseQuery
+from users import User
 
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True)
-    password = db.Column(db.String(80))
-    nickname = db.Column(db.String(80))
-    last_seen = db.Column(db.DateTime)
-
-    # Flask-Login integration
-    def is_authenticated(self):
-        return True
-
-    def is_active(self):
-        return True
-
-    def is_anonymous(self):
-        return False
-
-    def get_id(self):
-        return unicode(self.id)
-
-    @staticmethod
-    def get_auth_token(self):
-        m = hashlib.md5(self.username)
-        return m.hexdigest()
-
-    def __repr__(self):
-        return '<User %r>' % self.nickname
+class ProjectQuery(BaseQuery):
+    def jsonify(self):
+        for project in self.all():
+            yield project.json
 
 
 class Project(db.Model):
+    query_class = ProjectQuery
+
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(80))
     type = db.Column(db.Integer)
@@ -59,6 +41,18 @@ class Project(db.Model):
         print self.end_time
         timedelta = self.end_time - self.start_time
         return timedelta.days
+
+    @cached_property
+    def json(self):
+        return dict(project_id=self.id,
+                    content=self.content,
+                    type=self.type,
+                    project_now=self.project_now,
+                    project_all=self.project_all,
+                    project_day=self.project_day,
+                    start_time=self.start_time,
+                    end_time=self.end_time,
+                    user_id=self.user_id)
 
 
 class ProjectHistory(db.Model):

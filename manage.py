@@ -3,6 +3,8 @@ from flask.ext.script import Manager
 from app import app
 from app import db
 from app.models import User, Project
+import json
+from flask import jsonify
 
 manager = Manager(app)
 
@@ -17,8 +19,8 @@ def saveuser():
 
 @manager.command
 def queryproject():
-    project = Project.query.first()
-    print project.project_percent
+    projects = Project.query.jsonify()
+    print projects
 
 
 if __name__ == '__main__':

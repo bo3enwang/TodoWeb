@@ -5,7 +5,7 @@ from flask.ext.wtf import Form
 from wtforms import TextAreaField, BooleanField, TextField, SelectField, DateField
 from wtforms.validators import DataRequired, ValidationError
 from app import db
-from app.models import User
+from app.models.users import User
 
 
 class LoginForm(Form):

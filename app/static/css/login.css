@@ -2,15 +2,15 @@
 	GENERAL
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 html, body {
-    height: 100%; /*ÉèÖÃhtmlºÍbodyµÄwidthºÍheightÎª100%£¬¿ÉÊ¹È«ÆÁÉúĞ§*/
+    height: 100%; /*è®¾ç½®htmlå’Œbodyçš„widthå’Œheightä¸º100%ï¼Œå¯ä½¿å…¨å±ç”Ÿæ•ˆ*/
     width: 100%;
     font-size: 16px;
-    margin: 0px; /*ÉèÖÃÉÏÏÂ×óÓÒµÄÏà¶ÔÎ»ÖÃÎª0£¬¿É±ÜÃâ³¬³ö·¶Î§³öÏÖ¹ö¶¯Ìõ*/
+    margin: 0px; /*è®¾ç½®ä¸Šä¸‹å·¦å³çš„ç›¸å¯¹ä½ç½®ä¸º0ï¼Œå¯é¿å…è¶…å‡ºèŒƒå›´å‡ºç°æ»šåŠ¨æ¡*/
 }
 
 body {
-    white-space: nowrap; /*ÉèÖÃwhite-space:nowrap£¬Í¬Ê±ÔÚÏà¶Ô²ÎÕÕÔªËØÖĞÏß¾ÓÖĞÊ±Éè¶¨display:inline-block£¬¿É±ÜÃâä¯ÀÀÆ÷Ëõ·ÅÊ±£¬´¹Ö±¾ÓÖĞµÄÈİÆ÷»»ĞĞ*/
-    text-align: center; /*ÉèÖÃtext-align: center£¬¿ÉÊ¹×ÓÈİÆ÷Ë®Æ½¶ÔÆë*/
+    white-space: nowrap; /*è®¾ç½®white-space:nowrapï¼ŒåŒæ—¶åœ¨ç›¸å¯¹å‚ç…§å…ƒç´ ä¸­çº¿å±…ä¸­æ—¶è®¾å®šdisplay:inline-blockï¼Œå¯é¿å…æµè§ˆå™¨ç¼©æ”¾æ—¶ï¼Œå‚ç›´å±…ä¸­çš„å®¹å™¨æ¢è¡Œ*/
+    text-align: center; /*è®¾ç½®text-align: centerï¼Œå¯ä½¿å­å®¹å™¨æ°´å¹³å¯¹é½*/
     background: url(images/index_bg.jpg);
 }
 
@@ -55,11 +55,12 @@ body {
     margin-bottom: 30px;
 }
 
-.btn{
+.btn {
     margin-left: 5px;
     float: right;
 }
-.checkbox{
+
+.checkbox {
     color: #ffffff;
     float: left;
 }

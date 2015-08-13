@@ -15,8 +15,7 @@
         var w = $(window).width();
         var h = $(window).height();
         $(".time-main").css({
-            width: w,
-            "min-height": h
+            "min-height": h*0.9
         });
     }
 })(jQuery);

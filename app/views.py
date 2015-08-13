@@ -2,8 +2,9 @@
 __author__ = 'Zovven'
 
 from app import app, lm
-from models import User, Project, ProjectHistory
-from flask import render_template, flash, redirect, session, url_for, request, g
+from models.projects import Project, ProjectHistory
+from models.users import User
+from flask import render_template, flash, redirect, session, url_for, request, g, jsonify
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from forms import LoginForm, AddProjectForm
 from datetime import datetime
@@ -82,10 +83,16 @@ def addProject():
 def myproject():
     addProjectform = AddProjectForm()
     projects = Project.query.filter_by(user=g.user).all()
-    return render_template('project.html', form=addProjectform,projects=projects)
+    return render_template('project.html', form=addProjectform, projects=projects)
 
 
 @app.route('/todo')
 @login_required
 def mytodo():
     return render_template('todo.html')
+
+
+@app.route("/api/project/list")
+def api_project_list():
+    projects = Project.query.filter_by(user=g.user).all()
+    return jsonify(projects.jsonify())
