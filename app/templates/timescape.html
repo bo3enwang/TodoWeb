@@ -1,51 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link href="{{ url_for('static', filename = 'css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
-    <link href="{{ url_for('static', filename = 'style.css') }}" rel="stylesheet" media="screen">
-    <script src="{{ url_for('static', filename = 'jquery-1.11.3.min.js') }}"></script>
-    <script src="{{ url_for('static', filename = 'js/bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('static', filename = 'style.js') }}"></script>
+    <link href="{{ url_for('static', filename = 'css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename = 'assets/css/timescape.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static', filename = 'js/jquery-1.11.3.min.js') }}"></script>
     <meta charset="UTF-8">
     <title></title>
 </head>
 <body>
-<div class="time-main">
-    <div class="time-header">
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#">Brand</a>
-                </div>
+{#MAIN HEAD#}
+<div class="main-header">
 
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="active"><a href="/task">Task</a></li>
-                        <li><a href="todo">Todo</a></li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                               aria-haspopup="true" aria-expanded="false">
-                                {% if current_user.is_authenticated() %}
-                                    {{ current_user.nickname }}
-                                {% endif %} <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="/logout">Logout</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <!-- /.navbar-collapse -->
-            </div>
-            <!-- /.container-fluid -->
-        </nav>
-    </div>
-
-    <div class="time-container">
-        {% block content %}
-        {% endblock %}
-    </div>
+    <nav class="navbar navbar-static-top" role="navigation">
+        <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+                <li><a href="#">bowen</a></li>
+            </ul>
+        </div>
+    </nav>
 </div>
+<aside class="main-sidebar">
+    <section class="sidebar">
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+          <ul class="sidebar-menu">
+            <li class="header">MAIN NAVIGATION</li>
+            <li class="active treeview">
+              <a href="#">
+                <i class="fa fa-dashboard"></i> <span>Dashboard</span> <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li class="active"><a href="index.html"><i class="fa fa-circle-o"></i> Dashboard v1</a></li>
+                <li><a href="index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
+              </ul>
+            </li>
+            <li class="treeview">
+              <a href="#">
+                <i class="fa fa-files-o"></i>
+                <span>Layout Options</span>
+                <span class="label label-primary pull-right">4</span>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
+                <li><a href="pages/layout/boxed.html"><i class="fa fa-circle-o"></i> Boxed</a></li>
+                <li><a href="pages/layout/fixed.html"><i class="fa fa-circle-o"></i> Fixed</a></li>
+                <li><a href="pages/layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i> Collapsed Sidebar</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="pages/widgets.html">
+                <i class="fa fa-th"></i> <span>Widgets</span> <small class="label pull-right bg-green">new</small>
+              </a>
+            </li>
+           </ul>
+          </ul>
+    </section>
+</aside>
+<div class="content-wrapper">
+
+
+</div>
+
+<script src="{{ url_for('static', filename = 'js/bootstrap.min.js') }}"></script>
 </body>
 </html>
