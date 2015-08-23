@@ -2,7 +2,8 @@ __author__ = 'Zovven'
 from flask.ext.script import Manager
 from app import app
 from app import db
-from app.models import User, Project
+from app.models.users import User
+from app.models.projects import Project
 import json
 from flask import jsonify
 
