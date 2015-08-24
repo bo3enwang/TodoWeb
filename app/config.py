@@ -26,25 +26,23 @@ class DefaultConfig(object):
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_POOL_SIZE = 30
 
-    # 需要测试发送邮件功能的时候，自由设置！
-    # 如果需要开启代码中向管理员发送邮件的功能的话，需要在 ADMINS 里面添加收件人
-    # 如: ADMINS = ('admin@newsmeme.com')。默认情况下这个功能关闭
-    ADMINS = ()
-
-    MAIL_SERVER = u'smtp.qq.com'
-    MAIL_USERNAME = u'920863755@qq.com'
-    MAIL_PASSWORD = u'wbw1992'
-    DEFAULT_MAIL_SENDER = u'smtp.qq.com'
-
-    ACCEPT_LANGUAGES = ['en', 'fi']
-
-    DEBUG_LOG = 'logs/debug.log'
-    ERROR_LOG = 'logs/error.log'
-
-    THEME = 'zo'
-
-    CACHE_TYPE = "simple"
-    CACHE_DEFAULT_TIMEOUT = 300
+    # # 需要测试发送邮件功能的时候，自由设置！
+    # # 如果需要开启代码中向管理员发送邮件的功能的话，需要在 ADMINS 里面添加收件人
+    # # 如: ADMINS = ('admin@newsmeme.com')。默认情况下这个功能关闭
+    # ADMINS = ()
+    #
+    # MAIL_SERVER = u'smtp.qq.com'
+    # MAIL_USERNAME = u'920863755@qq.com'
+    # MAIL_PASSWORD = u'wbw1992'
+    # DEFAULT_MAIL_SENDER = u'smtp.qq.com'
+    #
+    # ACCEPT_LANGUAGES = ['en', 'fi']
+    #
+    # DEBUG_LOG = 'logs/debug.log'
+    # ERROR_LOG = 'logs/error.log'
+    #
+    # CACHE_TYPE = "simple"
+    # CACHE_DEFAULT_TIMEOUT = 300
 
 
 class TestConfig(object):
