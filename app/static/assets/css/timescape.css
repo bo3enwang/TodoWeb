@@ -3,7 +3,7 @@
     margin: 0;
 }
 html, body, * {
-    font-family: "Microsoft YaHei" ! important;
+    font-family: "Microsoft YaHei";
 }
 a:hover,
 a:active,
@@ -811,4 +811,15 @@ color
 
 .chart-legend {
     margin: 10px 0;
+}
+
+
+
+/*
+ * Component: Modal
+ * --------------
+ */
+
+#addProject{
+    margin-top: 100px;
 }

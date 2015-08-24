@@ -20,8 +20,10 @@ def saveuser():
 
 @manager.command
 def queryproject():
-    projects = Project.query.jsonify()
-    print projects
+    # projects = Project.query.jsonify()
+    # print projects
+    project = Project.query.first()
+    print project.project_percent
 
 
 if __name__ == '__main__':
