@@ -48,3 +48,14 @@
 # def api_project_list():
 #     projects = Project.query.filter_by(user=g.user).all()
 #     return jsonify(projects.jsonify())
+
+from flask.ext.login import login_required
+from flask import Module, render_template, flash, redirect, session, url_for, request, g, jsonify
+
+project = Module(__name__)
+
+
+@project.route('/index')
+@login_required
+def index():
+    return render_template('account/index.html')
