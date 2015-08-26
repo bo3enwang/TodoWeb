@@ -5,6 +5,7 @@ from app.models import db
 from app.models import User
 import json
 from flask import jsonify
+from werkzeug.security import generate_password_hash, check_password_hash
 
 manager = Manager(create_app())
 
@@ -18,8 +19,10 @@ def saveuser():
     db.session.close()
 
 @manager.command
-def query():
-    user
+def dopw():
+    user, authenticated = User.query.authenticate('zo', '123')
+    print user.email
+    print authenticated
 
 
 

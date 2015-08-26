@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="{{ url_for('.static', filename = 'css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('.static', filename = 'assets/css/base.css') }}" rel="stylesheet">
+    <link href="{{ url_for('.static', filename = 'css/bootstrapValidator.min.css') }}" rel="stylesheet">
+    <script src="{{ url_for('.static', filename = 'js/jquery-1.11.3.min.js') }}"></script>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div class="wrapper">
+
+    {#MAIN HEAD#}
+    <div class="main-header">
+        <!-- Logo -->
+        <a href="project/project.html" class="logo">
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><b>Admin</b>LTE</span>
+        </a>
+
+        <nav class="navbar navbar-static-top" role="navigation">
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li><a href="#">bowen</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+            <ul class="sidebar-menu">
+                <li class="header">MAIN NAVIGATION</li>
+                {% block sidebar %}
+                {% endblock %}
+            </ul>
+        </section>
+    </aside>
+    <div name="content" class="content-wrapper">
+    {% block content %}
+    {% endblock %}
+
+    </div>
+</div>
+
+<script src="{{ url_for('.static', filename = 'js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('.static', filename = 'js/bootstrapValidator.min.js') }}"></script>
+<script src="{{ url_for('.static', filename = 'js/language/zh_CN.js') }}"></script>
+</body>
+</html>

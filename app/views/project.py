@@ -55,7 +55,12 @@ from flask import Module, render_template, flash, redirect, session, url_for, re
 project = Module(__name__)
 
 
-@project.route('/index')
+@project.route('/all')
 @login_required
-def index():
-    return render_template('account/index.html')
+def project_all():
+    return render_template('project/project.html')
+
+@project.route('/add')
+@login_required
+def project_add():
+    return redirect()
