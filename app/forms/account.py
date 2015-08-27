@@ -7,10 +7,9 @@ from wtforms.validators import DataRequired
 
 
 class LoginForm(Form):
-    next = HiddenField()
 
-    remember = BooleanField(("Remember me"))
+    remember = BooleanField("Remember me")
 
-    login = StringField(("Username or Email address"), validators=[DataRequired()])
+    login = StringField("Username or Email address", validators=[DataRequired()])
 
-    password = PasswordField(("Password"), validators=[DataRequired()])
+    password = PasswordField("Password", validators=[DataRequired()])

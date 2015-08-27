@@ -14,13 +14,34 @@ class ProjectQuery(BaseQuery):
         for project in self.all():
             yield project.json
 
+    def start(self):
+        return self.filter(Project.status == Project.STATUS_START)
+
+    def progress(self):
+        return self.filter(Project.status == Project.STATUS_PROGRESS)
+
+    def end(self):
+        return self.filter(Project.status == Project.STATUS_END)
+
+    def restricted(self, user=None):
+        return self.filter(Project.user == user)
+
 
 class Project(db.Model):
     query_class = ProjectQuery
 
+    NORMAL = 1
+    Priority = 5
+
+    STATUS_START = 0
+    STATUS_PROGRESS = 1
+    STATUS_END = 2
+    STATUS_DEAD = 3
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
     type = db.Column(db.Integer)
+    status = db.Column(db.Integer, default=0)
     p_now = db.Column(db.Integer, default=0)
     p_all = db.Column(db.Integer)
     p_day = db.Column(db.Integer)
@@ -32,24 +53,25 @@ class Project(db.Model):
 
     @property
     def p_percent(self):
-        percent = int((float(self.project_now) / float(self.project_all)) * 100)
+        percent = int((float(self.p_now) / float(self.p_all)) * 100)
         return percent
 
     @property
     def remain_days(self):
-        print self.start_time
-        print self.end_time
-        timedelta = self.end_time - self.start_time
-        return timedelta.days
+        if self.start_time is not None and self.end_time is not None:
+            timedelta = self.end_time - self.start_time
+            return timedelta.days
+        else:
+            return 0
 
     @cached_property
     def json(self):
-        return dict(project_id=self.id,
-                    content=self.content,
+        return dict(p_id=self.id,
+                    name=self.name,
                     type=self.type,
-                    project_now=self.project_now,
-                    project_all=self.project_all,
-                    project_day=self.project_day,
+                    p_now=self.project_now,
+                    p_all=self.project_all,
+                    p_day=self.project_day,
                     start_time=self.start_time,
                     end_time=self.end_time,
                     user_id=self.user_id)

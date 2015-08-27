@@ -39,6 +39,7 @@ def create_app(config=None, app_name=None, modules=None):
     configure_app(app, config)
     configure_errorhandlers(app)
     configure_modules(app, modules)
+    configure_g_user(app)
     register_db(app)
     register_lm(app)
     return app
@@ -66,6 +67,14 @@ def register_db(app):
 def register_lm(app):
     from views._base import lm
     lm.init_app(app)
+
+
+def configure_g_user(app):
+    from flask_login import current_user
+
+    @app.before_request
+    def before_request():
+        g.user = current_user
 
 
 def configure_errorhandlers(app):

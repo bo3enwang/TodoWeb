@@ -52,15 +52,53 @@
 from flask.ext.login import login_required
 from flask import Module, render_template, flash, redirect, session, url_for, request, g, jsonify
 
+from app.forms import ProjectAddForm
+from app.models import db, Project
+from app import timeutils
+
 project = Module(__name__)
 
 
-@project.route('/all')
+@project.route('/p/<ptype>')
 @login_required
-def project_all():
-    return render_template('project/project.html')
+def project_query(ptype):
+    if ptype == 'start':
+        pjs = Project.query.start().restricted(g.user)
+    elif ptype == 'progress':
+        pjs = Project.query.progress().restricted(g.user)
+    elif ptype == 'end':
+        pjs = Project.query.end().restricted(g.user)
+    else:
+        pjs = Project.query.restricted(g.user).all()
+    form = ProjectAddForm()
+    return render_template('project/project.html', form=form, pjs=pjs)
 
-@project.route('/add')
+
+@project.route('/add', methods=("post",))
 @login_required
 def project_add():
-    return redirect()
+    form = ProjectAddForm()
+    if form.validate_on_submit():
+        p = Project()
+        p.p_all = form.p_all.data
+        p.p_day = form.p_day.data
+        p.type = form.type.data
+        p.name = form.name.data
+        p.user = g.user
+        db.session.add(p)
+        db.session.commit()
+
+    return redirect(url_for('project.project_query', ptype='start'))
+
+
+@project.route('/begin/<pid>')
+@login_required
+def project_begin(pid):
+    p = Project.query.get(pid)
+    if p.status == Project.STATUS_START:
+        p.status = Project.STATUS_PROGRESS
+        p.start_day = timeutils.today()
+        p.end_day = timeutils.get_day_of_day(p.p_day)
+        session.save(p)
+        session.commit()
+    return redirect(url_for('project.project_query', ptype='progress'))

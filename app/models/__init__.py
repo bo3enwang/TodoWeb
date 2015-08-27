@@ -2,5 +2,5 @@
 __author__ = 'Zovven'
 
 from ._base import db
-from .users import *
-from .projects import *
+from .users import User
+from .projects import Project

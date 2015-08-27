@@ -1,6 +1,16 @@
 {% extends 'base.html' %}
 {% block sidebar %}
     <li class="active treeview">
+        <a href="/project/p/progress">
+            <i class="fa fa-dashboard"></i> <span>我的计划</span></i>
+        </a>
+        <ul class="treeview-menu">
+            <li><a href="/project/p/progress">进行中</a></li>
+            <li><a href="/project/p/start"> 未激活</a></li>
+            <li><a href="/project/p/end"> 已完成</a></li>
+        </ul>
+    </li>
+    <li class="treeview">
         <a href="/project/all">
             <span>我的任务</span>
         </a>
@@ -57,40 +67,29 @@
                                 <th style="width: 7%">剩余天数</th>
                                 <th style="width: 10%">操作</th>
                             </tr>
-                            {#                                {% for project in projects %}#}
-                            {#                                    <tr>#}
-                            {#                                        <td>{{ project.type }}</td>#}
-                            {#                                        <td>{{ project.content }}</td>#}
-                            {#                                        <td>#}
-                            {#                                            <div class="progress progress-xs">#}
-                            {#                                                <div class="progress-bar progress-bar-danger"#}
-                            {#                                                     style="width: {{ project.project_percent }}%"></div>#}
-                            {#                                            </div>#}
-                            {#                                        </td>#}
-                            {#                                        <td>{{ project.project_now }} / {{ project.project_all }} </td>#}
-                            {#                                        <td>{{ project.start_time }} / {{ project.end_time }} </td>#}
-                            {#                                        <td>{{ project.remain_days }} </td>#}
-                            {#                                        <td>Nothing</td>#}
-                            {#                                    </tr>#}
-                            {#                                {% endfor %}#}
-                            <tr>
-                                <td>1.</td>
-                                <td>Update software</td>
-                                <td>
-                                    <div class="progress progress-xs">
-                                        <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                                    </div>
-                                </td>
-                                {#                                    <td><span class="badge bg-red">55%</span></td>#}
-                                <td>100/500</td>
-                                <td>2015.6.9/2015.7.5</td>
-                                <td>20天</td>
-                                <td>
-                                    <button type="button" class="btn btn-default btn-xs">
-                                        <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Star
-                                    </button>
-                                </td>
-                            </tr>
+                            {% for project in pjs %}
+                                <tr>
+                                    <td>{{ project.type }}</td>
+                                    <td>{{ project.name }}</td>
+                                    <td>
+                                        <div class="progress progress-xs">
+                                            <div class="progress-bar progress-bar-danger"
+                                                 style="width: {{ project.p_percent }}%"></div>
+                                        </div>
+                                    </td>
+                                    <td>{{ project.p_now }} / {{ project.p_all }} </td>
+                                    <td>{{ project.start_time }} / {{ project.end_time }} </td>
+                                    <td>{{ project.remain_days }} </td>
+                                    <td>
+                                        {% if project.status == 0 %}
+                                            <button type="button" class="btn btn-default btn-xs">
+                                                <span class="glyphicon glyphicon-star" aria-hidden="true" onclick="project_begin(this)"></span> 激活
+                                            </button>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
                         </table>
                     </div>
                     <!-- /.box-body -->
@@ -110,35 +109,46 @@
                         &times;
                     </button>
                     <h4 class="modal-title" id="myModalLabel">
-                        模态框（Modal）标题
+                        新增任务
                     </h4>
                 </div>
-                <div class="modal-body">
-                    <form id="projectFrom" action="/addProject" method="post">
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">计划名</label>
-                            <input type="text" class="form-control" name="name" id="name" placeholder="计划名" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleInputPassword1">天数</label>
-                            <input type="text" class="form-control" name="p_day" id="name" placeholder="计划名" required>
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox"> Check me out
-                            </label>
-                        </div>
+                <form id="projectFrom" action="/project/add" method="post">
+                    <div class="modal-body">
 
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default"
-                            data-dismiss="modal">关闭
-                    </button>
-                    <button type="button" class="btn btn-primary" onclick="project_submit()">
-                        确认
-                    </button>
-                </div>
+                        {{ form.hidden_tag() if form.hidden_tag }}
+                        <div class="form-group">
+                            <label class="control-label">优先级</label>
+                            <select class="form-control" name="type">
+                                <option value="1">普通</option>
+                                <option value="5">优先</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">计划名</label>
+                            <input type="text" class="form-control" name="name" id="name" placeholder="请输入1~30个字符"
+                                   required>
+                            <!-- /input-group -->
+                        </div>
+                        <div class="form-group">
+                            <label for="p_all">计划长度</label>
+                            <input type="text" class="form-control" name="p_all" id="p_all"
+                                   placeholder="请输入100~3000之内的数字" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="p_day">天数</label>
+                            <input type="text" class="form-control" name="p_day" id="p_day" placeholder="请输入7~999之间的数字"
+                                   required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default"
+                                data-dismiss="modal">关闭
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            确认
+                        </button>
+                    </div>
+                </form>
             </div>
             <!-- /.modal-content -->
         </div>
@@ -167,10 +177,27 @@
                             }
                         }
                     },
+                    p_all: {
+                        validators: {
+                            notEmpty: {
+                                message: '计划长度不能为空'
+                            },
+                            lessThan: {
+                                value: 3000,
+                                inclusive: true,
+                                message: '长度不能大于3000'
+                            },
+                            greaterThan: {
+                                value: 100,
+                                inclusive: true,
+                                message: '长度不能小于100'
+                            }
+                        }
+                    },
                     p_day: {
                         validators: {
                             notEmpty: {
-                                message: '计划预估天数不能为空'
+                                message: '计划天数不能为空'
                             },
                             lessThan: {
                                 value: 999,
@@ -187,11 +214,17 @@
                 }
             });
         });
-        function project_submit() {
-            $('#projectFrom').submit();
+
+        function project_begin(node) {
+            alert("some");
+{#            $.post("test.php", { pid: id} );#}
+            var tr = $('#'+node).parent();
+            console.log(tr);
         }
 
+
     </script>
+
 
 {% endblock %}
 
