@@ -82,10 +82,19 @@
                                     <td>{{ project.remain_days }} </td>
                                     <td>
                                         {% if project.status == 0 %}
-                                            <button type="button" class="btn btn-default btn-xs">
-                                                <span class="glyphicon glyphicon-star" aria-hidden="true" onclick="project_begin(this)"></span> 激活
+                                            <button type="button" class="btn btn-default btn-xs"
+                                                    proid="{{ project.id }}" onclick="project_begin(this)">
+                                                <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 激活
                                             </button>
                                         {% endif %}
+                                        {% if project.status == 1 %}
+                                            <button type="button" class="btn btn-default btn-xs"
+                                                    proid="{{ project.id }}" onclick="project_reocrd(this)">
+                                                <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 记录
+                                            </button>
+                                        {% endif %}
+
+
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -154,6 +163,7 @@
         </div>
         <!-- /.modal -->
     </div>
+
     <script>
         $(document).ready(function () {
             $('#projectFrom').bootstrapValidator({
@@ -212,14 +222,53 @@
                         }
                     }
                 }
+            }).on('success.form.bv', function (e) {
+                // Prevent form submission
+                e.preventDefault();
+
+                // Get the form instance
+                var $form = $(e.target);
+
+                // Get the BootstrapValidator instance
+                var bv = $form.data('bootstrapValidator');
+
+                // Use Ajax to submit form data
+                $.post($form.attr('action'), $form.serialize(), function (result) {
+                    if(result.result>0){
+                        $.globalMessenger().post("激活成功!");
+                        $('#projectFrom').data('bootstrapValidator').resetForm(true);
+                    }
+                }, 'json');
             });
         });
 
-        function project_begin(node) {
-            alert("some");
-{#            $.post("test.php", { pid: id} );#}
-            var tr = $('#'+node).parent();
-            console.log(tr);
+        function project_begin(obj) {
+            tr = $(obj).parent().parent();
+            proid = $(obj).attr("proid");
+            $.ajax({
+                type: 'post',
+                contentType: "application/json; charset=UTF-8",
+                url: '/project/begin',
+                dataType: 'json',
+                data: JSON.stringify({
+                    'proid': proid,
+                }),
+                error: function (xhr, err) {
+                    alert('请求失败，原因可能是：' + err + '！')
+                },
+                success: function (data, textStatus) {
+                    if (data.result > 0) {
+                        tr.remove();
+                        $.globalMessenger().post("激活成功!");
+                    }
+                }
+            });
+
+        }
+        function project_reocrd(obj) {
+            tr = $(obj).parent().parent();
+            proid = $(obj).attr("proid");
+
         }
 
 

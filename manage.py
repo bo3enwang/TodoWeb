@@ -6,7 +6,7 @@ from app.models import User, Project
 import json
 from flask import jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from app import timeutils
 manager = Manager(create_app())
 
 
@@ -38,9 +38,9 @@ def findp():
 @manager.command
 def qpj():
     project = Project.query.first()
-    print project.p_percent
-
-
+    print timeutils.today()
+    project.start_time = timeutils.today()
+    db.session.commit()
 
 
 if __name__ == '__main__':

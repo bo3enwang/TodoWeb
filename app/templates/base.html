@@ -4,6 +4,8 @@
     <link href="{{ url_for('.static', filename = 'css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('.static', filename = 'assets/css/base.css') }}" rel="stylesheet">
     <link href="{{ url_for('.static', filename = 'css/bootstrapValidator.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('.static', filename = 'css/messenger.css') }}" rel="stylesheet">
+    <link href="{{ url_for('.static', filename = 'css/messenger-theme-ice.css') }}" rel="stylesheet">
     <script src="{{ url_for('.static', filename = 'js/jquery-1.11.3.min.js') }}"></script>
     <meta charset="UTF-8">
     <title></title>
@@ -38,8 +40,8 @@
         </section>
     </aside>
     <div name="content" class="content-wrapper">
-    {% block content %}
-    {% endblock %}
+        {% block content %}
+        {% endblock %}
 
     </div>
 </div>
@@ -47,5 +49,16 @@
 <script src="{{ url_for('.static', filename = 'js/bootstrap.min.js') }}"></script>
 <script src="{{ url_for('.static', filename = 'js/bootstrapValidator.min.js') }}"></script>
 <script src="{{ url_for('.static', filename = 'js/language/zh_CN.js') }}"></script>
+<script src="{{ url_for('.static', filename = 'js/messenger.min.js') }}"></script>
+<script src="{{ url_for('.static', filename = 'js/messenger-theme-future.js') }}"></script>
+<script src="{{ url_for('.static', filename = 'js/jquery.bootstrap.min.js') }}"></script>
+<script>
+    $(function () {
+        Messenger.options = {
+            extraClasses: 'messenger-fixed messenger-on-bottom messenger-on-right',
+            theme: 'ice'
+        };
+    });
+</script>
 </body>
 </html>

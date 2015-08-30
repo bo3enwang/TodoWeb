@@ -50,7 +50,7 @@
 #     return jsonify(projects.jsonify())
 
 from flask.ext.login import login_required
-from flask import Module, render_template, flash, redirect, session, url_for, request, g, jsonify
+from flask import Module, render_template, flash, redirect, url_for, request, g, jsonify
 
 from app.forms import ProjectAddForm
 from app.models import db, Project
@@ -78,27 +78,33 @@ def project_query(ptype):
 @login_required
 def project_add():
     form = ProjectAddForm()
-    if form.validate_on_submit():
-        p = Project()
-        p.p_all = form.p_all.data
-        p.p_day = form.p_day.data
-        p.type = form.type.data
-        p.name = form.name.data
-        p.user = g.user
-        db.session.add(p)
-        db.session.commit()
+    a = form.p_all.data
+    print a
+    # if form.validate_on_submit():
+        # p = Project()
+        # p.p_all = form.p_all.data
+        # p.p_day = form.p_day.data
+        # p.type = form.type.data
+        # p.name = form.name.data
+        # p.user = g.user
+        # db.session.add(p)
+        # db.session.commit()
+    return jsonify({'result': a})
 
-    return redirect(url_for('project.project_query', ptype='start'))
 
-
-@project.route('/begin/<pid>')
+@project.route('/begin', methods=("post",))
 @login_required
-def project_begin(pid):
-    p = Project.query.get(pid)
+def project_begin():
+    jsondata = request.get_json()
+    proid = jsondata.get('proid')
+    p = Project.query.get(proid)
     if p.status == Project.STATUS_START:
         p.status = Project.STATUS_PROGRESS
-        p.start_day = timeutils.today()
-        p.end_day = timeutils.get_day_of_day(p.p_day)
-        session.save(p)
-        session.commit()
-    return redirect(url_for('project.project_query', ptype='progress'))
+        p.start_time = timeutils.today()
+        p.end_time = timeutils.get_day_of_day(p.p_day)
+        db.session.commit()
+        result = 1
+    else:
+        result = -1
+
+    return jsonify({'result': result})

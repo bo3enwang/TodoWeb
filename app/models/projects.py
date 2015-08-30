@@ -7,6 +7,7 @@ from datetime import date, datetime, timedelta
 from werkzeug.utils import cached_property
 from flask_sqlalchemy import BaseQuery
 from users import User
+from app import timeutils
 
 
 class ProjectQuery(BaseQuery):
@@ -59,7 +60,9 @@ class Project(db.Model):
     @property
     def remain_days(self):
         if self.start_time is not None and self.end_time is not None:
-            timedelta = self.end_time - self.start_time
+            timedelta = self.end_time - timeutils.today()
+            if timedelta.days < 0:
+                return -1
             return timedelta.days
         else:
             return 0
