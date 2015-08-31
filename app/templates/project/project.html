@@ -50,8 +50,8 @@
 
                         <div class="box-tools">
                             <button class="btn btn-default" data-toggle="modal"
-                                    data-target="#addProject">
-                                开始演示模态框
+                                    data-target="#modal_project_add">
+                                新增计划
                             </button>
                         </div>
                     </div>
@@ -82,19 +82,20 @@
                                     <td>{{ project.remain_days }} </td>
                                     <td>
                                         {% if project.status == 0 %}
-                                            <button type="button" class="btn btn-default btn-xs"
-                                                    proid="{{ project.id }}" onclick="project_begin(this)">
+                                            <button type="button" class="btn btn-default btn-xs begin"
+                                                    proid="{{ project.id }}">
                                                 <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 激活
                                             </button>
+
                                         {% endif %}
                                         {% if project.status == 1 %}
-                                            <button type="button" class="btn btn-default btn-xs"
-                                                    proid="{{ project.id }}" onclick="project_reocrd(this)">
+                                            <button type="button" class="btn btn-default btn-xs" data-toggle="modal"
+                                                    data-target="#modal_project_record"
+                                                    data-proid="{{ project.id }}"
+                                                    data-remain="{{ project.p_all - project.p_now }}">
                                                 <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 记录
                                             </button>
                                         {% endif %}
-
-
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -107,8 +108,8 @@
             </div>
         </div>
     </section>
-    <!-- 模态框（Modal） -->
-    <div class="modal fade" id="addProject" tabindex="-1" role="dialog"
+    <!-- 模态框（Modal） 新增计划 -->
+    <div class="modal fade" id="modal_project_add" tabindex="-1" role="dialog"
          aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -121,7 +122,7 @@
                         新增任务
                     </h4>
                 </div>
-                <form id="projectFrom" action="/project/add" method="post">
+                <form id="form_project_add" action="/project/add" method="post">
                     <div class="modal-body">
 
                         {{ form.hidden_tag() if form.hidden_tag }}
@@ -163,10 +164,49 @@
         </div>
         <!-- /.modal -->
     </div>
+    <!-- 模态框（Modal） 记录计划 -->
+    <div class="modal fade" id="modal_project_record" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        记录计划
+                    </h4>
+                </div>
+                <form id="form_project_record" action="/project/record" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" id="proid" name="proid">
+
+                        <div class="form-group">
+                            <label for="name">完成数</label>
+                            <input type="text" class="form-control" name="record" id="record" placeholder="请输入完成度"
+                                   required>
+                            <!-- /input-group -->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default"
+                                data-dismiss="modal">关闭
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            确认
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal -->
+    </div>
 
     <script>
         $(document).ready(function () {
-            $('#projectFrom').bootstrapValidator({
+            $('#form_project_add').bootstrapValidator({
                 message: 'This value is not valid',
                 feedbackIcons: {
                     valid: 'glyphicon glyphicon-ok',
@@ -234,42 +274,14 @@
 
                 // Use Ajax to submit form data
                 $.post($form.attr('action'), $form.serialize(), function (result) {
-                    if(result.result>0){
-                        $.globalMessenger().post("激活成功!");
-                        $('#projectFrom').data('bootstrapValidator').resetForm(true);
+                    if (result.result > 0) {
+                        $.globalMessenger().post("新增成功!");
+                        $('#form_project_add').data('bootstrapValidator').resetForm(true);
+                        $('#modal_project_add').modal('hide')
                     }
                 }, 'json');
             });
         });
-
-        function project_begin(obj) {
-            tr = $(obj).parent().parent();
-            proid = $(obj).attr("proid");
-            $.ajax({
-                type: 'post',
-                contentType: "application/json; charset=UTF-8",
-                url: '/project/begin',
-                dataType: 'json',
-                data: JSON.stringify({
-                    'proid': proid,
-                }),
-                error: function (xhr, err) {
-                    alert('请求失败，原因可能是：' + err + '！')
-                },
-                success: function (data, textStatus) {
-                    if (data.result > 0) {
-                        tr.remove();
-                        $.globalMessenger().post("激活成功!");
-                    }
-                }
-            });
-
-        }
-        function project_reocrd(obj) {
-            tr = $(obj).parent().parent();
-            proid = $(obj).attr("proid");
-
-        }
 
 
     </script>
@@ -277,3 +289,111 @@
 
 {% endblock %}
 
+{% block jscontent %}
+
+    <script>
+        $(".begin").confirm({
+            text: "你确定要激活计划",
+            title: "激活?",
+            confirm: function (button) {
+                tr = button.parent().parent();
+                proid = button.attr("proid");
+                $.ajax({
+                    type: 'post',
+                    contentType: "application/json; charset=UTF-8",
+                    url: '/project/begin',
+                    dataType: 'json',
+                    data: JSON.stringify({
+                        'proid': proid,
+                    }),
+                    error: function (xhr, err) {
+                        alert('请求失败，原因可能是：' + err + '！')
+                    },
+                    success: function (data, textStatus) {
+                        if (data.result > 0) {
+                            tr.remove();
+                            $.globalMessenger().post("激活成功!");
+                        }
+                    }
+                });
+            },
+            cancel: function (button) {
+                // nothing to do
+            },
+            confirmButton: "Yes I am",
+            cancelButton: "No",
+            post: true,
+            confirmButtonClass: "btn-danger",
+            cancelButtonClass: "btn-default",
+            dialogClass: "modal-dialog modal-xs" // Bootstrap classes for large modal
+        });
+
+        $('#modal_project_record').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var proid = button.data('proid'); // Extract info from data-* attributes
+            var remain = button.data('remain');
+            var modal = $(this);
+            modal.find('.modal-body #proid').val(proid);
+            $('#form_project_record').bootstrapValidator({
+                message: 'This value is not valid',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    record: {
+                        validators: {
+                            notEmpty: {
+                                message: '计划天数不能为空'
+                            },
+                            lessThan: {
+                                value: remain,
+                                inclusive: true,
+                                message: '完成不能大于' + remain
+                            },
+                            greaterThan: {
+                                value: 1,
+                                inclusive: true,
+                                message: '完成数不能小于1'
+                            }
+                        }
+                    }
+                }
+            }).on('success.form.bv', function (e) {
+                // Prevent form submission
+                e.preventDefault();
+
+                // Get the form instance
+                var $form = $(e.target);
+
+                // Get the BootstrapValidator instance
+                var bv = $form.data('bootstrapValidator');
+
+                // Use Ajax to submit form data
+                var record = $("#record").val();
+                $.ajax({
+                    type: 'post',
+                    contentType: "application/json; charset=UTF-8",
+                    url: $form.attr('action'),
+                    dataType: 'json',
+                    data: JSON.stringify({
+                        'proid': proid,
+                        'record': record
+                    }),
+                    error: function (xhr, err) {
+                        alert('请求失败，原因可能是：' + err + '！')
+                    },
+                    success: function (data, textStatus) {
+                        if (data.result > 0) {
+                            $.globalMessenger().post("记录成功!");
+                            $('#form_project_record').data('bootstrapValidator').resetForm(true);
+                            $('#modal_project_record').modal('hide');
+                        }
+                    }
+                });
+            });
+        })
+    </script>
+
+{% endblock %}

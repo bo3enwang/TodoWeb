@@ -43,14 +43,12 @@ class Project(db.Model):
     name = db.Column(db.String(80))
     type = db.Column(db.Integer)
     status = db.Column(db.Integer, default=0)
-    p_now = db.Column(db.Integer, default=0)
     p_all = db.Column(db.Integer)
     p_day = db.Column(db.Integer)
     start_time = db.Column(db.Date)
     end_time = db.Column(db.Date)
-    user_id = db.Column(db.Integer, db.ForeignKey(User.id, ondelete='CASCADE'))
     user = db.relation(User, innerjoin=True, lazy="joined")
-    historys = db.relationship('ProjectHistory', backref='project', lazy='dynamic')
+    user_id = db.Column(db.Integer, db.ForeignKey(User.id, ondelete='CASCADE'))
 
     @property
     def p_percent(self):
@@ -79,9 +77,22 @@ class Project(db.Model):
                     end_time=self.end_time,
                     user_id=self.user_id)
 
+    @cached_property
+    def history(self):
+        history = ProjectHistory.query.filter(ProjectHistory.project_id == self.id).all()
+        return history
+
+    @cached_property
+    def p_now(self):
+        count = 0
+        for h in self.history:
+            count += h.record
+        return count
+
 
 class ProjectHistory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    project = db.relation(Project, innerjoin=True, lazy="joined")
     project_id = db.Column(db.Integer, db.ForeignKey('project.id'))
-    operate = db.Column(db.Integer)
+    record = db.Column(db.Integer)
     create_time = db.Column(db.DateTime, index=True, default=datetime.now())

@@ -2,11 +2,12 @@ __author__ = 'Zovven'
 from flask.ext.script import Manager
 from app import create_app
 from app.models import db
-from app.models import User, Project
+from app.models import User, Project, ProjectHistory
 import json
 from flask import jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import timeutils
+
 manager = Manager(create_app())
 
 
@@ -37,9 +38,17 @@ def findp():
 
 @manager.command
 def qpj():
+    project = Project.query.get(3)
+    print project.p_now
+
+
+@manager.command
+def ph():
     project = Project.query.first()
-    print timeutils.today()
-    project.start_time = timeutils.today()
+    ph = ProjectHistory()
+    ph.project = project
+    ph.progress = 55
+    db.session.add(ph)
     db.session.commit()
 
 

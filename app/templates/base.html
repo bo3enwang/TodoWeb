@@ -51,7 +51,7 @@
 <script src="{{ url_for('.static', filename = 'js/language/zh_CN.js') }}"></script>
 <script src="{{ url_for('.static', filename = 'js/messenger.min.js') }}"></script>
 <script src="{{ url_for('.static', filename = 'js/messenger-theme-future.js') }}"></script>
-<script src="{{ url_for('.static', filename = 'js/jquery.bootstrap.min.js') }}"></script>
+<script src="{{ url_for('.static', filename = 'js/jquery.confirm.min.js') }}"></script>
 <script>
     $(function () {
         Messenger.options = {
@@ -59,6 +59,11 @@
             theme: 'ice'
         };
     });
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    });
 </script>
+{% block jscontent %}
+{% endblock %}
 </body>
 </html>

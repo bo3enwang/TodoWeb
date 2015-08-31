@@ -14,7 +14,3 @@ class ProjectAddForm(Form):
     p_all = IntegerField("Project length", validators=[DataRequired(), NumberRange(min=100, max=3000)])
 
     p_day = IntegerField("Project day", validators=[DataRequired(), NumberRange(min=7, max=999)])
-
-
-class ProjectDoForm(Form):
-    type = IntegerField("Project type", validators=[DataRequired()])
