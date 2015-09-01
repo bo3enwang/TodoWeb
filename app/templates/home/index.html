@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block sidebar %}
+    <li class="treeview active">
+        <a href="/">
+            <span>工作面部</span>
+        </a>
+    </li>
+    <li class="treeview">
+        <a href="/project/p/progress">
+            <i class="fa fa-dashboard"></i> <span>我的计划</span></i>
+        </a>
+        <ul class="treeview-menu">
+            <li><a href="/project/p/progress">进行中</a></li>
+            <li><a href="/project/p/start"> 未激活</a></li>
+            <li><a href="/project/p/end"> 已完成</a></li>
+        </ul>
+    </li>
+    <li class="treeview">
+        <a href="/project" target="content">
+            <span>Project</span>
+            <span class="label label-primary pull-right">4</span>
+        </a>
+    </li>
+    <li>
+        <a href="pages/widgets.html">
+            <span>Widgets</span>
+            <small class="label pull-right bg-green">new</small>
+        </a>
+    </li>
+{% endblock %}
+{% block content %}
+    hehehehehehehhehehe
+{% endblock %}
+{% block jscontent %}
+    <script>
+        $(document).ready(function () {
+            postMessage();
+        });
+    </script>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <script>
+                        function postMessage() {
+                            $.globalMessenger().post("{{ message }}");
+                        }
+                    </script>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+{% endblock %}

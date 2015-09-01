@@ -4,6 +4,7 @@ from app import create_app
 from app.models import db
 from app.models import User, Project, ProjectHistory
 import json
+from app.jsonutil import TimeEncoder
 from flask import jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import timeutils
@@ -38,8 +39,9 @@ def findp():
 
 @manager.command
 def qpj():
-    project = Project.query.get(3)
-    print project.p_now
+    user = User.query.get(1)
+    jsondata = Project.query.progress().restricted(user).jsonify()
+    print json.dumps(jsondata,cls=TimeEncoder)
 
 
 @manager.command

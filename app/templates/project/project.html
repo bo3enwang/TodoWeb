@@ -1,22 +1,22 @@
 {% extends 'base.html' %}
 {% block sidebar %}
+    <li class="treeview">
+        <a href="/">
+            <span>工作面版</span>
+        </a>
+    </li>
     <li class="active treeview">
         <a href="/project/p/progress">
             <i class="fa fa-dashboard"></i> <span>我的计划</span></i>
         </a>
         <ul class="treeview-menu">
-            <li><a href="/project/p/progress">进行中</a></li>
-            <li><a href="/project/p/start"> 未激活</a></li>
-            <li><a href="/project/p/end"> 已完成</a></li>
+            <li {% if ptype == 'progress' %} class="active" {% endif %} ><a href="/project/p/progress">进行中</a></li>
+            <li {% if ptype == 'start' %} class="active"  {% endif %} ><a href="/project/p/start"> 未激活</a></li>
+            <li {% if ptype == 'end' %} class="active"  {% endif %}><a href="/project/p/end"> 已完成</a></li>
         </ul>
     </li>
     <li class="treeview">
-        <a href="/project/all">
-            <span>我的任务</span>
-        </a>
-    </li>
-    <li class="treeview">
-        <a href="/project" target="content">
+        <a href="/project">
             <span>Project</span>
             <span class="label label-primary pull-right">4</span>
         </a>
@@ -53,11 +53,14 @@
                                     data-target="#modal_project_add">
                                 新增计划
                             </button>
+                            <button class="btn btn-default" onclick="ajaxdata()">
+                                xxx
+                            </button>
                         </div>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body no-padding">
-                        <table class="table table-bordered table-striped">
+                        <table id="table_project" class="table table-bordered table-striped">
                             <tr>
                                 <th style="width: 7%">优先级</th>
                                 <th style="width: 20%">任务名</th>
@@ -333,67 +336,140 @@
             var proid = button.data('proid'); // Extract info from data-* attributes
             var remain = button.data('remain');
             var modal = $(this);
-            modal.find('.modal-body #proid').val(proid);
-            $('#form_project_record').bootstrapValidator({
-                message: 'This value is not valid',
-                feedbackIcons: {
-                    valid: 'glyphicon glyphicon-ok',
-                    invalid: 'glyphicon glyphicon-remove',
-                    validating: 'glyphicon glyphicon-refresh'
-                },
-                fields: {
-                    record: {
-                        validators: {
-                            notEmpty: {
-                                message: '计划天数不能为空'
-                            },
-                            lessThan: {
-                                value: remain,
-                                inclusive: true,
-                                message: '完成不能大于' + remain
-                            },
-                            greaterThan: {
-                                value: 1,
-                                inclusive: true,
-                                message: '完成数不能小于1'
-                            }
-                        }
+            modal.find('.modal-body #proid').val(proid);//添加计划id到隐藏域
+            $('#form_project_record').bootstrapValidator('addField', 'record', {//动态添加验证
+                message: '请填写正确的完成数',
+                validators: {
+                    notEmpty: {
+                        message: '完成数不能为空'
+                    },
+                    lessThan: {
+                        value: remain,
+                        inclusive: true,
+                        message: '完成数不能大于' + remain
+                    },
+                    greaterThan: {
+                        value: 1,
+                        inclusive: true,
+                        message: '完成数不能小于1'
                     }
                 }
-            }).on('success.form.bv', function (e) {
-                // Prevent form submission
-                e.preventDefault();
-
-                // Get the form instance
-                var $form = $(e.target);
-
-                // Get the BootstrapValidator instance
-                var bv = $form.data('bootstrapValidator');
-
-                // Use Ajax to submit form data
-                var record = $("#record").val();
-                $.ajax({
-                    type: 'post',
-                    contentType: "application/json; charset=UTF-8",
-                    url: $form.attr('action'),
-                    dataType: 'json',
-                    data: JSON.stringify({
-                        'proid': proid,
-                        'record': record
-                    }),
-                    error: function (xhr, err) {
-                        alert('请求失败，原因可能是：' + err + '！')
-                    },
-                    success: function (data, textStatus) {
-                        if (data.result > 0) {
-                            $.globalMessenger().post("记录成功!");
-                            $('#form_project_record').data('bootstrapValidator').resetForm(true);
-                            $('#modal_project_record').modal('hide');
-                        }
-                    }
-                });
             });
         })
+
+        $('#form_project_record').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {}
+        }).on('success.form.bv', function (e) {
+            // Prevent form submission
+            e.preventDefault();
+
+            // Get the form instance
+            var $form = $(e.target);
+
+            // Get the BootstrapValidator instance
+            var bv = $form.data('bootstrapValidator');
+
+            // Use Ajax to submit form data
+            var record = $("#record").val();
+            var proid = $("#proid").val();
+            $.ajax({
+                type: 'post',
+                contentType: "application/json; charset=UTF-8",
+                url: $form.attr('action'),
+                dataType: 'json',
+                data: JSON.stringify({
+                    'proid': proid,
+                    'record': record
+                }),
+                error: function (xhr, err) {
+                    alert('请求失败，原因可能是：' + err + '！')
+                },
+                success: function (data, textStatus) {
+                    if (data.result > 0) {
+                        $.globalMessenger().post("记录成功!");
+                        $('#modal_project_record').modal('hide');
+                        $('#form_project_record').data('bootstrapValidator').resetForm(true);
+                        $('#contactForm').bootstrapValidator('removeField', 'record');
+                    }
+                }
+            });
+        });
     </script>
+    <script>
+        function ajaxdata() {
+            $.ajax({
+                type: 'post',
+                contentType: "application/json; charset=UTF-8",
+                url: '/project/p/data',
+                dataType: 'json',
+                data: JSON.stringify({
+                    'ptype': "{{ ptype }}"
+                }),
+                error: function (xhr, err) {
+                    alert('请求失败，原因可能是：' + err + '！')
+                },
+                success: function (data, textStatus) {
+                    var json = $.parseJSON(data.result);
+                    console.log(json);
+                    $.each(json, function () {
+                        tr = $("#table_template_project tr").clone();
+                        tr.find('.cell-type').text(this.type);
+                        tr.find('.cell-name').text(this.name);
+                        tr.find('.cell-progress .ppass').css("width",this.p_percent+"%");
+                        tr.find('.cell-time').text(this.start_time+" / "+this.end_time);
+                        tr.find('.cell-text-progress').text(this.p_now+" / "+this.p_all);
+                        tr.find('.cell-remain-days').text(this.remain_days);
+                        if(this.status==1){
+                            btn = $("#template_button .record").clone();
+                            btn.attr("data-proid",this.id);
+                            tr.find('.cell-button').append(btn);
+                        }
+                        $("#table_project").append(tr);
+                    });
+
+                }
+            });
+        }
+    </script>
+
+
+    <table style="display: none">
+        <div id="template_button">
+
+            <button type="button" class="btn btn-default btn-xs begin" proid="">
+                <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 激活
+            </button>
+
+
+            <button type="button" class="btn btn-default btn-xs record" data-toggle="modal"
+                    data-target="#modal_project_record" data-proid="" data-remain="">
+                <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 记录
+            </button>
+
+        </div>
+        <tbody id="table_template_project">
+        <tr>
+            <td class="cell-type"></td>
+            <td class="cell-name"></td>
+            <td class="cell-progress">
+                <div class="progress progress-xs">
+                    <div class="progress-bar progress-bar-danger ppass"></div>
+                    <div class="progress-bar progress-bar-danger ptoday"></div>
+                </div>
+            </td>
+            <td class="cell-text-progress"></td>
+            <td class="cell-time"></td>
+            <td class="cell-remain-days"></td>
+            <td class="cell-button">
+            </td>
+        </tr>
+        </tbody>
+    </table>
 
 {% endblock %}

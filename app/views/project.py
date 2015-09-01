@@ -1,11 +1,27 @@
+# -*- coding:utf8 -*-
 from flask.ext.login import login_required
 from flask import Module, render_template, flash, redirect, url_for, request, g, jsonify
-
+import json
 from app.forms import ProjectAddForm
-from app.models import db, Project,ProjectHistory
+from app.models import db, Project, ProjectHistory
 from app import timeutils
 
 project = Module(__name__)
+
+
+@project.route('/p/data', methods=("post",))
+def project_data():
+    jsondata = request.get_json()
+    ptype = jsondata.get('ptype')
+    if ptype == 'start':
+        pdata = Project.query.start().restricted(g.user).jsonify()
+    elif ptype == 'progress':
+        pdata = Project.query.progress().restricted(g.user).jsonify()
+    elif ptype == 'end':
+        pdata = Project.query.end().restricted(g.user).jsonify()
+    else:
+        pdata = Project.query.progress().jsonify()
+    return jsonify({"result": pdata})
 
 
 @project.route('/p/<ptype>')
@@ -20,7 +36,7 @@ def project_query(ptype):
     else:
         pjs = Project.query.restricted(g.user).all()
     form = ProjectAddForm()
-    return render_template('project/project.html', form=form, pjs=pjs)
+    return render_template('project/project.html', form=form, pjs=pjs, ptype=ptype)
 
 
 @project.route('/add', methods=("post",))
@@ -58,6 +74,7 @@ def project_begin():
     return jsonify({'result': result})
 
 
+# 新增计划进度
 @project.route('/record', methods=("post",))
 @login_required
 def project_record():
@@ -72,4 +89,4 @@ def project_record():
         db.session.add(ph)
         db.session.commit()
         result = 1
-    return jsonify({'result': result})
+    return jsonify({'result': proid})

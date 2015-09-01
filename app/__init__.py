@@ -16,6 +16,7 @@ sys.setdefaultencoding('utf8')
 DEFAULT_APP_NAME = "app"
 
 DEFAULT_MODULES = (
+    (views.home, ""),
     (views.account, "/account"),
     (views.project, "/project"),
 )

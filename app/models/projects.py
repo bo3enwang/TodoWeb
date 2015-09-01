@@ -2,18 +2,20 @@
 __author__ = 'Zovven'
 
 from ._base import db
-import hashlib
+import json
 from datetime import date, datetime, timedelta
 from werkzeug.utils import cached_property
 from flask_sqlalchemy import BaseQuery
 from users import User
-from app import timeutils
+from app import timeutils, jsonutil
 
 
 class ProjectQuery(BaseQuery):
     def jsonify(self):
+        jsonarry = []
         for project in self.all():
-            yield project.json
+            jsonarry.append(project.json)
+        return json.dumps(jsonarry, cls=jsonutil.TimeEncoder)
 
     def start(self):
         return self.filter(Project.status == Project.STATUS_START)
@@ -67,15 +69,17 @@ class Project(db.Model):
 
     @cached_property
     def json(self):
-        return dict(p_id=self.id,
+        return dict(id=self.id,
                     name=self.name,
                     type=self.type,
-                    p_now=self.project_now,
-                    p_all=self.project_all,
-                    p_day=self.project_day,
+                    status=self.status,
+                    p_now=self.p_now,
+                    p_all=self.p_all,
+                    remain_days=self.remain_days,
                     start_time=self.start_time,
                     end_time=self.end_time,
-                    user_id=self.user_id)
+                    user_id=self.user_id,
+                    p_percent=self.p_percent)
 
     @cached_property
     def history(self):
