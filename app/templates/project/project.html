@@ -5,6 +5,12 @@
             <span>工作面版</span>
         </a>
     </li>
+    <li class="treeview">
+        <a href="/project">
+            <span>待办事项</span>
+            <span class="label label-primary pull-right">4</span>
+        </a>
+    </li>
     <li class="active treeview">
         <a href="/project/p/progress">
             <i class="fa fa-dashboard"></i> <span>我的计划</span></i>
@@ -14,18 +20,6 @@
             <li {% if ptype == 'start' %} class="active"  {% endif %} ><a href="/project/p/start"> 未激活</a></li>
             <li {% if ptype == 'end' %} class="active"  {% endif %}><a href="/project/p/end"> 已完成</a></li>
         </ul>
-    </li>
-    <li class="treeview">
-        <a href="/project">
-            <span>Project</span>
-            <span class="label label-primary pull-right">4</span>
-        </a>
-    </li>
-    <li>
-        <a href="pages/widgets.html">
-            <span>Widgets</span>
-            <small class="label pull-right bg-green">new</small>
-        </a>
     </li>
 {% endblock %}
 
@@ -53,56 +47,25 @@
                                     data-target="#modal_project_add">
                                 新增计划
                             </button>
-                            <button class="btn btn-default" onclick="ajaxdata()">
-                                xxx
-                            </button>
                         </div>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body no-padding">
-                        <table id="table_project" class="table table-bordered table-striped">
+                        <table class="table table-bordered table-striped">
+                            <thead>
                             <tr>
                                 <th style="width: 7%">优先级</th>
                                 <th style="width: 20%">任务名</th>
-                                <th style="width: 26%">进度条</th>
+                                <th style="width: 24%">进度条</th>
                                 <th style="width: 10%">进度</th>
                                 <th style="width: 20%">截至日期</th>
                                 <th style="width: 7%">剩余天数</th>
-                                <th style="width: 10%">操作</th>
+                                <th style="width: 12%">操作</th>
                             </tr>
-                            {% for project in pjs %}
-                                <tr>
-                                    <td>{{ project.type }}</td>
-                                    <td>{{ project.name }}</td>
-                                    <td>
-                                        <div class="progress progress-xs">
-                                            <div class="progress-bar progress-bar-danger"
-                                                 style="width: {{ project.p_percent }}%"></div>
-                                        </div>
-                                    </td>
-                                    <td>{{ project.p_now }} / {{ project.p_all }} </td>
-                                    <td>{{ project.start_time }} / {{ project.end_time }} </td>
-                                    <td>{{ project.remain_days }} </td>
-                                    <td>
-                                        {% if project.status == 0 %}
-                                            <button type="button" class="btn btn-default btn-xs begin"
-                                                    proid="{{ project.id }}">
-                                                <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 激活
-                                            </button>
+                            </thead>
+                            <tbody id="table_project">
 
-                                        {% endif %}
-                                        {% if project.status == 1 %}
-                                            <button type="button" class="btn btn-default btn-xs" data-toggle="modal"
-                                                    data-target="#modal_project_record"
-                                                    data-proid="{{ project.id }}"
-                                                    data-remain="{{ project.p_all - project.p_now }}">
-                                                <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 记录
-                                            </button>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-
+                            </tbody>
                         </table>
                     </div>
                     <!-- /.box-body -->
@@ -122,7 +85,7 @@
                         &times;
                     </button>
                     <h4 class="modal-title" id="myModalLabel">
-                        新增任务
+                        新增计划
                     </h4>
                 </div>
                 <form id="form_project_add" action="/project/add" method="post">
@@ -226,7 +189,7 @@
                 },
                 success: function (data, textStatus) {
                     var json = $.parseJSON(data.result);
-                    console.log(json);
+                    $("#table_project").empty();
                     $.each(json, function () {
                         tr = $("#table_template_project tr").clone();
                         tr.find('.cell-type').text(this.type);
@@ -236,13 +199,24 @@
                         tr.find('.cell-text-progress').text(this.p_now + " / " + this.p_all);
                         tr.find('.cell-remain-days').text(this.remain_days);
                         if (this.status == 1) {
-                            btn = $("#template_button .record").clone();
-                            btn.attr("data-proid", this.id);
-                            tr.find('.cell-button').append(btn);
+                            btnRecord = $("#template_button .p-record").clone();
+                            btnRecord.attr("data-proid", this.id);
+                            btnRecord.attr("data-remain", (this.p_all - this.p_now));
+                            tr.find('.cell-button').append(btnRecord);
+                        }
+                        if (this.status == 0) {
+                            btnBegin = $("#template_button .p-begin").clone();
+                            btnBegin.attr("proid", this.id);
+                            tr.find('.cell-button').append(btnBegin);
+                        }
+                        if (this.status != 2) {
+                            btnDelete = $("#template_button .p-delete").clone();
+                            btnDelete.attr("proid", this.id);
+                            tr.find('.cell-button').append(btnDelete);
                         }
                         $("#table_project").append(tr);
                     });
-
+                    confirmAdd();
                 }
             });
         }
@@ -252,14 +226,17 @@
     <table style="display: none">
         <div id="template_button">
 
-            <button type="button" class="btn btn-default btn-xs begin" proid="">
+            <button type="button" class="btn btn-default btn-xs p-begin" proid="">
                 <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 激活
             </button>
 
-
-            <button type="button" class="btn btn-default btn-xs record" data-toggle="modal"
+            <button type="button" class="btn btn-default btn-xs p-record" data-toggle="modal"
                     data-target="#modal_project_record" data-proid="" data-remain="">
-                <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 记录
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 记录
+            </button>
+
+            <button type="button" class="btn btn-default btn-xs p-delete" proid="">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> 删除
             </button>
 
         </div>
@@ -269,8 +246,7 @@
             <td class="cell-name"></td>
             <td class="cell-progress">
                 <div class="progress progress-xs">
-                    <div class="progress-bar progress-bar-danger ppass"></div>
-                    <div class="progress-bar progress-bar-danger ptoday"></div>
+                    <div class="progress-bar progress-bar-info ppass"></div>
                 </div>
             </td>
             <td class="cell-text-progress"></td>
@@ -281,5 +257,10 @@
         </tr>
         </tbody>
     </table>
-
+    <script>
+        $(document).ready(function () {
+            ajaxDataProject();
+        });
+    </script>
+    <script src="{{ url_for('.static', filename = 'assets/js/project.js') }}"></script>
 {% endblock %}

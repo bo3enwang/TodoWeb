@@ -826,3 +826,7 @@ color
 .modal{
     margin-top: 100px;
 }
+
+.btn{
+    margin-left: 3px;
+}

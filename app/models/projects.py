@@ -97,6 +97,6 @@ class Project(db.Model):
 class ProjectHistory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     project = db.relation(Project, innerjoin=True, lazy="joined")
-    project_id = db.Column(db.Integer, db.ForeignKey('project.id'))
+    project_id = db.Column(db.Integer, db.ForeignKey('project.id', ondelete='CASCADE'))
     record = db.Column(db.Integer)
     create_time = db.Column(db.DateTime, index=True, default=datetime.now())

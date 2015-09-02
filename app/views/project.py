@@ -1,7 +1,6 @@
 # -*- coding:utf8 -*-
 from flask.ext.login import login_required
 from flask import Module, render_template, flash, redirect, url_for, request, g, jsonify
-import json
 from app.forms import ProjectAddForm
 from app.models import db, Project, ProjectHistory
 from app import timeutils
@@ -27,16 +26,8 @@ def project_data():
 @project.route('/p/<ptype>')
 @login_required
 def project_query(ptype):
-    if ptype == 'start':
-        pjs = Project.query.start().restricted(g.user)
-    elif ptype == 'progress':
-        pjs = Project.query.progress().restricted(g.user)
-    elif ptype == 'end':
-        pjs = Project.query.end().restricted(g.user)
-    else:
-        pjs = Project.query.restricted(g.user).all()
     form = ProjectAddForm()
-    return render_template('project/project.html', form=form, pjs=pjs, ptype=ptype)
+    return render_template('project/project.html', form=form, ptype=ptype)
 
 
 @project.route('/add', methods=("post",))
@@ -88,5 +79,19 @@ def project_record():
         ph.project_id = proid
         db.session.add(ph)
         db.session.commit()
-        result = 1
-    return jsonify({'result': proid})
+        result = proid
+    return jsonify({'result': result})
+
+
+@project.route('/delete', methods=("post",))
+@login_required
+def project_delete():
+    result = -1
+    jsondata = request.get_json()
+    proid = jsondata.get('proid')
+    p = Project.query.get_or_404(proid)
+    if p:
+        db.session.delete(p)
+        db.session.commit()
+        result = proid
+    return jsonify({'result': result})

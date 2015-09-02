@@ -2,7 +2,7 @@
  * Created by Zovven on 2015/9/1.
  */
 $(document).ready(function () {
-    //º∆ªÆÃÌº”±Ìµ•—È÷§
+    //ËÆ°ÂàíÊ∑ªÂä†Ë°®ÂçïÈ™åËØÅ
     $('#form_project_add').bootstrapValidator({
         message: 'This value is not valid',
         feedbackIcons: {
@@ -12,49 +12,49 @@ $(document).ready(function () {
         },
         fields: {
             name: {
-                message: 'The username is not valid',
+                message: 'ËÆ°ÂàíÂêç‰∏çÊ≠£Á°Æ',
                 validators: {
                     notEmpty: {
-                        message: 'º∆ªÆ√˚≤ªƒ‹Œ™ø’'
+                        message: 'ËÆ°ÂàíÂêç‰∏çËÉΩ‰∏∫Á©∫'
                     },
                     stringLength: {
                         min: 1,
                         max: 30,
-                        message: 'º∆ªÆ√˚±ÿ–Î‘⁄1µΩ30∏ˆ◊÷∑˚÷Æƒ⁄'
+                        message: 'ËÆ°ÂàíÂêç‰∏çËÉΩË∂ÖËøá30‰∏™Â≠óÁ¨¶'
                     }
                 }
             },
             p_all: {
                 validators: {
                     notEmpty: {
-                        message: 'º∆ªÆ≥§∂»≤ªƒ‹Œ™ø’'
+                        message: 'ËÆ°ÂàíÊÄªÈïø‰∏çËÉΩ‰∏∫Á©∫'
                     },
                     lessThan: {
                         value: 3000,
                         inclusive: true,
-                        message: '≥§∂»≤ªƒ‹¥Û”⁄3000'
+                        message: 'ËÆ°ÂàíÊÄªÈïø‰∏çËÉΩË∂ÖËøá3000'
                     },
                     greaterThan: {
                         value: 100,
                         inclusive: true,
-                        message: '≥§∂»≤ªƒ‹–°”⁄100'
+                        message: 'ËÆ°ÂàíÊÄªÈïø‰∏çËÉΩÂ∞è‰∫é100'
                     }
                 }
             },
             p_day: {
                 validators: {
                     notEmpty: {
-                        message: 'º∆ªÆÃÏ ˝≤ªƒ‹Œ™ø’'
+                        message: 'ËÆ°ÂàíÊó∂Èïø‰∏çËÉΩ‰∏∫Á©∫'
                     },
                     lessThan: {
                         value: 999,
                         inclusive: true,
-                        message: 'ÃÏ ˝≤ªƒ‹¥Û”⁄999'
+                        message: 'ËÆ°ÂàíÊó∂Èïø‰∏çËÉΩË∂ÖËøá999'
                     },
                     greaterThan: {
-                        value: 7,
+                        value: 3,
                         inclusive: true,
-                        message: 'ÃÏ ˝≤ªƒ‹–°”⁄7'
+                        message: 'ËÆ°ÂàíÊó∂Èïø‰∏çËÉΩÂ∞è‰∫é3'
                     }
                 }
             }
@@ -72,14 +72,20 @@ $(document).ready(function () {
         // Use Ajax to submit form data
         $.post($form.attr('action'), $form.serialize(), function (result) {
             if (result.result > 0) {
-                $.globalMessenger().post("–¬‘ˆ≥…π¶!");
+                //Post add success message
+                $.globalMessenger().post({
+                    message: 'Ê∑ªÂä†ÊàêÂäü',
+                    type: 'info',
+                    showCloseButton: true
+                });
                 $('#form_project_add').data('bootstrapValidator').resetForm(true);
-                $('#modal_project_add').modal('hide')
+                $('#modal_project_add').modal('hide');
+                ajaxDataProject();
             }
         }, 'json');
     });
 
-    //º∆ªÆº«¬º±Ìµ•—È÷§
+    //ËÆ°ÂàíËÆ∞ÂΩïË°®ÂçïÈ™åËØÅ
     $('#form_project_record').bootstrapValidator({
         message: 'This value is not valid',
         feedbackIcons: {
@@ -101,6 +107,7 @@ $(document).ready(function () {
         // Use Ajax to submit form data
         var record = $("#record").val();
         var proid = $("#proid").val();
+        console.log(proid);
         $.ajax({
             type: 'post',
             contentType: "application/json; charset=UTF-8",
@@ -111,78 +118,128 @@ $(document).ready(function () {
                 'record': record
             }),
             error: function (xhr, err) {
-                alert('«Î«Û ß∞‹£¨‘≠“Úø…ƒ‹ «£∫' + err + '£°')
+                alert('ËØ∑Ê±ÇÈîôËØØ' + err + 'ÂéüÂõ†')
             },
             success: function (data, textStatus) {
                 if (data.result > 0) {
-                    $.globalMessenger().post("º«¬º≥…π¶!");
+                    $.globalMessenger().post({
+                        message: 'ËÆ∞ÂΩïÊàêÂäü',
+                        type: 'info',
+                        showCloseButton: true
+                    });
                     $('#modal_project_record').modal('hide');
                     $('#form_project_record').data('bootstrapValidator').resetForm(true);
                     $('#contactForm').bootstrapValidator('removeField', 'record');
+                    ajaxDataProject();
                 }
             }
         });
     });
-});
 
-$('#modal_project_record').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget); // Button that triggered the modal
-    var proid = button.data('proid'); // Extract info from data-* attributes
-    var remain = button.data('remain');
-    var modal = $(this);
-    modal.find('.modal-body #proid').val(proid);//ÃÌº”º∆ªÆidµΩ“˛≤ÿ”Ú
-    $('#form_project_record').bootstrapValidator('addField', 'record', {//∂ØÃ¨ÃÌº”—È÷§
-        message: '«ÎÃÓ–¥’˝»∑µƒÕÍ≥… ˝',
-        validators: {
-            notEmpty: {
-                message: 'ÕÍ≥… ˝≤ªƒ‹Œ™ø’'
-            },
-            lessThan: {
-                value: remain,
-                inclusive: true,
-                message: 'ÕÍ≥… ˝≤ªƒ‹¥Û”⁄' + remain
-            },
-            greaterThan: {
-                value: 1,
-                inclusive: true,
-                message: 'ÕÍ≥… ˝≤ªƒ‹–°”⁄1'
-            }
-        }
-    });
-});
-
-$(".begin").confirm({
-    text: "ƒ„»∑∂®“™º§ªÓº∆ªÆ",
-    title: "º§ªÓ?",
-    confirm: function (button) {
-        tr = button.parent().parent();
-        proid = button.attr("proid");
-        $.ajax({
-            type: 'post',
-            contentType: "application/json; charset=UTF-8",
-            url: '/project/begin',
-            dataType: 'json',
-            data: JSON.stringify({
-                'proid': proid,
-            }),
-            error: function (xhr, err) {
-                alert('«Î«Û ß∞‹£¨‘≠“Úø…ƒ‹ «£∫' + err + '£°')
-            },
-            success: function (data, textStatus) {
-                if (data.result > 0) {
-                    tr.remove();
-                    $.globalMessenger().post("º§ªÓ≥…π¶!");
+    $('#modal_project_record').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var proid = button.data('proid'); // Extract info from data-* attributes
+        var remain = button.data('remain');
+        var modal = $(this);
+        modal.find('.modal-body #proid').val(proid);//Âä®ÊÄÅÊõ¥ÊîπËÆ°Âàíid
+        $('#form_project_record').bootstrapValidator('addField', 'record', {//Âä®ÊÄÅÊ∑ªÂä†È™åËØÅ
+            message: 'ËØ∑ËæìÂÖ•Ê≠£Á°ÆÁöÑËÆ∞ÂΩïÊï∞',
+            validators: {
+                notEmpty: {
+                    message: 'ËÆ∞ÂΩïÊï∞‰∏çËÉΩ‰∏∫Á©∫'
+                },
+                lessThan: {
+                    value: remain,
+                    inclusive: true,
+                    message: 'ËÆ∞ÂΩïÊï∞‰∏çËÉΩÂ§ß‰∫é' + remain
+                },
+                greaterThan: {
+                    value: 1,
+                    inclusive: true,
+                    message: 'ËÆ∞ÂΩïÊï∞‰∏çËÉΩÂ∞è‰∫é1'
                 }
             }
         });
-    },
-    cancel: function (button) {
-        // nothing to do
-    },
-    confirmButton: "Yes I am",
-    cancelButton: "No",
-    post: true,
-    confirmButtonClass: "btn-danger",
-    cancelButtonClass: "btn-default",
-    dialogClass: "modal-dialog modal-xs" // Bootstrap classes for large modal
+    });
+    confirmAdd();
 });
+
+function confirmAdd() {
+    $(".p-begin").confirm({
+        text: "Á°ÆÂÆöË¶ÅÊøÄÊ¥ªËÆ°ÂàíÂêó?",
+        title: "ÊøÄÊ¥ªËÆ°Âàí",
+        confirm: function (button) {
+            proid = button.attr("proid");
+            $.ajax({
+                type: 'post',
+                contentType: "application/json; charset=UTF-8",
+                url: '/project/begin',
+                dataType: 'json',
+                data: JSON.stringify({
+                    'proid': proid,
+                }),
+                error: function (xhr, err) {
+                    alert('ËØ∑Ê±ÇÈîôËØØ' + err + 'ÂéüÂõ†')
+                },
+                success: function (data, textStatus) {
+                    if (data.result > 0) {
+                        ajaxDataProject();
+                        $.globalMessenger().post({
+                            message: 'ÊøÄÊ¥ªÊàêÂäü',
+                            type: 'info',
+                            showCloseButton: true
+                        });
+                    }
+                }
+            });
+        },
+        cancel: function (button) {
+            // nothing to do
+        },
+        confirmButton: "Á°ÆÂÆö",
+        cancelButton: "ÂèñÊ∂à",
+        post: true,
+        confirmButtonClass: "btn-danger",
+        cancelButtonClass: "btn-default",
+        dialogClass: "modal-dialog modal-xs" // Bootstrap classes for large modal
+    });
+
+    $(".p-delete").confirm({
+        text: "Á°ÆÂÆöË¶ÅÂà†Èô§ËÆ°ÂàíÂêó?",
+        title: "Âà†Èô§ËÆ°Âàí",
+        confirm: function (button) {
+            proid = button.attr("proid");
+            $.ajax({
+                type: 'post',
+                contentType: "application/json; charset=UTF-8",
+                url: '/project/delete',
+                dataType: 'json',
+                data: JSON.stringify({
+                    'proid': proid,
+                }),
+                error: function (xhr, err) {
+                    alert('ËØ∑Ê±ÇÈîôËØØ' + err + 'ÂéüÂõ†')
+                },
+                success: function (data, textStatus) {
+                    if (data.result > 0) {
+                        ajaxDataProject();
+                        $.globalMessenger().post({
+                            message: 'Âà†Èô§ÊàêÂäü',
+                            type: 'info',
+                            showCloseButton: true
+                        });
+                    }
+                }
+            });
+        },
+        cancel: function (button) {
+            // nothing to do
+        },
+        confirmButton: "Á°ÆÂÆö",
+        cancelButton: "ÂèñÊ∂à",
+        post: true,
+        confirmButtonClass: "btn-danger",
+        cancelButtonClass: "btn-default",
+        dialogClass: "modal-dialog modal-xs" // Bootstrap classes for large modal
+    });
+}

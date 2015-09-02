@@ -19,6 +19,7 @@ DEFAULT_MODULES = (
     (views.home, ""),
     (views.account, "/account"),
     (views.project, "/project"),
+    (views.todo, "/todo"),
 )
 
 

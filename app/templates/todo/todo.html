@@ -1,12 +1,11 @@
 {% extends 'base.html' %}
-
 {% block sidebar %}
-    <li class="treeview active">
+    <li class="treeview">
         <a href="/">
             <span>工作面部</span>
         </a>
     </li>
-    <li class="treeview">
+    <li class="treeview active">
         <a href="/todo/p">
             <span>待办事项</span>
         </a>
@@ -29,26 +28,12 @@
     </li>
 {% endblock %}
 {% block content %}
-    hehehehehehehhehehe
+<div class="todo-main">
+<div class="todo-tool"></div>
+</div>
+
 {% endblock %}
 {% block jscontent %}
-    <script>
-        $(document).ready(function () {
-            postMessage();
-        });
-    </script>
-
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul>
-                {% for message in messages %}
-                    <script>
-                        function postMessage() {
-                            $.globalMessenger().post("{{ message }}");
-                        }
-                    </script>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
+    <link href="{{ url_for('.static', filename = 'assets/css/todo.css') }}" rel="stylesheet">
+    <script src="{{ url_for('.static', filename = 'assets/js/todo.js') }}"></script>
 {% endblock %}
