@@ -15,7 +15,7 @@
     function fullWidthHeight() {
         var h = $(window).height();
         $(".todo-main").css({
-            "height": h-50
+            "height": h-141
         });
     }
 })(jQuery);
