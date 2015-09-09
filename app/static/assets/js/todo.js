@@ -3,19 +3,21 @@
  */
 (function ($) {
 
-    $(document).ready(function() {
-		fullWidthHeight();
+    $(document).ready(function () {
+        fullWidthHeight();
 
-	});
+    });
 
-	$(window).resize(function() {
-		fullWidthHeight();
-	});
+    $(window).resize(function () {
+        fullWidthHeight();
+    });
 
     function fullWidthHeight() {
         var h = $(window).height();
         $(".todo-main").css({
-            "height": h-141
+            "height": h - 141
         });
     }
+
 })(jQuery);
+
