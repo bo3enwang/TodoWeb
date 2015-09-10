@@ -6,7 +6,6 @@
     <link href="{{ url_for('.static', filename = 'css/bootstrapValidator.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('.static', filename = 'css/messenger.css') }}" rel="stylesheet">
     <link href="{{ url_for('.static', filename = 'css/messenger-theme-ice.css') }}" rel="stylesheet">
-    <link href="{{ url_for('.static', filename = 'css/flat/blue.css') }}" rel="stylesheet">
     <script src="{{ url_for('.static', filename = 'js/jquery-1.11.3.min.js') }}"></script>
     <meta charset="UTF-8">
     <title></title>
@@ -40,7 +39,7 @@
             </ul>
         </section>
     </aside>
-    <div name="content" class="content-wrapper">
+    <div id="content" class="content-wrapper">
         {% block content %}
         {% endblock %}
 
@@ -54,7 +53,6 @@
 <script src="{{ url_for('.static', filename = 'js/messenger-theme-future.js') }}"></script>
 <script src="{{ url_for('.static', filename = 'js/jquery.confirm.min.js') }}"></script>
 <script src="{{ url_for('.static', filename = 'js/jquery.slimscroll.min.js') }}"></script>
-<script src="{{ url_for('.static', filename = 'js/icheck.min.js') }}"></script>
 <script>
     $(function () {
         Messenger.options = {

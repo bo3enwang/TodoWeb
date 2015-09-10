@@ -53,28 +53,15 @@
                 <ul class="todo-list">
                     <li>
                         <!-- checkbox -->
-                        <input type="checkbox" value="" name="">
+                        <input type="checkbox" value="">
                         <!-- todo text -->
                         <span class="text">Design a nice theme</span>
                         <!-- Emphasis label -->
-                        <small class="label label-danger"><i class="fa fa-clock-o"></i> 2 mins</small>
+                        <small class="label label-danger">2 mins</small>
                         <!-- General tools such as edit or delete-->
                         <div class="tools">
-                            <i class="fa fa-edit"></i>
-                            <i class="fa fa-trash-o"></i>
-                        </div>
-                    </li>
-                    <li>
-                        <!-- checkbox -->
-                        <input type="checkbox" value="" name="">
-                        <!-- todo text -->
-                        <span class="text">Design a nice theme</span>
-                        <!-- Emphasis label -->
-                        <small class="label label-danger"><i class="fa fa-clock-o"></i> 2 mins</small>
-                        <!-- General tools such as edit or delete-->
-                        <div class="tools">
-                            <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>
-                            <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="true" onclick="dosome()"></span>
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                         </div>
                     </li>
                 </ul>
@@ -95,12 +82,19 @@
         $('input').on('change', function () {
             var ele = $(this).parents("li").first();
             ele.toggleClass("done");
-            id = ele.find()
+            id = ele.find();
             if ($('input', ele).is(":checked")) {
-                console.log($(this));
+                console.log($(this).val());
             } else {
                 alert("ex")
             }
         });
+    </script>
+    <script>
+        function dosome(){
+            date = new Date();
+            date.setDate(date.getDate()+1);
+            console.log(date)
+        }
     </script>
 {% endblock %}
