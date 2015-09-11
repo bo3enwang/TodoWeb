@@ -46,7 +46,17 @@
                 <h3 class="box-title">To Do List</h3>
 
                 <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-xs btn-info">今天</button>
+                    <button class="btn btn-xs" onclick="lastDay()">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    </button>
+                    <label id="todo-date">2018-18-18</label>
+
+                    <button class="btn btn-xs" onclick="nextDay()">
+                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    </button>
                 </div>
+
             </div>
             <!-- /.box-header -->
             <div class="box-body">
@@ -56,12 +66,10 @@
                         <input type="checkbox" value="">
                         <!-- todo text -->
                         <span class="text">Design a nice theme</span>
-                        <!-- Emphasis label -->
-                        <small class="label label-danger">2 mins</small>
                         <!-- General tools such as edit or delete-->
                         <div class="tools">
-                            <span class="glyphicon glyphicon-pencil" aria-hidden="true" onclick="dosome()"></span>
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            {#                            <span class="glyphicon glyphicon-pencil" aria-hidden="true" onclick="dosome()"></span>#}
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true" onclick="doDelete()"></span>
                         </div>
                     </li>
                 </ul>
@@ -74,27 +82,152 @@
         <!-- /.box -->
     </section>
 
+
+    <!-- 模态框（Modal） 记录计划 -->
+    <div class="modal fade" id="modal_project_add" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        记录计划
+                    </h4>
+                </div>
+                <form id="form_todo_add" action="/todo/add" method="post">
+                    <div class="modal-body">
+                        {{ form.hidden_tag() if form.hidden_tag }}
+                        <input type="hidden" id="t_date" name="t_date">
+                        <div class="form-group">
+                            <label for="name">任务名</label>
+                            <input type="text" class="form-control" name="name" id="name" placeholder="请输入任务名">
+                            <!-- /input-group -->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default"
+                                data-dismiss="modal">关闭
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            确认
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal -->
+    </div>
+
+    <div style="display: none">
+        <ul id="table_template_project">
+            <li>
+                <!-- checkbox -->
+                <input type="checkbox" value="">
+                <!-- todo text -->
+                <span class="text">Design a nice theme</span>
+                <!-- General tools such as edit or delete-->
+                <div class="tools">
+                    {#                            <span class="glyphicon glyphicon-pencil" aria-hidden="true" onclick="dosome()"></span>#}
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true" onclick="doDelete()"></span>
+                </div>
+            </li>
+        </ul>
+    </div>
+
 {% endblock %}
 {% block jscontent %}
     <link href="{{ url_for('.static', filename = 'assets/css/todo.css') }}" rel="stylesheet">
     <script src="{{ url_for('.static', filename = 'assets/js/todo.js') }}"></script>
     <script>
-        $('input').on('change', function () {
-            var ele = $(this).parents("li").first();
-            ele.toggleClass("done");
-            id = ele.find();
-            if ($('input', ele).is(":checked")) {
-                console.log($(this).val());
-            } else {
-                alert("ex")
-            }
-        });
+
     </script>
     <script>
-        function dosome(){
-            date = new Date();
-            date.setDate(date.getDate()+1);
-            console.log(date)
+        function addCheckBox() {
+            $('input').on('change', function () {
+                var ele = $(this).parents("li").first();
+                ele.toggleClass("done");
+                id = ele.find();
+                if ($('input', ele).is(":checked")) {
+                    console.log($(this).val());
+                } else {
+                    alert("ex")
+                }
+            });
         }
+        function doDelete() {
+            var m = moment();
+            console.log(m.format("YYYY-MM-DD"));
+        }
+        function nextDay() {
+            var date = $("#todo-date").text();
+            day = moment(date);
+            day.add(1, 'd');
+            ajaxDataTodo(day.format("YYYY-MM-DD"));
+        }
+        function lastDay() {
+            var date = $("#todo-date").text();
+            day = moment(date);
+            day.add(-1, 'd');
+            ajaxDataTodo(day.format("YYYY-MM-DD"));
+        }
+        function ajaxDataTodo(t_date) {
+            if (t_date == null) {
+                t_date = moment().format("YYYY-MM-DD");
+            }
+            $("#todo-date").text(t_date);
+            $.ajax({
+                type: 'post',
+                contentType: "application/json; charset=UTF-8",
+                url: '/todo/p/data',
+                dataType: 'json',
+                data: JSON.stringify({
+                    't_date': t_date
+                }),
+                error: function (xhr, err) {
+                    alert('请求失败，原因可能是：' + err + '！')
+                },
+                success: function (data, textStatus) {
+                    var json = $.parseJSON(data.result);
+                    console.log(json);
+                    {#                                $("#table_project").empty();#}
+                    {#                                $.each(json, function () {#}
+                    {#                                    tr = $("#table_template_project tr").clone();#}
+                    {#                                    tr.find('.cell-type').text(this.type);#}
+                    {#                                    tr.find('.cell-name').text(this.name);#}
+                    {#                                    tr.find('.cell-progress .ppass').css("width", this.p_percent + "%");#}
+                    {#                                    tr.find('.cell-time').text(this.start_time + " / " + this.end_time);#}
+                    {#                                    tr.find('.cell-text-progress').text(this.p_now + " / " + this.p_all);#}
+                    {#                                    tr.find('.cell-remain-days').text(this.remain_days);#}
+                    {#                                    if (this.status == 1) {#}
+                    {#                                        btnRecord = $("#template_button .p-record").clone();#}
+                    {#                                        btnRecord.attr("data-proid", this.id);#}
+                    {#                                        btnRecord.attr("data-remain", (this.p_all - this.p_now));#}
+                    {#                                        tr.find('.cell-button').append(btnRecord);#}
+                    {#                                    }#}
+                    {#                                    if (this.status == 0) {#}
+                    {#                                        btnBegin = $("#template_button .p-begin").clone();#}
+                    {#                                        btnBegin.attr("proid", this.id);#}
+                    {#                                        tr.find('.cell-button').append(btnBegin);#}
+                    {#                                    }#}
+                    {#                                    if (this.status != 2) {#}
+                    {#                                        btnDelete = $("#template_button .p-delete").clone();#}
+                    {#                                        btnDelete.attr("proid", this.id);#}
+                    {#                                        tr.find('.cell-button').append(btnDelete);#}
+                    {#                                    }#}
+                    {#                                    $("#table_project").append(tr);#}
+                    {#                                });#}
+                    {#                                confirmAdd();#}
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            ajaxDataTodo();
+            addCheckBox();
+        });
     </script>
 {% endblock %}

@@ -2,7 +2,7 @@ __author__ = 'Zovven'
 from flask.ext.script import Manager
 from app import create_app
 from app.models import db
-from app.models import User, Project, ProjectHistory
+from app.models import User, Project, ProjectHistory, Todo
 import json
 from app.jsonutil import TimeEncoder
 from flask import jsonify
@@ -41,7 +41,7 @@ def findp():
 def qpj():
     user = User.query.get(1)
     jsondata = Project.query.progress().restricted(user).jsonify()
-    print json.dumps(jsondata,cls=TimeEncoder)
+    print json.dumps(jsondata, cls=TimeEncoder)
 
 
 @manager.command
@@ -51,6 +51,18 @@ def ph():
     ph.project = project
     ph.progress = 55
     db.session.add(ph)
+    db.session.commit()
+
+
+@manager.command
+def addtodo():
+    user = User.query.get(1)
+    todo = Todo()
+    todo.user = user
+    todo.name = "hehehehe"
+    todo.t_date = timeutils.today()
+    todo.status = 0
+    db.session.add(todo)
     db.session.commit()
 
 

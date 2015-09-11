@@ -20,6 +20,15 @@
     height: 100%;
 }
 
+.box-tools{
+    margin-top: 5px;
+    margin-right: 5px;
+}
+
+#todo-date{
+    margin-left: 5px;
+    margin-right: 5px;
+}
 
 /* Widget: TODO LIST */
 .todo-list {
