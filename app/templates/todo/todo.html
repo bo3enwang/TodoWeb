@@ -41,8 +41,6 @@
     <section class="content">
         <div class="box box-primary">
             <div class="box-header">
-                <i class="ion ion-clipboard"></i>
-
                 <h3 class="box-title">To Do List</h3>
 
                 <div class="box-tools pull-right">
@@ -76,7 +74,9 @@
             </div>
             <!-- /.box-body -->
             <div class="box-footer clearfix no-border">
-                <button class="btn btn-default pull-right"><i class="fa fa-plus"></i> Add item</button>
+                <button class="btn btn-default pull-right" data-toggle="modal"
+                        data-target="#modal_todo_add"> Add item
+                </button>
             </div>
         </div>
         <!-- /.box -->
@@ -84,7 +84,7 @@
 
 
     <!-- 模态框（Modal） 记录计划 -->
-    <div class="modal fade" id="modal_project_add" tabindex="-1" role="dialog"
+    <div class="modal fade" id="modal_todo_add" tabindex="-1" role="dialog"
          aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -143,11 +143,8 @@
     <link href="{{ url_for('.static', filename = 'assets/css/todo.css') }}" rel="stylesheet">
     <script src="{{ url_for('.static', filename = 'assets/js/todo.js') }}"></script>
     <script>
-
-    </script>
-    <script>
         function addCheckBox() {
-            $('input').on('change', function () {
+            $('.todo-list input[type=checkbox]').on('change', function () {
                 var ele = $(this).parents("li").first();
                 ele.toggleClass("done");
                 id = ele.find();
@@ -179,6 +176,7 @@
                 t_date = moment().format("YYYY-MM-DD");
             }
             $("#todo-date").text(t_date);
+            $("#t_date").val(t_date);
             $.ajax({
                 type: 'post',
                 contentType: "application/json; charset=UTF-8",

@@ -7,6 +7,6 @@ from wtforms import HiddenField, BooleanField, StringField, PasswordField, Submi
 from wtforms.validators import DataRequired, Length, NumberRange
 
 
-class TodoAdd(Form):
+class TodoAddForm(Form):
     t_date = DateField("Todo Date", validators=[DataRequired()])
     name = StringField("Todo name", validators=[DataRequired(), Length(min=1, max=30)])

@@ -65,6 +65,13 @@ def addtodo():
     db.session.add(todo)
     db.session.commit()
 
+@manager.command
+def ph():
+    t_date = '2015-09-13'
+    tododata = Todo.query.query_day(t_date).restricted(g.user).jsonify()
+
+
+
 
 if __name__ == '__main__':
     manager.run()
