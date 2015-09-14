@@ -36,3 +36,33 @@ def todo_add():
 def index():
     form = TodoAddForm()
     return render_template('todo/todo.html', form=form)
+
+
+@todo.route('/change', methods=("post",))
+def change_todo_status():
+    result = -1
+    jsondata = request.get_json()
+    todoid = jsondata.get('id')
+    status = jsondata.get('status')
+    t = Todo.query.get(todoid)
+    if t:
+        if status == 1:
+            t.status = 1
+        else:
+            t.status = 0
+        db.session.commit()
+        result = 1
+    return jsonify({'result': result})
+
+
+@todo.route('/delete', methods=("post",))
+def delete_todo():
+    result = -1
+    jsondata = request.get_json()
+    todoid = jsondata.get('id')
+    t = Todo.query.get(todoid)
+    if t:
+        db.session.delete(t)
+        db.session.commit()
+        result = 1
+    return jsonify({'result': result})

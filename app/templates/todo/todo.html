@@ -1,29 +1,25 @@
 {% extends 'base.html' %}
 {% block sidebar %}
-    <li class="treeview">
-        <a href="/">
-            <span>工作面部</span>
-        </a>
-    </li>
-    <li class="treeview active">
+    <li id="nav_todo" class="treeview active">
         <a href="/todo/p">
             <span>待办事项</span>
         </a>
     </li>
-    <li class="treeview">
+    <li id="nav_p" class="treeview">
         <a href="/project/p/progress">
-            <i class="fa fa-dashboard"></i> <span>我的计划</span></i>
+            <span>我的计划</span></i>
         </a>
         <ul class="treeview-menu">
-            <li><a href="/project/p/progress">进行中</a></li>
-            <li><a href="/project/p/start"> 未激活</a></li>
-            <li><a href="/project/p/end"> 已完成</a></li>
+            <li id="nav_p_progress">
+                <a href="/project/p/progress">进行中</a>
+            </li>
+            <li id="nav_p_start"><a href="/project/p/start"> 未激活</a></li>
+            <li id="nav_p_end"><a href="/project/p/end"> 已完成</a></li>
         </ul>
     </li>
     <li class="treeview">
         <a href="/project" target="content">
             <span>Project</span>
-            <span class="label label-primary pull-right">4</span>
         </a>
     </li>
 {% endblock %}
@@ -44,11 +40,11 @@
                 <h3 class="box-title">To Do List</h3>
 
                 <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-xs btn-info">今天</button>
+                    <button type="button" class="btn btn-xs btn-info" onclick="ajaxDataTodo()">今天</button>
                     <button class="btn btn-xs" onclick="lastDay()">
                         <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
                     </button>
-                    <label id="todo-date">2018-18-18</label>
+                    <label id="todo-date"></label>
 
                     <button class="btn btn-xs" onclick="nextDay()">
                         <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
@@ -58,18 +54,7 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-                <ul class="todo-list">
-                    <li>
-                        <!-- checkbox -->
-                        <input type="checkbox" value="">
-                        <!-- todo text -->
-                        <span class="text">Design a nice theme</span>
-                        <!-- General tools such as edit or delete-->
-                        <div class="tools">
-                            {#                            <span class="glyphicon glyphicon-pencil" aria-hidden="true" onclick="dosome()"></span>#}
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true" onclick="doDelete()"></span>
-                        </div>
-                    </li>
+                <ul class="todo-list" id="todo-list">
                 </ul>
             </div>
             <!-- /.box-body -->
@@ -101,6 +86,7 @@
                     <div class="modal-body">
                         {{ form.hidden_tag() if form.hidden_tag }}
                         <input type="hidden" id="t_date" name="t_date">
+
                         <div class="form-group">
                             <label for="name">任务名</label>
                             <input type="text" class="form-control" name="name" id="name" placeholder="请输入任务名">
@@ -123,16 +109,15 @@
     </div>
 
     <div style="display: none">
-        <ul id="table_template_project">
-            <li>
+        <ul id="ul_template_todo">
+            <li class="cell-main">
                 <!-- checkbox -->
-                <input type="checkbox" value="">
+                <input class="cell-checkbox" type="checkbox" value="">
                 <!-- todo text -->
-                <span class="text">Design a nice theme</span>
+                <span class="text cell-name"></span>
                 <!-- General tools such as edit or delete-->
                 <div class="tools">
-                    {#                            <span class="glyphicon glyphicon-pencil" aria-hidden="true" onclick="dosome()"></span>#}
-                    <span class="glyphicon glyphicon-remove" aria-hidden="true" onclick="doDelete()"></span>
+                    <span class="glyphicon glyphicon-remove cell-delete" data-id="" aria-hidden="true"></span>
                 </div>
             </li>
         </ul>
@@ -143,89 +128,11 @@
     <link href="{{ url_for('.static', filename = 'assets/css/todo.css') }}" rel="stylesheet">
     <script src="{{ url_for('.static', filename = 'assets/js/todo.js') }}"></script>
     <script>
-        function addCheckBox() {
-            $('.todo-list input[type=checkbox]').on('change', function () {
-                var ele = $(this).parents("li").first();
-                ele.toggleClass("done");
-                id = ele.find();
-                if ($('input', ele).is(":checked")) {
-                    console.log($(this).val());
-                } else {
-                    alert("ex")
-                }
-            });
-        }
-        function doDelete() {
-            var m = moment();
-            console.log(m.format("YYYY-MM-DD"));
-        }
-        function nextDay() {
-            var date = $("#todo-date").text();
-            day = moment(date);
-            day.add(1, 'd');
-            ajaxDataTodo(day.format("YYYY-MM-DD"));
-        }
-        function lastDay() {
-            var date = $("#todo-date").text();
-            day = moment(date);
-            day.add(-1, 'd');
-            ajaxDataTodo(day.format("YYYY-MM-DD"));
-        }
-        function ajaxDataTodo(t_date) {
-            if (t_date == null) {
-                t_date = moment().format("YYYY-MM-DD");
-            }
-            $("#todo-date").text(t_date);
-            $("#t_date").val(t_date);
-            $.ajax({
-                type: 'post',
-                contentType: "application/json; charset=UTF-8",
-                url: '/todo/p/data',
-                dataType: 'json',
-                data: JSON.stringify({
-                    't_date': t_date
-                }),
-                error: function (xhr, err) {
-                    alert('请求失败，原因可能是：' + err + '！')
-                },
-                success: function (data, textStatus) {
-                    var json = $.parseJSON(data.result);
-                    console.log(json);
-                    {#                                $("#table_project").empty();#}
-                    {#                                $.each(json, function () {#}
-                    {#                                    tr = $("#table_template_project tr").clone();#}
-                    {#                                    tr.find('.cell-type').text(this.type);#}
-                    {#                                    tr.find('.cell-name').text(this.name);#}
-                    {#                                    tr.find('.cell-progress .ppass').css("width", this.p_percent + "%");#}
-                    {#                                    tr.find('.cell-time').text(this.start_time + " / " + this.end_time);#}
-                    {#                                    tr.find('.cell-text-progress').text(this.p_now + " / " + this.p_all);#}
-                    {#                                    tr.find('.cell-remain-days').text(this.remain_days);#}
-                    {#                                    if (this.status == 1) {#}
-                    {#                                        btnRecord = $("#template_button .p-record").clone();#}
-                    {#                                        btnRecord.attr("data-proid", this.id);#}
-                    {#                                        btnRecord.attr("data-remain", (this.p_all - this.p_now));#}
-                    {#                                        tr.find('.cell-button').append(btnRecord);#}
-                    {#                                    }#}
-                    {#                                    if (this.status == 0) {#}
-                    {#                                        btnBegin = $("#template_button .p-begin").clone();#}
-                    {#                                        btnBegin.attr("proid", this.id);#}
-                    {#                                        tr.find('.cell-button').append(btnBegin);#}
-                    {#                                    }#}
-                    {#                                    if (this.status != 2) {#}
-                    {#                                        btnDelete = $("#template_button .p-delete").clone();#}
-                    {#                                        btnDelete.attr("proid", this.id);#}
-                    {#                                        tr.find('.cell-button').append(btnDelete);#}
-                    {#                                    }#}
-                    {#                                    $("#table_project").append(tr);#}
-                    {#                                });#}
-                    {#                                confirmAdd();#}
-                }
-            });
-        }
+
 
         $(document).ready(function () {
             ajaxDataTodo();
-            addCheckBox();
+            addFuntion();
         });
     </script>
 {% endblock %}

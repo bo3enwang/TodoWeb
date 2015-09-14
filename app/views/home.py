@@ -12,5 +12,6 @@ home = Module(__name__)
 @home.route("/")
 @login_required
 def home_index():
-    flash('hehe')
-    return render_template("home/index.html")
+    # flash('hehe')
+    # return render_template("home/index.html")
+    return  render_template("todo/todo.html")

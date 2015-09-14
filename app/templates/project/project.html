@@ -1,28 +1,28 @@
 {% extends 'base.html' %}
 {% block sidebar %}
-    <li class="treeview">
-        <a href="/">
-            <span>工作面版</span>
-        </a>
-    </li>
-    <li class="treeview">
-        <a href="/project">
+    <li id="nav_todo" class="treeview">
+        <a href="/todo/p">
             <span>待办事项</span>
-            <span class="label label-primary pull-right">4</span>
         </a>
     </li>
-    <li class="active treeview">
+    <li id="nav_p" class="treeview active">
         <a href="/project/p/progress">
-            <i class="fa fa-dashboard"></i> <span>我的计划</span></i>
+            <span>我的计划</span></i>
         </a>
         <ul class="treeview-menu">
-            <li {% if ptype == 'progress' %} class="active" {% endif %} ><a href="/project/p/progress">进行中</a></li>
-            <li {% if ptype == 'start' %} class="active"  {% endif %} ><a href="/project/p/start"> 未激活</a></li>
-            <li {% if ptype == 'end' %} class="active"  {% endif %}><a href="/project/p/end"> 已完成</a></li>
+            <li id="nav_p_progress" {% if ptype == 'progress' %}class="active"{% endif %}>
+                <a href="/project/p/progress">进行中</a>
+            </li>
+            <li id="nav_p_start" {% if ptype == 'start' %}class="active"{% endif %}><a href="/project/p/start"> 未激活</a></li>
+            <li id="nav_p_end" {% if ptype == 'end' %}class="active"{% endif %}><a href="/project/p/end"> 已完成</a></li>
         </ul>
     </li>
+    <li class="treeview">
+        <a href="/project" target="content">
+            <span>Project</span>
+        </a>
+    </li>
 {% endblock %}
-
 {% block content %}
     <section class="content-header">
         <h1>
