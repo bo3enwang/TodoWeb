@@ -14,4 +14,4 @@ home = Module(__name__)
 def home_index():
     # flash('hehe')
     # return render_template("home/index.html")
-    return  render_template("todo/todo.html")
+    return redirect(url_for('todo.index'))

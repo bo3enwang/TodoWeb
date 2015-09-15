@@ -14,8 +14,8 @@ manager = Manager(create_app())
 
 @manager.command
 def saveuser():
-    user = User(username='zo', email='bluewbw@qq.com')
-    user._set_password('123')
+    user = User(username='qwe', email='ewq@qq.com')
+    user.password = '123'
     db.session.add(user)
     db.session.commit()
     db.session.close()

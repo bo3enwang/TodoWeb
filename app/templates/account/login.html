@@ -13,9 +13,9 @@
         <div class="login-container">
             <form class="form-signin" action="/account/login" method="post">
                 {{ form.hidden_tag() if form.hidden_tag }}
-                <div class="glyphicon-warning-sign">
+                <small class="help-block flash-info">
                     {{ get_flashed_messages()[0] }}
-                </div>
+                </small>
                 <div class="form-input">
                     <input id="login" name="login" class="form-control" type="text" placeholder="Username"
                            required>
@@ -28,7 +28,7 @@
                     <label>{{ form.remember(class='checkbox') }} Remember Me</label>
                 </div>
                 <input type="submit" class="btn btn-primary" value="Sign In"/>
-                <a class="btn btn-primary">Register</a>
+                <a href="/account/register" class="btn btn-primary">Register</a>
             </form>
         </div>
     </div>
