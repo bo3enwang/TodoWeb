@@ -43,10 +43,3 @@ class DefaultConfig(object):
     #
     # CACHE_TYPE = "simple"
     # CACHE_DEFAULT_TIMEOUT = 300
-
-
-class TestConfig(object):
-    TESTING = True
-    CSRF_ENABLED = False
-    SQLALCHEMY_DATABASE_URI = "sqlite://"
-    SQLALCHEMY_ECHO = False
