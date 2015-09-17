@@ -36,14 +36,13 @@
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        {#                        <div class="box-title">#}
-                        {#                            <button class="btn btn-sm btn-primary">呵呵</button>#}
-                        {#                        </div>#}
-                        <ol class="breadcrumb">
-                            <li><a href="#">Home</a></li>
-                            <li><a href="#">Library</a></li>
-                            <li class="active">Data</li>
-                        </ol>
+                        <div id="btn-group-type" class="btn-group .btn-group-sm" role="group" aria-label="...">
+                            <button type="button" class="btn btn-default" data-type="-1">全部</button>
+                            <button type="button" class="btn btn-primary" data-type="0">计划</button>
+                            <button type="button" class="btn btn-success" data-type="1">阅读</button>
+                            <button type="button" class="btn btn-info" data-type="2">学习</button>
+                            <button type="button" class="btn btn-warning" data-type="3">运动</button>
+                        </div>
 
                         <div class="box-tools">
                             <button class="btn btn-sm btn-default" data-toggle="modal"
@@ -57,8 +56,8 @@
                         <table class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th style="width: 7%">优先级</th>
-                                <th style="width: 20%">任务名</th>
+                                <th style="width: 5%">类型</th>
+                                <th style="width: 22%">任务名</th>
                                 <th style="width: 24%">进度条</th>
                                 <th style="width: 10%">进度</th>
                                 <th style="width: 20%">截至日期</th>
@@ -96,10 +95,12 @@
 
                         {{ form.hidden_tag() if form.hidden_tag }}
                         <div class="form-group">
-                            <label class="control-label">优先级</label>
+                            <label class="control-label">类型</label>
                             <select class="form-control" name="type">
-                                <option value="1">普通</option>
-                                <option value="5">优先</option>
+                                <option value="0">计划</option>
+                                <option value="1">阅读</option>
+                                <option value="2">学习</option>
+                                <option value="3">运动</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -111,11 +112,11 @@
                         <div class="form-group">
                             <label for="p_all">计划长度</label>
                             <input type="text" class="form-control" name="p_all" id="p_all"
-                                   placeholder="请输入100~3000之内的数字" required>
+                                   placeholder="请输入10~9999之内的数字" required>
                         </div>
                         <div class="form-group">
                             <label for="p_day">天数</label>
-                            <input type="text" class="form-control" name="p_day" id="p_day" placeholder="请输入7~999之间的数字"
+                            <input type="text" class="form-control" name="p_day" id="p_day" placeholder="请输入3~999之间的数字"
                                    required>
                         </div>
                     </div>
@@ -179,6 +180,9 @@
 
     <script>
         function ajaxDataProject(ptype) {
+            if(ptype==null){
+                ptype = -1;
+            }
             $.ajax({
                 type: 'post',
                 contentType: "application/json; charset=UTF-8",
@@ -202,8 +206,18 @@
                         tr.find('.cell-text-progress').text(this.p_now + " / " + this.p_all);
                         tr.find('.cell-remain-days').text(this.remain_days);
                         switch (this.type) {
+                            case 0 :
+                                tr.find('.cell-type').html("<span class=\"label label-primary\">计划</span>");
+                                break;
                             case 1 :
-                                tr.find('.cell-type').html("<span class=\"label label-default\">计划</span>");
+                                tr.find('.cell-type').html("<span class=\"label label-success\">阅读</span>");
+                                break;
+                            case 2 :
+                                tr.find('.cell-type').html("<span class=\"label label-info\">学习</span>");
+                                break;
+                            case 3 :
+                                tr.find('.cell-type').html("<span class=\"label label-warning\">运动</span>");
+                                break;
                         }
                         if (this.status == 1) {
                             btnRecord = $("#template_button .p-record").clone();
@@ -267,7 +281,15 @@
     <script>
         $(document).ready(function () {
             ajaxDataProject();
+            typeChangeAdd();
         });
+        function typeChangeAdd() {
+            $("#btn-group-type .btn").click(function () {
+                $("#btn-group-type .btn").removeClass("active");
+                $(this).addClass("active");
+                ajaxDataProject($(this).attr("data-type"));
+            });
+        }
     </script>
     <script src="{{ url_for('.static', filename = 'assets/js/project.js') }}"></script>
 {% endblock %}

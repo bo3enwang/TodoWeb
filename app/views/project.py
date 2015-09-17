@@ -12,13 +12,16 @@ project = Module(__name__)
 def project_data():
     jsondata = request.get_json()
     pstatus = jsondata.get('pstatus')
-    ptype = jsondata.get('ptype')
+    ptype = int(jsondata.get('ptype'))
     statusDict = {
         "start": Project.STATUS_START,
         "progress": Project.STATUS_PROGRESS,
         "end": Project.STATUS_END,
     }
-    pdata = Project.query.project_status(statusDict.get(pstatus)).restricted(g.user).jsonify()
+    if ptype >= 0:
+        pdata = Project.query.project_status(statusDict.get(pstatus)).project_type(ptype).restricted(g.user).jsonify()
+    else:
+        pdata = Project.query.project_status(statusDict.get(pstatus)).restricted(g.user).jsonify()
     return jsonify({"result": pdata})
 
 

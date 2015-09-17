@@ -30,31 +30,31 @@ $(document).ready(function () {
                         message: '计划总长不能为空'
                     },
                     lessThan: {
-                        value: 3000,
+                        value: 9999,
                         inclusive: true,
-                        message: '计划总长不能超过3000'
+                        message: '计划总长不能超过9999'
                     },
                     greaterThan: {
-                        value: 100,
+                        value: 10,
                         inclusive: true,
-                        message: '计划总长不能小于100'
+                        message: '计划总长不能小于10'
                     }
                 }
             },
             p_day: {
                 validators: {
                     notEmpty: {
-                        message: '计划时长不能为空'
+                        message: '计划天数不能为空'
                     },
                     lessThan: {
                         value: 999,
                         inclusive: true,
-                        message: '计划时长不能超过999'
+                        message: '计划天数不能超过999'
                     },
                     greaterThan: {
                         value: 3,
                         inclusive: true,
-                        message: '计划时长不能小于3'
+                        message: '计划天数不能小于3'
                     }
                 }
             }
@@ -81,6 +81,14 @@ $(document).ready(function () {
                 $('#form_project_add').data('bootstrapValidator').resetForm(true);
                 $('#modal_project_add').modal('hide');
                 ajaxDataProject();
+            }else{
+                $.globalMessenger().post({
+                    message: '添加失败',
+                    type: 'info',
+                    showCloseButton: true
+                });
+                $('#form_project_add').data('bootstrapValidator').resetForm(true);
+                $('#modal_project_add').modal('hide');
             }
         }, 'json');
     });
@@ -131,6 +139,14 @@ $(document).ready(function () {
                     $('#form_project_record').data('bootstrapValidator').resetForm(true);
                     $('#contactForm').bootstrapValidator('removeField', 'record');
                     ajaxDataProject();
+                }else{
+                    $.globalMessenger().post({
+                        message: '记录失败',
+                        type: 'info',
+                        showCloseButton: true
+                    });
+                    $('#modal_project_record').modal('hide');
+                    $('#form_project_record').data('bootstrapValidator').resetForm(true);
                 }
             }
         });

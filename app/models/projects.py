@@ -40,8 +40,8 @@ class Project(db.Model):
 
     TYPE_PROJECT = 0
     TYPE_READ = 1
-    TYPE_SPORT = 2
-    TYPE_LEARN = 3
+    TYPE_LEARN = 2
+    TYPE_SPORT = 3
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
