@@ -11,23 +11,22 @@ project = Module(__name__)
 @project.route('/p/data', methods=("post",))
 def project_data():
     jsondata = request.get_json()
+    pstatus = jsondata.get('pstatus')
     ptype = jsondata.get('ptype')
-    if ptype == 'start':
-        pdata = Project.query.start().restricted(g.user).jsonify()
-    elif ptype == 'progress':
-        pdata = Project.query.progress().restricted(g.user).jsonify()
-    elif ptype == 'end':
-        pdata = Project.query.end().restricted(g.user).jsonify()
-    else:
-        pdata = Project.query.progress().jsonify()
+    statusDict = {
+        "start": Project.STATUS_START,
+        "progress": Project.STATUS_PROGRESS,
+        "end": Project.STATUS_END,
+    }
+    pdata = Project.query.project_status(statusDict.get(pstatus)).restricted(g.user).jsonify()
     return jsonify({"result": pdata})
 
 
-@project.route('/p/<ptype>')
+@project.route('/p/<pstatus>')
 @login_required
-def project_query(ptype):
+def project_query(pstatus):
     form = ProjectAddForm()
-    return render_template('project/project.html', form=form, ptype=ptype)
+    return render_template('project/project.html', form=form, pstatus=pstatus)
 
 
 @project.route('/add', methods=("post",))

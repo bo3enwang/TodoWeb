@@ -10,11 +10,12 @@
             <span>我的计划</span></i>
         </a>
         <ul class="treeview-menu">
-            <li id="nav_p_progress" {% if ptype == 'progress' %}class="active"{% endif %}>
+            <li id="nav_p_progress" {% if pstatus == 'progress' %}class="active"{% endif %}>
                 <a href="/project/p/progress">进行中</a>
             </li>
-            <li id="nav_p_start" {% if ptype == 'start' %}class="active"{% endif %}><a href="/project/p/start"> 未激活</a></li>
-            <li id="nav_p_end" {% if ptype == 'end' %}class="active"{% endif %}><a href="/project/p/end"> 已完成</a></li>
+            <li id="nav_p_start" {% if pstatus == 'start' %}class="active"{% endif %}><a href="/project/p/start">
+                未激活</a></li>
+            <li id="nav_p_end" {% if pstatus == 'end' %}class="active"{% endif %}><a href="/project/p/end"> 已完成</a></li>
         </ul>
     </li>
 {% endblock %}
@@ -35,10 +36,17 @@
             <div class="col-xs-12">
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title">我的计划</h3>
+                        {#                        <div class="box-title">#}
+                        {#                            <button class="btn btn-sm btn-primary">呵呵</button>#}
+                        {#                        </div>#}
+                        <ol class="breadcrumb">
+                            <li><a href="#">Home</a></li>
+                            <li><a href="#">Library</a></li>
+                            <li class="active">Data</li>
+                        </ol>
 
                         <div class="box-tools">
-                            <button class="btn btn-default" data-toggle="modal"
+                            <button class="btn btn-sm btn-default" data-toggle="modal"
                                     data-target="#modal_project_add">
                                 新增计划
                             </button>
@@ -170,14 +178,15 @@
 {% block jscontent %}
 
     <script>
-        function ajaxDataProject() {
+        function ajaxDataProject(ptype) {
             $.ajax({
                 type: 'post',
                 contentType: "application/json; charset=UTF-8",
                 url: '/project/p/data',
                 dataType: 'json',
                 data: JSON.stringify({
-                    'ptype': "{{ ptype }}"
+                    'pstatus': "{{ pstatus }}",
+                    'ptype': ptype
                 }),
                 error: function (xhr, err) {
                     alert('请求失败，原因可能是：' + err + '！')
@@ -186,13 +195,16 @@
                     var json = $.parseJSON(data.result);
                     $("#table_project").empty();
                     $.each(json, function () {
-                        tr = $("#table_template_project tr").clone();
-                        tr.find('.cell-type').text(this.type);
+                        var tr = $("#table_template_project tr").clone();
                         tr.find('.cell-name').text(this.name);
                         tr.find('.cell-progress .ppass').css("width", this.p_percent + "%");
                         tr.find('.cell-time').text(this.start_time + " / " + this.end_time);
                         tr.find('.cell-text-progress').text(this.p_now + " / " + this.p_all);
                         tr.find('.cell-remain-days').text(this.remain_days);
+                        switch (this.type) {
+                            case 1 :
+                                tr.find('.cell-type').html("<span class=\"label label-default\">计划</span>");
+                        }
                         if (this.status == 1) {
                             btnRecord = $("#template_button .p-record").clone();
                             btnRecord.attr("data-proid", this.id);

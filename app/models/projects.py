@@ -17,14 +17,11 @@ class ProjectQuery(BaseQuery):
             jsonarry.append(project.json)
         return json.dumps(jsonarry, cls=jsonutil.TimeEncoder)
 
-    def start(self):
-        return self.filter(Project.status == Project.STATUS_START)
+    def project_status(self, pstatus):
+        return self.filter(Project.status == pstatus)
 
-    def progress(self):
-        return self.filter(Project.status == Project.STATUS_PROGRESS)
-
-    def end(self):
-        return self.filter(Project.status == Project.STATUS_END)
+    def project_type(self, ptype):
+        return self.filter(Project.type == ptype)
 
     def restricted(self, user=None):
         return self.filter(Project.user == user)
@@ -41,9 +38,14 @@ class Project(db.Model):
     STATUS_END = 2
     STATUS_DEAD = 3
 
+    TYPE_PROJECT = 0
+    TYPE_READ = 1
+    TYPE_SPORT = 2
+    TYPE_LEARN = 3
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
-    type = db.Column(db.Integer)
+    type = db.Column(db.Integer, default=0)
     status = db.Column(db.Integer, default=0)
     p_all = db.Column(db.Integer)
     p_day = db.Column(db.Integer)
