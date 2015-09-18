@@ -128,6 +128,9 @@
             ajaxDataTodo();
             addFuntion();
             todoScrollAdd();
+            $(window).resize(function () {
+                todoScrollAdd();
+            });
         });
         function todoScrollAdd() {
             var h = $(window).height();

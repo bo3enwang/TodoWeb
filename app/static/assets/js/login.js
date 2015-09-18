@@ -24,7 +24,3 @@
         });
     }
 })(jQuery);
-
-function toRegister(){
-
-}
