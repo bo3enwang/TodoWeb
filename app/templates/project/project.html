@@ -52,7 +52,7 @@
                         </div>
                     </div>
                     <!-- /.box-header -->
-                    <div class="box-body no-padding">
+                    <div id="project-box" class="box-body no-padding">
                         <table class="table table-bordered table-striped">
                             <thead>
                             <tr>
@@ -245,7 +245,7 @@
 
 
     <table style="display: none">
-        <div id="template_button">
+        <div id="template_button" style="display: none">
 
             <button type="button" class="btn btn-default btn-xs p-begin" proid="">
                 <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 激活
@@ -282,12 +282,21 @@
         $(document).ready(function () {
             ajaxDataProject();
             typeChangeAdd();
+            projectScrollAdd();
         });
         function typeChangeAdd() {
             $("#btn-group-type .btn").click(function () {
                 $("#btn-group-type .btn").removeClass("active");
                 $(this).addClass("active");
                 ajaxDataProject($(this).attr("data-type"));
+            });
+        }
+        function projectScrollAdd() {
+            var h = $(window).height();
+            $("#project-box").slimScroll({
+                color: '#001F3F',
+                size: '3px',
+                height: h-200+'px',
             });
         }
     </script>

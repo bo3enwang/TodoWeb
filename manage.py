@@ -22,11 +22,27 @@ def saveuser():
 
 
 @manager.command
-def dopw():
-    user, authenticated = User.query.authenticate('zo', '123')
-    print user.email
-    print authenticated
+def bathaddp():
+    user = User.query.get(1)
+    for i in range(10):
+        p = Project()
+        p.user = user
+        p.name = "ehhe" + str(i)
+        p.p_all = 50 + i * 10
+        p.p_day = 3 + i * 3
+        db.session.add(p)
+        db.session.commit()
 
+@manager.command
+def bathaddto():
+    user = User.query.get(1)
+    for i in range(20):
+        t = Todo()
+        t.user = user
+        t.t_date = timeutils.today()
+        t.name = "ehhe" + str(i)
+        db.session.add(t)
+        db.session.commit()
 
 @manager.command
 def findp():
@@ -65,12 +81,11 @@ def addtodo():
     db.session.add(todo)
     db.session.commit()
 
+
 @manager.command
 def ph():
     t_date = '2015-09-13'
     tododata = Todo.query.query_day(t_date).restricted(g.user).jsonify()
-
-
 
 
 if __name__ == '__main__':
