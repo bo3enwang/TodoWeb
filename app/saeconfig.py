@@ -3,7 +3,7 @@ __author__ = 'Zovven'
 
 import sae.const
 class DefaultConfig(object):
-    DEBUG = True
+    DEBUG = False
 
     # change this in your production settings !!!
 
