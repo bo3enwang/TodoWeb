@@ -7,7 +7,7 @@ from wtforms.validators import DataRequired, Length, NumberRange
 
 
 class ProjectAddForm(Form):
-    type = IntegerField("Project type", validators=[Length(min=0, max=5)])
+    type = IntegerField("Project type", validators=[NumberRange(min=0, max=5)])
 
     name = StringField("Project name", validators=[DataRequired(), Length(min=1, max=30)])
 
