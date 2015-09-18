@@ -39,8 +39,8 @@
                         <div id="btn-group-type" class="btn-group .btn-group-sm" role="group" aria-label="...">
                             <button type="button" class="btn btn-default" data-type="-1">全部</button>
                             <button type="button" class="btn btn-primary" data-type="0">计划</button>
-                            <button type="button" class="btn btn-success" data-type="1">阅读</button>
-                            <button type="button" class="btn btn-info" data-type="2">学习</button>
+                            <button type="button" class="btn btn-info" data-type="1">学习</button>
+                            <button type="button" class="btn btn-success" data-type="2">阅读</button>
                             <button type="button" class="btn btn-warning" data-type="3">运动</button>
                         </div>
 
@@ -98,8 +98,8 @@
                             <label class="control-label">类型</label>
                             <select class="form-control" name="type">
                                 <option value="0">计划</option>
-                                <option value="1">阅读</option>
-                                <option value="2">学习</option>
+                                <option value="1">学习</option>
+                                <option value="2">阅读</option>
                                 <option value="3">运动</option>
                             </select>
                         </div>
@@ -180,7 +180,7 @@
 
     <script>
         function ajaxDataProject(ptype) {
-            if(ptype==null){
+            if (ptype == null) {
                 ptype = -1;
             }
             $.ajax({
@@ -210,10 +210,10 @@
                                 tr.find('.cell-type').html("<span class=\"label label-primary\">计划</span>");
                                 break;
                             case 1 :
-                                tr.find('.cell-type').html("<span class=\"label label-success\">阅读</span>");
+                                tr.find('.cell-type').html("<span class=\"label label-info\">学习</span>");
                                 break;
                             case 2 :
-                                tr.find('.cell-type').html("<span class=\"label label-info\">学习</span>");
+                                tr.find('.cell-type').html("<span class=\"label label-success\">阅读</span>");
                                 break;
                             case 3 :
                                 tr.find('.cell-type').html("<span class=\"label label-warning\">运动</span>");

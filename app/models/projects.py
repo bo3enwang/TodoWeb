@@ -39,8 +39,8 @@ class Project(db.Model):
     STATUS_DEAD = 3
 
     TYPE_PROJECT = 0
-    TYPE_READ = 1
-    TYPE_LEARN = 2
+    TYPE_LEARN = 1
+    TYPE_READ = 2
     TYPE_SPORT = 3
 
     id = db.Column(db.Integer, primary_key=True)
