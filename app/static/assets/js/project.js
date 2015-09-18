@@ -11,6 +11,13 @@ $(document).ready(function () {
             validating: 'glyphicon glyphicon-refresh'
         },
         fields: {
+            type: {
+                validators: {
+                    notEmpty: {
+                        message: '请选择计划类型'
+                    }
+                }
+            },
             name: {
                 message: '计划名不正确',
                 validators: {
