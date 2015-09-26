@@ -75,10 +75,14 @@ def project_record():
     result = -1
     proid = jsondata.get('proid')
     record = jsondata.get('record')
-    if proid:
+    p = Project.query.get_or_404(proid)
+    if p:
         ph = ProjectHistory()
         ph.record = record
-        ph.project_id = proid
+        ph.project = p
+        if (p.p_now + long(record)) >= p.p_all:
+            p.status = Project.STATUS_END
+            p.p_real_day = (timeutils.today() - p.start_time).days
         db.session.add(ph)
         db.session.commit()
         result = proid

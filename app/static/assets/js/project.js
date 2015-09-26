@@ -88,7 +88,7 @@ $(document).ready(function () {
                 $('#form_project_add').data('bootstrapValidator').resetForm(true);
                 $('#modal_project_add').modal('hide');
                 ajaxDataProject();
-            }else{
+            } else {
                 $.globalMessenger().post({
                     message: '添加失败',
                     type: 'info',
@@ -122,7 +122,6 @@ $(document).ready(function () {
         // Use Ajax to submit form data
         var record = $("#record").val();
         var proid = $("#proid").val();
-        console.log(proid);
         $.ajax({
             type: 'post',
             contentType: "application/json; charset=UTF-8",
@@ -146,7 +145,7 @@ $(document).ready(function () {
                     $('#form_project_record').data('bootstrapValidator').resetForm(true);
                     $('#contactForm').bootstrapValidator('removeField', 'record');
                     ajaxDataProject();
-                }else{
+                } else {
                     $.globalMessenger().post({
                         message: '记录失败',
                         type: 'info',
@@ -163,6 +162,7 @@ $(document).ready(function () {
         var button = $(event.relatedTarget); // Button that triggered the modal
         var proid = button.data('proid'); // Extract info from data-* attributes
         var remain = button.data('remain');
+        var p_all = button.data('all');
         var modal = $(this);
         modal.find('.modal-body #proid').val(proid);//动态更改计划id
         $('#form_project_record').bootstrapValidator('addField', 'record', {//动态添加验证
@@ -183,6 +183,7 @@ $(document).ready(function () {
                 }
             }
         });
+        recordSliderAdd(p_all, remain);
     });
     confirmAdd();
 });
@@ -264,5 +265,45 @@ function confirmAdd() {
         confirmButtonClass: "btn-danger",
         cancelButtonClass: "btn-default",
         dialogClass: "modal-dialog modal-xs" // Bootstrap classes for large modal
+    });
+}
+function recordSliderAdd(p_all, p_remain) {
+    var p_now = Number(p_all) - Number(p_remain);
+    var $range = $("#record_gra");
+    slider = $range.data("ionRangeSlider");
+    slider && slider.destroy();
+    $range.ionRangeSlider({
+        type: "single",
+        min: 1,
+        max: p_all,
+        from: p_now+1,
+        from_min: p_now+1,
+        from_max: p_all,
+        from_shadow: true
+    });
+    $range.on("change", function () {
+        var $this = $(this),
+            value = $this.prop("value");
+        $("#record").val(value-p_now);
+        $('#form_project_record').bootstrapValidator('revalidateField','record');
+    });
+
+    var slider = $range.data("ionRangeSlider");
+
+    $("#record").on('keyup paste', function () {
+        var currentVal = Number($(this).val());
+        var sliderValue = currentVal + p_now;
+        if (currentVal > p_remain) {
+            sliderValue = p_all;
+            $("#record").val(p_remain);
+            $('#form_project_record').bootstrapValidator('revalidateField', 'record');
+        }else if(currentVal < 1){
+            sliderValue = 1;
+            $("#record").val(1);
+            $('#form_project_record').bootstrapValidator('revalidateField', 'record');
+        }
+        slider.update({
+            from: sliderValue
+        });
     });
 }

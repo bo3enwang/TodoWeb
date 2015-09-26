@@ -1,4 +1,8 @@
 {% extends 'base.html' %}
+{% block csscontent %}
+    <link href="{{ url_for('.static', filename = 'css/ion.rangeSlider.css') }}" rel="stylesheet">
+    <link href="{{ url_for('.static', filename = 'css/ion.rangeSlider.skinModern.css') }}" rel="stylesheet">
+{% endblock %}
 {% block sidebar %}
     <li id="nav_todo" class="treeview">
         <a href="/todo/p">
@@ -157,6 +161,12 @@
                             <label for="name">完成数</label>
                             <input type="text" class="form-control" name="record" id="record" placeholder="请输入完成度"
                                    required>
+                            <br>
+                            <input type="text" class="form-control" id="record_gra">
+                            <!-- /input-group -->
+                        </div>
+                        <div class="form-group">
+
                             <!-- /input-group -->
                         </div>
                     </div>
@@ -168,6 +178,7 @@
                             确认
                         </button>
                     </div>
+                    <button class="btn-default" onclick="justTest()">Test</button>
                 </form>
             </div>
             <!-- /.modal-content -->
@@ -175,15 +186,51 @@
         <!-- /.modal -->
     </div>
 
+    {#-----表格生成模版-----#}
+    <table style="display: none">
+        <div id="template_button" style="display: none">
+
+            <button type="button" class="btn btn-default btn-xs p-begin" proid="">
+                <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 激活
+            </button>
+
+            <button type="button" class="btn btn-default btn-xs p-record" data-toggle="modal"
+                    data-target="#modal_project_record" data-proid="" data-remain="" data-all="">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 记录
+            </button>
+
+            <button type="button" class="btn btn-default btn-xs p-delete" proid="">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> 删除
+            </button>
+
+        </div>
+        <tbody id="table_template_project">
+        <tr>
+            <td class="cell-type"></td>
+            <td class="cell-name"></td>
+            <td class="cell-progress">
+                <div class="progress progress-xs">
+                    <div class="progress-bar progress-bar-info ppass"></div>
+                </div>
+            </td>
+            <td class="cell-text-progress"></td>
+            <td class="cell-time"></td>
+            <td class="cell-remain-days"></td>
+            <td class="cell-button">
+            </td>
+        </tr>
+        </tbody>
+    </table>
 {% endblock %}
 
 {% block jscontent %}
-
+    <script src="{{ url_for('.static', filename = 'js/ion.rangeSlider.min.js') }}"></script>
     <script>
         function ajaxDataProject(ptype) {
             if (ptype == null) {
                 ptype = -1;
             }
+
             $.ajax({
                 type: 'post',
                 contentType: "application/json; charset=UTF-8",
@@ -224,6 +271,7 @@
                             btnRecord = $("#template_button .p-record").clone();
                             btnRecord.attr("data-proid", this.id);
                             btnRecord.attr("data-remain", (this.p_all - this.p_now));
+                            btnRecord.attr("data-all", this.p_all);
                             tr.find('.cell-button').append(btnRecord);
                         }
                         if (this.status == 0) {
@@ -242,44 +290,6 @@
                 }
             });
         }
-    </script>
-
-
-    <table style="display: none">
-        <div id="template_button" style="display: none">
-
-            <button type="button" class="btn btn-default btn-xs p-begin" proid="">
-                <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 激活
-            </button>
-
-            <button type="button" class="btn btn-default btn-xs p-record" data-toggle="modal"
-                    data-target="#modal_project_record" data-proid="" data-remain="">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 记录
-            </button>
-
-            <button type="button" class="btn btn-default btn-xs p-delete" proid="">
-                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> 删除
-            </button>
-
-        </div>
-        <tbody id="table_template_project">
-        <tr>
-            <td class="cell-type"></td>
-            <td class="cell-name"></td>
-            <td class="cell-progress">
-                <div class="progress progress-xs">
-                    <div class="progress-bar progress-bar-info ppass"></div>
-                </div>
-            </td>
-            <td class="cell-text-progress"></td>
-            <td class="cell-time"></td>
-            <td class="cell-remain-days"></td>
-            <td class="cell-button">
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <script>
         $(document).ready(function () {
             ajaxDataProject();
             typeChangeAdd();
@@ -297,9 +307,14 @@
             $("#project-box").slimScroll({
                 color: '#001F3F',
                 size: '3px',
-                height: h-200+'px',
+                height: h - 200 + 'px',
             });
         }
+
+    function justTest(){
+
+        $('#form_project_record').bootstrapValidator('validate');
+    }
     </script>
     <script src="{{ url_for('.static', filename = 'assets/js/project.js') }}"></script>
 {% endblock %}

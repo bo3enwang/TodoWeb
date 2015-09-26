@@ -49,6 +49,7 @@ class Project(db.Model):
     status = db.Column(db.Integer, default=0)
     p_all = db.Column(db.Integer)
     p_day = db.Column(db.Integer)
+    p_real_day = db.Column(db.Integer)
     start_time = db.Column(db.Date)
     end_time = db.Column(db.Date)
     user = db.relation(User, innerjoin=True, lazy="joined")
@@ -61,11 +62,11 @@ class Project(db.Model):
 
     @property
     def remain_days(self):
+        if self.status == Project.STATUS_END:
+            return 0
         if self.start_time is not None and self.end_time is not None:
-            timedelta = self.end_time - timeutils.today()
-            if timedelta.days < 0:
-                return -1
-            return timedelta.days
+            remain_day = self.end_time - timeutils.today()
+            return remain_day.days
         else:
             return 0
 

@@ -12,4 +12,6 @@ class nullpool_SQLAlchemy(SQLAlchemy):
         del options['pool_size']
 
 
-db = nullpool_SQLAlchemy()
+# db = nullpool_SQLAlchemy()
+db = SQLAlchemy()
+

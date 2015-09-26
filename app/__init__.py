@@ -3,7 +3,7 @@ __author__ = 'Zovven'
 
 import sys
 import views
-from app.config import DefaultConfig
+from localconfig import DefaultConfig
 from flask import Flask, request, g, jsonify, redirect, url_for, flash, render_template
 from app import views
 
