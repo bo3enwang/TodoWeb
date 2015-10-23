@@ -10,8 +10,12 @@ home = Module(__name__)
 
 
 @home.route("/")
-@login_required
 def home_index():
     # flash('hehe')
-    # return render_template("home/index.html")
-    return redirect(url_for('todo.index'))
+    # return render_template("home/post.html")
+    return redirect(url_for('home.blog_view'))
+
+
+@home.route("/blog")
+def blog_view():
+    return render_template("home/base.html")

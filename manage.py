@@ -2,7 +2,7 @@ __author__ = 'Zovven'
 from flask.ext.script import Manager
 from app import create_app
 from app.models import db
-from app.models import User, Project, ProjectHistory, Todo
+from app.models import User, Project, ProjectHistory, Todo, Post, Tag, post_tags
 import json
 from app.jsonutil import TimeEncoder
 from flask import jsonify
@@ -14,7 +14,7 @@ manager = Manager(create_app())
 
 @manager.command
 def saveuser():
-    user = User(username='qwe', email='ewq@qq.com')
+    user = User(username='zo', email='ewq@qq.com')
     user.password = '123'
     db.session.add(user)
     db.session.commit()
@@ -33,6 +33,7 @@ def bathaddp():
         db.session.add(p)
         db.session.commit()
 
+
 @manager.command
 def bathaddto():
     user = User.query.get(1)
@@ -43,6 +44,7 @@ def bathaddto():
         t.name = "ehhe" + str(i)
         db.session.add(t)
         db.session.commit()
+
 
 @manager.command
 def findp():
@@ -86,6 +88,24 @@ def addtodo():
 def ph():
     t_date = '2015-09-13'
     tododata = Todo.query.query_day(t_date).restricted(g.user).jsonify()
+
+
+@manager.command
+def addPost():
+    post = Post()
+    user = User.query.get(1)
+    post.user = user
+    post.tags = 'java,ruby'
+    post.title = '2 test'
+    post.content = '#bad'
+    db.session.add(post)
+    db.session.commit()
+
+
+@manager.command
+def queryPost():
+    d = db.delete(Tag, Tag.num_posts == 0)
+    db.engine.execute(d)
 
 
 if __name__ == '__main__':

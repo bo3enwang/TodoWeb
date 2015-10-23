@@ -2,6 +2,8 @@
 __author__ = 'Zovven'
 
 import sae.const
+
+
 class DefaultConfig(object):
     DEBUG = False
 
@@ -21,3 +23,7 @@ class DefaultConfig(object):
 
     SQLALCHEMY_ECHO = False
     SQLALCHEMY_POOL_SIZE = 30
+
+    ACCESS_KEY = 'mko320xmlw'
+
+    SECRET_KEY = '4k3xjjmz3wlhh4ky201h3yl0xw2yh34xhwjwhikk'

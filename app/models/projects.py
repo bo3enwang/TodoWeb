@@ -84,7 +84,7 @@ class Project(db.Model):
                     user_id=self.user_id,
                     p_percent=self.p_percent)
 
-    @cached_property
+    @property
     def history(self):
         history = ProjectHistory.query.filter(ProjectHistory.project_id == self.id).all()
         return history

@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block csscontent %}
+    <link href="{{ url_for('.static', filename = 'css/bootstrap-tagsinput.css') }}" rel="stylesheet">
+    <style>
+        .bootstrap-tagsinput {
+            display: block;
+            width: 100%;
+        }
+
+    </style>
+{% endblock %}
+{% block sidebar %}
+    <li id="nav_todo" class="treeview">
+        <a href="/admin/todo/p">
+            <span>待办事项</span>
+        </a>
+    </li>
+    <li id="nav_p" class="treeview">
+        <a href="/admin/project/p/progress">
+            <span>我的计划</span></i>
+        </a>
+        <ul class="treeview-menu">
+            <li id="nav_p_progress">
+                <a href="/admin/project/p/progress">进行中</a>
+            </li>
+            <li id="nav_p_start"><a href="/admin/project/p/start"> 未激活</a></li>
+            <li id="nav_p_end"><a href="/admin/project/p/end"> 已完成</a></li>
+        </ul>
+    </li>
+    <li id="nav_todo" class="treeview active">
+        <a href="/admin/post/list">
+            <span>博客文章</span>
+        </a>
+    </li>
+{% endblock %}
+{% block content %}
+    <section class="content-header">
+        <h1>
+            我的计划
+            <small>Control panel</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">编辑文章</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box box-info">
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form role="form" action="{{ acurl }}" method="post">
+                        {{ form.hidden_tag() if form.hidden_tag }}
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label for="title">文件</label>
+                                <input type="file" class="form-control" id="title" name="title">
+                            </div>
+                        </div>
+                        <!-- /.box-body -->
+
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-primary">提交</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section>
+
+
+
+{% endblock %}
+{% block jscontent %}
+    <script>
+        $(document).ready(function () {
+            initHeight();
+            addTagsCss();
+        });
+        function initHeight() {
+            var h = $(window).height();
+            var rows = Math.ceil(h / 60);
+            var post_content = $("#post_content");
+            post_content.attr("rows", rows);
+        }
+        function addTagsCss() {
+            $('#tags').tagsinput({
+                maxChars: 8,
+                maxTags: 3
+            });
+        }
+
+    </script>
+    <script src="{{ url_for('.static', filename = 'js/bootstrap-tagsinput.min.js') }}"></script>
+{% endblock %}

@@ -11,7 +11,7 @@
     <div class="index-panel input-group">
         <div class="login-title"><span><b>Time</b>Watcher</span></div>
         <div class="login-container">
-            <form class="form-signin" action="/account/login" method="post">
+            <form class="form-signin" action="/admin/account/login" method="post">
                 {{ form.hidden_tag() if form.hidden_tag }}
                 <small class="help-block flash-info">
                     {{ get_flashed_messages()[0] }}
@@ -28,7 +28,7 @@
                     <label>{{ form.remember(class='checkbox') }} 记住我</label>
                 </div>
                 <input type="submit" class="btn btn-primary" value="登录"/>
-                <a href="/account/register" class="btn btn-primary">注册</a>
+                <a href="/admin/account/register" class="btn btn-primary">注册</a>
             </form>
         </div>
     </div>

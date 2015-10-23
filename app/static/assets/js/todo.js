@@ -11,7 +11,7 @@ function ajaxDataTodo(t_date) {
     $.ajax({
         type: 'post',
         contentType: "application/json; charset=UTF-8",
-        url: '/todo/p/data',
+        url: '/admin/todo/p/data',
         dataType: 'json',
         data: JSON.stringify({
             't_date': t_date
@@ -109,7 +109,7 @@ function addFuntion() {
             $.ajax({
                 type: 'post',
                 contentType: "application/json; charset=UTF-8",
-                url: '/todo/delete',
+                url: '/admin/todo/delete',
                 dataType: 'json',
                 data: JSON.stringify({
                     'id': id
@@ -146,7 +146,7 @@ function ajaxChange(id, status) {
     $.ajax({
         type: 'post',
         contentType: "application/json; charset=UTF-8",
-        url: '/todo/change',
+        url: '/admin/todo/change',
         dataType: 'json',
         data: JSON.stringify({
             'id': id,

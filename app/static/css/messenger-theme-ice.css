@@ -97,13 +97,13 @@ ul.messenger-theme-ice .messenger-message .messenger-message-inner:before {
 }
 /* line 84, ../../src/sass/messenger-theme-ice.sass */
 ul.messenger-theme-ice .messenger-message.alert-success .messenger-message-inner:before {
-  content: "Success";
+  content: "成功";
 }
 /* line 88, ../../src/sass/messenger-theme-ice.sass */
 ul.messenger-theme-ice .messenger-message.alert-error .messenger-message-inner:before {
-  content: "Error";
+  content: "错误";
 }
 /* line 92, ../../src/sass/messenger-theme-ice.sass */
 ul.messenger-theme-ice .messenger-message.alert-info .messenger-message-inner:before {
-  content: "Information";
+  content: "消息";
 }

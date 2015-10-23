@@ -6,16 +6,21 @@
         </a>
     </li>
     <li id="nav_p" class="treeview">
-        <a href="/project/p/progress">
+        <a href="/admin/project/p/progress">
             <span>我的计划</span></i>
         </a>
         <ul class="treeview-menu">
             <li id="nav_p_progress">
-                <a href="/project/p/progress">进行中</a>
+                <a href="/admin/project/p/progress">进行中</a>
             </li>
-            <li id="nav_p_start"><a href="/project/p/start"> 未激活</a></li>
-            <li id="nav_p_end"><a href="/project/p/end"> 已完成</a></li>
+            <li id="nav_p_start"><a href="/admin/project/p/start"> 未激活</a></li>
+            <li id="nav_p_end"><a href="/admin/project/p/end"> 已完成</a></li>
         </ul>
+    </li>
+    <li id="nav_todo" class="treeview">
+        <a href="/admin/post/list">
+            <span>博客文章</span>
+        </a>
     </li>
 {% endblock %}
 {% block content %}
@@ -75,7 +80,7 @@
                         记录计划
                     </h4>
                 </div>
-                <form id="form_todo_add" action="/todo/add" method="post">
+                <form id="form_todo_add" action="/admin/todo/add" method="post">
                     <div class="modal-body">
                         {{ form.hidden_tag() if form.hidden_tag }}
                         <input type="hidden" id="t_date" name="t_date">

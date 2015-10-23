@@ -190,14 +190,14 @@ $(document).ready(function () {
 
 function confirmAdd() {
     $(".p-begin").confirm({
-        text: "确定要激活计划吗?",
+        text: "确定要激活计划?",
         title: "激活计划",
         confirm: function (button) {
             proid = button.attr("proid");
             $.ajax({
                 type: 'post',
                 contentType: "application/json; charset=UTF-8",
-                url: '/project/begin',
+                url: '/admin/project/begin',
                 dataType: 'json',
                 data: JSON.stringify({
                     'proid': proid,
@@ -236,7 +236,7 @@ function confirmAdd() {
             $.ajax({
                 type: 'post',
                 contentType: "application/json; charset=UTF-8",
-                url: '/project/delete',
+                url: '/admin/project/delete',
                 dataType: 'json',
                 data: JSON.stringify({
                     'proid': proid,
