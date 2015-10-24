@@ -2,7 +2,7 @@ __author__ = 'Zovven'
 from flask.ext.script import Manager
 from app import create_app
 from app.models import db
-from app.models import User, Project, ProjectHistory, Todo, Post, Tag, post_tags
+from app.models import User, Project, ProjectHistory, Todo, Post, Tag, post_tags, Album
 import json
 from app.jsonutil import TimeEncoder
 from flask import jsonify
@@ -85,12 +85,6 @@ def addtodo():
 
 
 @manager.command
-def ph():
-    t_date = '2015-09-13'
-    tododata = Todo.query.query_day(t_date).restricted(g.user).jsonify()
-
-
-@manager.command
 def addPost():
     post = Post()
     user = User.query.get(1)
@@ -108,5 +102,10 @@ def queryPost():
     db.engine.execute(d)
 
 
+@manager.command
+def add_album():
+    al = Album(img_name="testpic-1", img_url='http://zovven-zovvenimage.stor.sinaapp.com/249006-106.jpg')
+    db.session.add(al)
+    db.session.commit()
 if __name__ == '__main__':
     manager.run()
