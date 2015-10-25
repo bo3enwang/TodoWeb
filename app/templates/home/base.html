@@ -18,54 +18,22 @@
             </div>
         </div>
         <div id="menubar">
-            <ul id="menu">
-                <!-- put class="selected" in the li tag for the selected page - to highlight which page you're on -->
-                <li class="selected"><a href="index.html">Home</a></li>
-                <li><a href="examples.html">Examples</a></li>
-                <li><a href="page.html">A Page</a></li>
-                <li><a href="another_page.html">Another Page</a></li>
-                <li><a href="contact.html">Contact Us</a></li>
-            </ul>
+            {% block nav %}
+            {% endblock %}
         </div>
     </div>
-    <div class="inner_copyright">Collect from <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a>
-    </div>
     <div id="site_content">
-
+        <div id="sidebar_container">
+            {% block sidebar %}
+            {% endblock %}
+        </div>
         <div id="content">
-            <h1>Welcome to the simplestyle_3 template</h1>
-
-            <p>This standards compliant, simple, fixed width website template is released as an 'open source' design
-                (under a Creative Commons Attribution 3.0 Licence), which means that you are free to download and use it
-                for anything you want (including modifying and amending it). All I ask is that you leave the 'Collect
-                from cssmoban.com' link in the footer of the template, but other than that...</p>
-
-            <p>This template is written entirely in <strong>HTML5</strong> and <strong>CSS</strong>, and can be
-                validated using the links in the footer.</p>
-
-            <p>You can view more free HTML5 web templates <a href="http://www.cssmoban.com/">模板</a>.</p>
-
-            <p>This template is a fully functional 5 page website, with an <a href="examples.html">examples</a> page
-                that gives examples of all the styles available with this design.</p>
-
-            <h2>Browser Compatibility</h2>
-
-            <p>This template has been tested in the following browsers:</p>
-            <ul>
-                <li>Internet Explorer 8</li>
-                <li>Internet Explorer 7</li>
-                <li>FireFox 3.5</li>
-                <li>Google Chrome 6</li>
-                <li>Safari 4</li>
-            </ul>
+            {% block content %}
+            {% endblock %}
         </div>
     </div>
     <div id="footer">
-        <p><a href="index.html">Home</a> | <a href="examples.html">Examples</a> | <a href="page.html">A Page</a> | <a
-                href="another_page.html">Another Page</a> | <a href="contact.html">Contact Us</a></p>
-
-        <p>Copyright &copy; simplestyle_3 | <a href="http://www.cssmoban.com/cssthemes/html5moban/">HTML5 模板</a> | <a
-                href="#">CSS</a> | <a href="http://www.cssmoban.com/">模板之家</a></p>
+        <p>Copyright &copy; Zovven </p>
     </div>
     <p>&nbsp;</p>
 </div>

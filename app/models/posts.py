@@ -7,6 +7,7 @@ from datetime import date, datetime, timedelta
 from werkzeug.utils import cached_property
 from flask_sqlalchemy import BaseQuery
 from users import User
+from app.tocutil import TocRenderer
 from app import timeutils, jsonutil
 import mistune
 from app.helps import slugify
@@ -27,10 +28,21 @@ class PostQuery(BaseQuery):
 
         return self.filter(q).join(User).distinct()
 
+    def just_title(self):
+        """
+        Return restricted list of columns for list queries
+        """
+        deferred_cols = ("date_created",
+                         "title")
+        options = [db.defer(col) for col in deferred_cols]
+        return self.options(*options)
+
+    def sort_by_date(self):
+        return self.order_by(Post.date_created.desc())
+
 
 class Post(db.Model):
     __tablename__ = "posts"
-
     query_class = PostQuery
 
     id = db.Column(db.Integer, primary_key=True)
@@ -69,7 +81,18 @@ class Post(db.Model):
 
     @cached_property
     def markdown(self):
-        return mistune.markdown(self.content or '')
+        toc = TocRenderer()
+        toc.reset_toc()  # initial the status
+        md = mistune.Markdown(renderer=toc)
+        return md(self.content or '')
+
+    @cached_property
+    def toc(self):
+        toc = TocRenderer()
+        toc.reset_toc()  # initial the status
+        md = mistune.Markdown(renderer=toc)
+        md.parse(self.content or '')
+        return toc.render_toc()
 
     @property
     def taglist(self):

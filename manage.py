@@ -86,20 +86,23 @@ def addtodo():
 
 @manager.command
 def addPost():
-    post = Post()
     user = User.query.get(1)
-    post.user = user
-    post.tags = 'java,ruby'
-    post.title = '2 test'
-    post.content = '#bad'
-    db.session.add(post)
+    for x in range(10):
+        post = Post()
+        post.user = user
+        post.tags = 'java,ruby'
+        post.title = 'test'+str(x)
+        post.content = '#bad'
+        db.session.add(post)
     db.session.commit()
 
 
 @manager.command
 def queryPost():
-    d = db.delete(Tag, Tag.num_posts == 0)
-    db.engine.execute(d)
+    page_obj = Post.query.sort_by_date().just_title().paginate(1, per_page=3)
+    print page_obj.page
+    for p_num in range(page_obj.pages):
+        print p_num
 
 
 @manager.command
@@ -107,5 +110,7 @@ def add_album():
     al = Album(img_name="testpic-1", img_url='http://zovven-zovvenimage.stor.sinaapp.com/249006-106.jpg')
     db.session.add(al)
     db.session.commit()
+
+
 if __name__ == '__main__':
     manager.run()
