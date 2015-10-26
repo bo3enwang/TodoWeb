@@ -4,11 +4,13 @@ from flask import Module, render_template, flash, redirect, url_for, request, g,
 from flask.ext.login import login_required
 from app.models import db, Album
 # from sae.storage import Bucket
-# import sae.const
 import time
 
 album = Module(__name__)
+
+
 # bucket = Bucket('zovvenimage')#获取bucket
+
 
 @album.route('/list')
 @login_required
@@ -22,13 +24,16 @@ def album_list():
 def album_add():
     if request.method == 'POST':
         img_name = request.form['img_name']
-        f = request.files['file']
         genkey = str(int(time.time()))
-        img_key = img_name + genkey + '.'+f.filename.split('.')[-1]#生成图片存储名
-        bucket.put_object(img_key, f.read())
-        img_url = bucket.generate_url(img_key)
-        al = Album(img_name=img_name, img_key=img_key, img_url=img_url)
-        db.session.add(al)
+        uploaded_files = request.files.getlist("file")
+        i = 1
+        for f in uploaded_files:
+            img_key = img_name + genkey + str(i) + '.' + f.filename.split('.')[-1]  # 生成图片存储名
+            bucket.put_object(img_key, f.read())
+            img_url = bucket.generate_url(img_key)
+            al = Album(img_name=img_name + str(i), img_key=img_key, img_url=img_url)
+            db.session.add(al)
+            i += 1
         db.session.commit()
         flash("新增图片成功", "success")
         return redirect(url_for('album.album_list'))

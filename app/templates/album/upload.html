@@ -58,7 +58,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="tags">图片</label>
-                                <input type="file" class="form-control" id="file" name="file">
+                                <input type="file" class="form-control" multiple="" id="file" name="file">
                             </div>
                         </div>
                         <!-- /.box-body -->
@@ -83,7 +83,7 @@
     <script>
         $(document).on('ready', function () {
             $("#file").fileinput({
-                maxFileCount: 10,
+                maxFileCount: 15,
                 allowedFileExtensions: ["jpg", "gif", "png"],
                 showRemove: false,
                 showUpload: false

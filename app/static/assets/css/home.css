@@ -497,7 +497,26 @@ form p button {
     margin: 7px 0;
 }
 
-.toc a{
+.toc a {
     text-decoration: none;
 }
 
+.album-list {
+    width: 630px;
+}
+
+.album-item {
+    width: 280px;
+    height: 200px;
+    margin: 10px;
+    float: left;
+}
+
+.album-item img {
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    max-height: 90%;
+    max-width: 90%;
+}

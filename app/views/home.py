@@ -46,3 +46,9 @@ def tag_view(slug, page=1):
     page_obj = tag.posts.just_title().paginate(page, per_page=8)
     tags = Tag.query.filter(Tag.num_posts > 0).all()
     return render_template("home/tag.html", tag=tag, page_obj=page_obj, tags=tags)
+
+
+@home.route("/album")
+def ablum_list():
+    return render_template("home/album.html")
+    # page_obj = tag.posts.just_title().paginate(page, per_page=8)
