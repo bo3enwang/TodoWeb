@@ -32,11 +32,17 @@ h1, h2, h3, h4, h5, h6 {
 h2 {
     font: normal 175% 'century gothic', arial, sans-serif;
     color: #B60000;
-    padding: 15px 0 5px 0;
+    padding: 5px 0 5px 0;
 }
 
 h3 {
     font: normal 165% 'century gothic', arial, sans-serif;
+}
+
+.h3 {
+    color: #099;
+    font: 500 20px "Microsoft YaHei";
+    margin: 0px;
 }
 
 h4, h5, h6 {
@@ -197,7 +203,7 @@ ul#menu li a:hover {
 
 #site_content {
     width: 925px;
-    height: 560px;
+    min-height: 390px;
     overflow: hidden;
     margin: 44px auto 0 auto;
     padding: 10px 0 0 25px;
@@ -210,7 +216,6 @@ ul#menu li a:hover {
 #sidebar_container {
     float: right;
     width: 224px;
-    height: 520px;
     padding: 10px 20px 20px 0;
 }
 
@@ -223,21 +228,9 @@ ul#menu li a:hover {
 
 .sidebar_item {
     background: #FFF;
-    padding: 10px 15px;
+    padding: 10px 5px;
     width: 192px;
     margin: 10px 0 10px 0;
-}
-
-.sidebar_item ul {
-    width: 178px;
-    padding: 0;
-    margin: 0;
-}
-
-.sidebar_item li {
-    list-style: none;
-    padding: 0 0 6px 0;
-    margin: 0;
 }
 
 .img-link {
@@ -250,22 +243,13 @@ ul#menu li a:hover {
     background-size: 10px 10px;
 }
 
-.sidebar_item li a, .sidebar_item li a:hover {
-    padding: 0 0 0 20px;
-    display: block;
-}
-
-.sidebar_item li a.selected {
-    color: #444;
-    text-decoration: none;
-}
-
 #content {
     text-align: left;
     width: 655px;
     padding: 15px 0 20px 0;
     margin: 0;
 }
+
 #footer {
     width: 950px;
     font: normal 90% 'trebuchet ms', arial, sans-serif;
@@ -385,7 +369,7 @@ form p button {
     text-decoration: none;
     text-align: center;
     text-shadow: 1px 1px 0 #fff;
-    font:11px/normal sans-serif;
+    font: 11px/normal sans-serif;
     color: #333;
     white-space: nowrap;
     cursor: pointer;
@@ -401,41 +385,119 @@ form p button {
     *display: inline;
 }
 
-.post-list{
-    margin: 10px 0 0 0;
+.post-list {
+    margin: 5px 0 0 0;
     position: relative;
-    height: 500px;
+    height: 380px;
 }
-.lists{
+
+.lists {
     margin: 0;
-    font-size: 15px;
+    font-size: 16px;
 }
-.lists li{
+
+.lists li {
     list-style: none;
-    margin: 15px 0;
+    margin: 20px 0;
 }
-.lists li time{
+
+.lists li time {
     margin-right: 5px;
 }
+
 .lists li a {
-    font-weight : 500;
+    font-weight: 500;
     text-decoration: none;
 }
+
 .paginator {
     position: absolute;
     bottom: 5px;
 
 }
-.paginator a,.paginator span {
-	padding: 0 4px;
-	margin: 2px;
-	text-decoration: none;
+
+.paginator a, .paginator span {
+    padding: 0 4px;
+    margin: 2px;
+    text-decoration: none;
 }
+
 .paginator .current-page {
-	color: white;
-	background: #ff0000;
+    color: white;
+    background: #ff0000;
 }
+
 .paginator a:hover {
-	color: white;
-	background: #83BF73;
+    color: white;
+    background: #83BF73;
 }
+
+.post-title {
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+
+.label-time {
+    margin-right: 20px;
+}
+
+.tag {
+    margin: 0 5px;
+}
+
+.tags-box-title {
+    color: #099;
+    font: 500 20px "Microsoft YaHei";
+    margin: 0px;
+}
+
+.tags-box {
+    margin: 20px 0;
+}
+
+.tags-box a {
+    color: #555555;
+    float: left;
+    margin: 10px 20px;
+    height: 29px;
+    line-height: 29px;
+    overflow: hidden;
+    text-transform: capitalize;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.tags-box a:hover {
+    color: #EE1600;
+}
+
+.tag-list a {
+    display: inline-block;
+    color: #999;
+    height: 29px;
+    line-height: 29px;
+    overflow: hidden;
+    text-decoration: none;
+    text-transform: capitalize;
+    margin: 0 5px 0 0;
+}
+
+.tag-list a:hover {
+    color: #EE1600;
+}
+
+.toc ul {
+    margin: 0 0 5px 10px;
+    list-style-type: none;
+}
+
+.toc ul li {
+    list-style: none;
+    display: list-item;
+    margin: 7px 0;
+}
+
+.toc a{
+    text-decoration: none;
+}
+

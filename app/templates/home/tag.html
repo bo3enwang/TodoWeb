@@ -2,8 +2,8 @@
 {% block nav %}
     <ul id="menu">
         <!-- put class="selected" in the li tag for the selected page - to highlight which page you're on -->
-        <li class="selected"><a href="/blog">博客</a></li>
-        <li><a href="/tags">标签</a></li>
+        <li><a href="/blog">博客</a></li>
+        <li class="selected"><a href="/tags">标签</a></li>
         <li><a href="/album">图册</a></li>
         <li><a href="/about">关于我</a></li>
     </ul>
@@ -11,12 +11,12 @@
 {% block sidebar %}
     <div class="sidebar">
         <div class="sidebar_item">
-            <!-- insert your sidebar items here -->
-            <h3>最新文章</h3>
-            <h4>New Website Launched</h4>
-            <h5>January 1st, 2010</h5>
-
-            <p>2010 sees the redesign of our website.....&nbsp;<a href="#">read more</a></p>
+            <h3>全部标签</h3>
+            <div class="tag-list">
+                    {% for tag in tags %}
+                      <span><a href="/tags/{{ tag.slug }}">{{ tag.name }} ({{ tag.num_posts }})</a></span>
+                    {% endfor %}
+            </div>
         </div>
     </div>
     <div class="sidebar">
@@ -35,6 +35,7 @@
     </div>
 {% endblock %}
 {% block content %}
+    <h2>标签 : {{ tag.name }}</h2>
     <div class="post-list">
         <div class="item-list">
             <ul class="lists">
@@ -48,7 +49,7 @@
         </div>
         <div class="paginator">
             {% if page_obj.has_prev %}
-                <a href="/blog/{{ page_obj.page - 1 }}">&lt;前页</a>
+                <a href="/tags/{{ tag.slug }}/{{ page_obj.page - 1 }}">&lt;前页</a>
             {% else %}
                 <span class="previous  disabled">&lt;前页</span>
             {% endif %}
@@ -57,12 +58,12 @@
                 {% if x == page_obj.page %}
                     <span class="current-page">{{ x }}</span>
                 {% else %}
-                    <a href="/blog/{{ x }}">{{ x }}</a>
+                    <a href="/tags/{{ tag.slug }}/{{ x }}">{{ x }}</a>
                 {% endif %}
             {% endfor %}
 
             {% if page_obj.has_next %}
-                <a href="/blog/{{ page_obj.page + 1 }}">后页&gt;</a>
+                <a href="/tags/{{ tag.slug }}/{{ page_obj.page + 1 }}">后页&gt;</a>
             {% else %}
                 <span class="next  disabled">后页&gt;</span>
             {% endif %}

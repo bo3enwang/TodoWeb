@@ -91,7 +91,7 @@ def addPost():
         post = Post()
         post.user = user
         post.tags = 'java,ruby'
-        post.title = 'test'+str(x)
+        post.title = 'test' + str(x)
         post.content = '#bad'
         db.session.add(post)
     db.session.commit()
@@ -99,10 +99,18 @@ def addPost():
 
 @manager.command
 def queryPost():
-    page_obj = Post.query.sort_by_date().just_title().paginate(1, per_page=3)
-    print page_obj.page
-    for p_num in range(page_obj.pages):
-        print p_num
+    # page_obj = Post.query.sort_by_date().just_title().paginate(1, per_page=3)
+    # print page_obj.page
+    # for p_num in range(page_obj.pages):
+    #     print p_num
+    # tags = db.session.query_property(Post)
+    # for tag in tags:
+    #     print tag.name
+    tag = Tag.query.filter_by(slug='aaxxxwww').first_or_404()
+
+    page_obj = tag.posts.restricted(g.user).as_list().\
+        paginate(1, per_page=Post.PER_PAGE)
+    print page_obj.pages
 
 
 @manager.command

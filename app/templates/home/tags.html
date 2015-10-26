@@ -2,27 +2,17 @@
 {% block nav %}
     <ul id="menu">
         <!-- put class="selected" in the li tag for the selected page - to highlight which page you're on -->
-        <li class="selected"><a href="/blog">博客</a></li>
-        <li><a href="/tags">标签</a></li>
+        <li><a href="/blog">博客</a></li>
+        <li class="selected"><a href="/tags">标签</a></li>
         <li><a href="/album">图册</a></li>
         <li><a href="/about">关于我</a></li>
     </ul>
 {% endblock %}
 {% block sidebar %}
     <div class="sidebar">
-        <div class="sidebar_item">
-            <h3>目录</h3>
-
-            <div class="toc">
-                {{ post.toc }}
-            </div>
-
-        </div>
-    </div>
-    <div class="sidebar">
         <div class="sidebar_top"></div>
         <div class="sidebar_item">
-            <h3>搜索</h3>
+            <h3>Search</h3>
 
             <form method="post" action="#" id="search_form">
                 <p>
@@ -35,19 +25,12 @@
     </div>
 {% endblock %}
 {% block content %}
-    <div class="post-title">
-        <h1>{{ post.title }}</h1>
 
-        <div>
-            <label>发表于:</label>
-            <label class="label-time">{{ post.date_created }}</label>
-            <label>标签:</label>
-            {% for tag in post.taglist %}
-                <label class="tag">{{ tag }}</label>
-            {% endfor %}
-        </div>
+    <h3 class="tags-box-title">标签集合</h3>
+    <div class="tags-box">
+        {% for tag in tags %}
+            <a href="/tags/{{ tag.slug }}">{{ tag.name }} ({{ tag.num_posts }})</a>
+        {% endfor %}
     </div>
-    <div class="post-content">
-        {{ post.markdown }}
-    </div>
+
 {% endblock %}

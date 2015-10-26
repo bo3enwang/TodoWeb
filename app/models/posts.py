@@ -2,7 +2,7 @@
 __author__ = 'Zovven'
 
 from ._base import db
-import json
+from flask import Markup
 from datetime import date, datetime, timedelta
 from werkzeug.utils import cached_property
 from flask_sqlalchemy import BaseQuery
@@ -84,7 +84,7 @@ class Post(db.Model):
         toc = TocRenderer()
         toc.reset_toc()  # initial the status
         md = mistune.Markdown(renderer=toc)
-        return md(self.content or '')
+        return Markup(md(self.content or ''))
 
     @cached_property
     def toc(self):
@@ -92,7 +92,7 @@ class Post(db.Model):
         toc.reset_toc()  # initial the status
         md = mistune.Markdown(renderer=toc)
         md.parse(self.content or '')
-        return toc.render_toc()
+        return Markup(toc.render_toc())
 
     @property
     def taglist(self):
@@ -101,6 +101,16 @@ class Post(db.Model):
 
         tags = [t.strip() for t in self.tags.split(",")]
         return [t for t in tags if t]
+
+    @cached_property
+    def linked_taglist(self):
+        """
+        Returns the tags in the original order and format,
+        with link to tag page
+        """
+        return [(tag, url_for('frontend.tag',
+                              slug=slugify(tag)))
+                for tag in self.taglist]
 
 
 post_tags = db.Table("post_tags", db.Model.metadata,

@@ -10,6 +10,7 @@ todo = Module(__name__)
 
 
 @todo.route('/p/data', methods=("post",))
+@login_required
 def project_data():
     jsondata = request.get_json()
     t_date = jsondata.get('t_date')
@@ -18,6 +19,7 @@ def project_data():
 
 
 @todo.route('/add', methods=("post",))
+@login_required
 def todo_add():
     form = TodoAddForm()
     result = -1
@@ -33,12 +35,14 @@ def todo_add():
 
 
 @todo.route('/p')
+@login_required
 def index():
     form = TodoAddForm()
     return render_template('todo/todo.html', form=form)
 
 
 @todo.route('/change', methods=("post",))
+@login_required
 def change_todo_status():
     result = -1
     jsondata = request.get_json()
@@ -56,6 +60,7 @@ def change_todo_status():
 
 
 @todo.route('/delete', methods=("post",))
+@login_required
 def delete_todo():
     result = -1
     jsondata = request.get_json()
