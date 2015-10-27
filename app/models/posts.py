@@ -2,7 +2,7 @@
 __author__ = 'Zovven'
 
 from ._base import db
-from flask import Markup
+from flask import Markup, url_for
 from datetime import date, datetime, timedelta
 from werkzeug.utils import cached_property
 from flask_sqlalchemy import BaseQuery
@@ -108,7 +108,7 @@ class Post(db.Model):
         Returns the tags in the original order and format,
         with link to tag page
         """
-        return [(tag, url_for('frontend.tag',
+        return [(tag, url_for('home.tag_view',
                               slug=slugify(tag)))
                 for tag in self.taglist]
 

@@ -45,8 +45,8 @@
                 <label>发表于:</label>
                 <label class="label-time">{{ post.date_created }}</label>
                 <label>标签:</label>
-                {% for tag in post.taglist %}
-                    <label class="tag">{{ tag }}</label>
+                {% for tag in post.linked_taglist %}
+                    <label class="tag"><a href="{{ tag[1] }}">{{ tag[0] }}</a></label>
                 {% endfor %}
             </div>
         </div>

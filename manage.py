@@ -106,11 +106,9 @@ def queryPost():
     # tags = db.session.query_property(Post)
     # for tag in tags:
     #     print tag.name
-    tag = Tag.query.filter_by(slug='aaxxxwww').first_or_404()
-
-    page_obj = tag.posts.restricted(g.user).as_list().\
-        paginate(1, per_page=Post.PER_PAGE)
-    print page_obj.pages
+    post = Post.query.first()
+    for x in post.linked_taglist:
+        print x[0]
 
 
 @manager.command
