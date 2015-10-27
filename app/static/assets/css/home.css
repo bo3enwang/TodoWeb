@@ -503,22 +503,24 @@ form p button {
 
 .album-list {
     width: 870px;
-    min-height: 370px;
+    min-height: 700px;
     position: relative;
+    margin: 15px 0;
 }
 
 .album-item {
-    width: 390px;
+    width: 410px;
     height: 200px;
     margin: 10px;
     float: left;
 }
 
-.album-item img {
-    margin-left: 5%;
-    margin-right: 5%;
-    margin-top: 5%;
-    margin-bottom: 5%;
+.album-item a{
+    text-align:center;
+
+}
+.album-item a img {
+    margin: 0 15%;
     max-height: 90%;
     max-width: 90%;
 }

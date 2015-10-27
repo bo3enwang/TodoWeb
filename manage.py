@@ -113,8 +113,10 @@ def queryPost():
 
 @manager.command
 def add_album():
-    al = Album(img_name="testpic-1", img_url='http://zovven-zovvenimage.stor.sinaapp.com/249006-106.jpg')
-    db.session.add(al)
+    for x in range(10):
+        al = Album(img_name="testpic-1",
+                   img_url='http://b.hiphotos.baidu.com/image/pic/item/adaf2edda3cc7cd9d4dc1dec3d01213fb80e9115.jpg')
+        db.session.add(al)
     db.session.commit()
 
 
