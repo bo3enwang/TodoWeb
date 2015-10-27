@@ -3,6 +3,7 @@ __author__ = 'Zovven'
 from flask import Module, render_template, flash, redirect, url_for, request, g, jsonify
 from flask.ext.login import login_required
 from app.models import db, Album
+from app.helps import slugify
 # from sae.storage import Bucket
 import time
 
@@ -28,7 +29,7 @@ def album_add():
         uploaded_files = request.files.getlist("file")
         i = 1
         for f in uploaded_files:
-            img_key = img_name + genkey + str(i) + '.' + f.filename.split('.')[-1]  # 生成图片存储名
+            img_key = slugify(img_name) + genkey + str(i) + '.' + f.filename.split('.')[-1]  # 生成图片存储名
             bucket.put_object(img_key, f.read())
             img_url = bucket.generate_url(img_key)
             al = Album(img_name=img_name + str(i), img_key=img_key, img_url=img_url)

@@ -1,4 +1,7 @@
 {% extends 'home/base.html' %}
+{% block csscontent %}
+    <link href="{{ url_for('.static', filename = 'css/androidstudio.css') }}" rel="stylesheet">
+{% endblock %}
 {% block nav %}
     <ul id="menu">
         <!-- put class="selected" in the li tag for the selected page - to highlight which page you're on -->
@@ -38,9 +41,8 @@
         </div>
     </div>
     <div id="content">
-        <div class="post-title">
-            <h1>{{ post.title }}</h1>
-
+        <div class="post-title-box">
+            <div class="post-title">{{ post.title }}</div>
             <div>
                 <label>发表于:</label>
                 <label class="label-time">{{ post.date_created }}</label>
@@ -50,8 +52,11 @@
                 {% endfor %}
             </div>
         </div>
+
         <div class="post-content">
             {{ post.markdown }}
         </div>
     </div>
+    <script src="{{ url_for('.static', filename = 'js/highlight.pack.js') }}"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
 {% endblock %}
