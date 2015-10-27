@@ -8,29 +8,30 @@
         <li><a href="/about">关于我</a></li>
     </ul>
 {% endblock %}
-{% block sidebar %}
-    <div class="sidebar">
-        <div class="sidebar_top"></div>
-        <div class="sidebar_item">
-            <h3>Search</h3>
-
-            <form method="post" action="#" id="search_form">
-                <p>
-                    <input class="search" type="text" name="search_field" placeholder="请输入要查询的内容"/>
-                    <button type="submit">搜索</button>
-                </p>
-            </form>
-        </div>
-        <div class="sidebar_base"></div>
-    </div>
-{% endblock %}
 {% block content %}
+    <div id="sidebar_container">
+        <div class="sidebar">
+            <div class="sidebar_top"></div>
+            <div class="sidebar_item">
+                <h3>Search</h3>
 
-    <h3 class="tags-box-title">标签集合</h3>
-    <div class="tags-box">
-        {% for tag in tags %}
-            <a href="/tags/{{ tag.slug }}">{{ tag.name }} ({{ tag.num_posts }})</a>
-        {% endfor %}
+                <form method="post" action="#" id="search_form">
+                    <p>
+                        <input class="search" type="text" name="search_field" placeholder="请输入要查询的内容"/>
+                        <button type="submit">搜索</button>
+                    </p>
+                </form>
+            </div>
+            <div class="sidebar_base"></div>
+        </div>
     </div>
+    <div id="content">
+        <h3 class="tags-box-title">标签集合</h3>
 
+        <div class="tags-box">
+            {% for tag in tags %}
+                <a href="/tags/{{ tag.slug }}">{{ tag.name }} ({{ tag.num_posts }})</a>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}

@@ -11,7 +11,22 @@ from users import User
 from app import timeutils, jsonutil
 
 
+class AlbumQuery(BaseQuery):
+    def sort_by_date(self):
+        return self.order_by(Album.upload_date.desc())
+
+    def as_list(self):
+        """
+        Return restricted list of columns for list queries
+        """
+        deferred_cols = ("img_url",
+                         "img_name")
+        options = [db.defer(col) for col in deferred_cols]
+        return self.options(*options)
+
+
 class Album(db.Model):
+    query_class = AlbumQuery
     id = db.Column(db.Integer, primary_key=True)
     img_name = db.Column(db.String(255))
     img_url = db.Column(db.String(255))

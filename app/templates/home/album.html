@@ -3,42 +3,42 @@
     <ul id="menu">
         <!-- put class="selected" in the li tag for the selected page - to highlight which page you're on -->
         <li><a href="/blog">博客</a></li>
-        <li class="selected"><a href="/tags">标签</a></li>
-        <li><a href="/album">图册</a></li>
+        <li><a href="/tags">标签</a></li>
+        <li class="selected"><a href="/album">图册</a></li>
         <li><a href="/about">关于我</a></li>
     </ul>
 {% endblock %}
-{% block sidebar %}
-    <div class="sidebar">
-        <div class="sidebar_top"></div>
-        <div class="sidebar_item">
-            <h3>Search</h3>
-
-            <form method="post" action="#" id="search_form">
-                <p>
-                    <input class="search" type="text" name="search_field" placeholder="请输入要查询的内容"/>
-                    <button type="submit">搜索</button>
-                </p>
-            </form>
-        </div>
-        <div class="sidebar_base"></div>
-    </div>
-{% endblock %}
 {% block content %}
-    <div class="album-list">
-        <div class="album-item">
-            <img src="http://d.hiphotos.baidu.com/zhidao/wh%3D450%2C600/sign=b015ec07d20735fa91a546bdab612385/9825bc315c6034a845d2f69dcd134954092376fd.jpg">
-        </div>
-        <div class="album-item">
-            <img src="http://www.th7.cn/d/file/p/2012/12/14/796296d1976e12479f7bda31b465f44d.png">
-        </div><div class="album-item">
-            <img src="http://www.th7.cn/d/file/p/2012/12/14/796296d1976e12479f7bda31b465f44d.png">
-        </div><div class="album-item">
-            <img src="http://www.th7.cn/d/file/p/2012/12/14/796296d1976e12479f7bda31b465f44d.png">
-        </div><div class="album-item">
-            <img src="http://www.th7.cn/d/file/p/2012/12/14/796296d1976e12479f7bda31b465f44d.png">
-        </div><div class="album-item">
-            <img src="http://www.th7.cn/d/file/p/2012/12/14/796296d1976e12479f7bda31b465f44d.png">
+    <div class="large-content">
+        <div class="album-list">
+            {% for album in page_obj.item %}
+                <div class="album-item">
+                    <a href="{{ album.img_url }}" target="_blank"><img src="{{ album.img_url }}"
+                                                                       alt="{{ album.img_name }}"></a>
+                </div>
+            {% endfor %}
+            <div class="paginator">
+                {% if page_obj.has_prev %}
+                    <a href="/blog/{{ page_obj.page - 1 }}">&lt;前页</a>
+                {% else %}
+                    <span class="previous  disabled">&lt;前页</span>
+                {% endif %}
+
+                {% for x in range(1,page_obj.pages + 1) %}
+                    {% if x == page_obj.page %}
+                        <span class="current-page">{{ x }}</span>
+                    {% else %}
+                        <a href="/blog/{{ x }}">{{ x }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <a href="/blog/{{ page_obj.page + 1 }}">后页&gt;</a>
+                {% else %}
+                    <span class="next  disabled">后页&gt;</span>
+                {% endif %}
+
+            </div>
         </div>
     </div>
 {% endblock %}
