@@ -26,9 +26,14 @@ class AlbumQuery(BaseQuery):
 
 
 class Album(db.Model):
+
+    TYPE_PRIVATE = 0
+    TYPE_PUBLIC = 1
+
     query_class = AlbumQuery
     id = db.Column(db.Integer, primary_key=True)
     img_name = db.Column(db.String(255))
     img_url = db.Column(db.String(255))
     img_key = db.Column(db.String(255))
+    type = db.Column(db.Integer, default=0)
     upload_date = db.Column(db.DateTime, default=datetime.utcnow)

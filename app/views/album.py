@@ -25,6 +25,7 @@ def album_list():
 def album_add():
     if request.method == 'POST':
         img_name = request.form['img_name']
+        album_type = request.form['type']
         genkey = str(int(time.time()))
         uploaded_files = request.files.getlist("file")
         i = 1
@@ -32,7 +33,7 @@ def album_add():
             img_key = slugify(img_name) + genkey + str(i) + '.' + f.filename.split('.')[-1]  # 生成图片存储名
             bucket.put_object(img_key, f.read())
             img_url = bucket.generate_url(img_key)
-            al = Album(img_name=img_name + str(i), img_key=img_key, img_url=img_url)
+            al = Album(img_name=img_name + '_' + str(i), img_key=img_key, img_url=img_url, type=album_type)
             db.session.add(al)
             i += 1
         db.session.commit()

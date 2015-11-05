@@ -23,8 +23,9 @@ def admin_index():
 @home.route("/blog")
 @home.route("/blog/<int:page>/")
 def blog_list(page=1):
-    page_obj = Post.query.sort_by_date().just_title().paginate(page, per_page=8)
-    return render_template("home/blog.html", page_obj=page_obj)
+    tags = Tag.query.filter(Tag.num_posts > 0).all()
+    page_obj = Post.query.sort_by_date().just_title().paginate(page, per_page=10)
+    return render_template("home/blog.html", page_obj=page_obj, tags=tags)
 
 
 @home.route("/post/<int:post_id>/")

@@ -1,77 +1,50 @@
 {% extends 'home/base.html' %}
-{% block nav %}
-    <ul id="menu">
-        <!-- put class="selected" in the li tag for the selected page - to highlight which page you're on -->
-        <li><a href="/blog">博客</a></li>
-        <li class="selected"><a href="/tags">标签</a></li>
-        <li><a href="/album">图册</a></li>
-        <li><a href="/about">关于我</a></li>
-    </ul>
+{% block path %}
+    <ol class="breadcrumb">
+        <li><a href="/">主页</a></li>
+        <li class="active">标签</li>
+        <li class="active">{{ tag.name }}</li>
+    </ol>
 {% endblock %}
-{% block content %}
-    <div id="sidebar_container">
-        <div class="sidebar">
-            <div class="sidebar_item">
-                <h3>全部标签</h3>
-
-                <div class="tag-list">
-                    {% for tag in tags %}
-                        <span><a href="/tags/{{ tag.slug }}">{{ tag.name }} ({{ tag.num_posts }})</a></span>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-        <div class="sidebar">
-            <div class="sidebar_top"></div>
-            <div class="sidebar_item">
-                <h3>Search</h3>
-
-                <form method="post" action="#" id="search_form">
-                    <p>
-                        <input class="search" type="text" name="search_field" placeholder="请输入要查询的内容"/>
-                        <button type="submit">搜索</button>
-                    </p>
-                </form>
-            </div>
-            <div class="sidebar_base"></div>
-        </div>
-    </div>
-    <div id="content">
-        <h2>标签 : {{ tag.name }}</h2>
-
-        <div class="post-list">
-            <div class="item-list">
-                <ul class="lists">
-                    {% for post in page_obj.items %}
-                        <li>
-                            <time>{{ post.date_created.strftime('%Y-%m-%d') }}</time>
-                            <a href="/post/{{ post.id }}">{{ post.title }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class="paginator">
+{% block main %}
+    <div class="post-list">
+        {% for post in page_obj.items %}
+            <a class="post-item" href="/post/{{ post.id }}"><h3>{{ post.title }}</h3>
+                <time>{{ post.date_created.strftime('%Y/%m/%d') }}</time>
+            </a>
+        {% endfor %}
+        <div class="paginator">
+            <ul class="pagination">
                 {% if page_obj.has_prev %}
-                    <a href="/tags/{{ tag.slug }}/{{ page_obj.page - 1 }}">&lt;前页</a>
+                    <li><a href="/blog/{{ page_obj.page - 1 }}"> <span>前页</span> </a></li>
                 {% else %}
-                    <span class="previous  disabled">&lt;前页</span>
+                    <li class="disabled"><a href="#"> <span>前页</span> </a></li>
                 {% endif %}
 
                 {% for x in range(1,page_obj.pages + 1) %}
                     {% if x == page_obj.page %}
-                        <span class="current-page">{{ x }}</span>
+                        <li class="active"><a href="#">{{ x }}</a></li>
                     {% else %}
-                        <a href="/tags/{{ tag.slug }}/{{ x }}">{{ x }}</a>
+                        <li><a href="/blog/{{ x }}">{{ x }}</a></li>
                     {% endif %}
                 {% endfor %}
 
                 {% if page_obj.has_next %}
-                    <a href="/tags/{{ tag.slug }}/{{ page_obj.page + 1 }}">后页&gt;</a>
+                    <li><a href="/blog/{{ page_obj.page + 1 }}"> <span>后页</span> </a></li>
                 {% else %}
-                    <span class="next  disabled">后页&gt;</span>
+                    <li class="disabled"><a href="#"> <span>后页</span> </a></li>
                 {% endif %}
-
-            </div>
+            </ul>
         </div>
     </div>
+{% endblock %}
+{% block guide %}
+    <div class="guide-box-header">
+        标签
+    </div>
+    {% for tag in tags %}
+        <a class="guide-box-item" href="/tags/{{ tag.slug }}">
+            {{ tag.name }}<span class="tag-num">{{ tag.num_posts }}</span>
+        </a>
+    {% endfor %}
 {% endblock %}

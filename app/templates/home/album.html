@@ -1,44 +1,53 @@
 {% extends 'home/base.html' %}
-{% block nav %}
-    <ul id="menu">
-        <!-- put class="selected" in the li tag for the selected page - to highlight which page you're on -->
-        <li><a href="/blog">博客</a></li>
-        <li><a href="/tags">标签</a></li>
-        <li class="selected"><a href="/album">图册</a></li>
-        <li><a href="/about">关于我</a></li>
-    </ul>
+{% block style %}
+    <link href="{{ url_for('.static', filename = 'css/magnific-popup.css') }}" rel="stylesheet">
 {% endblock %}
-{% block content %}
-    <div class="large-content">
-        <div class="album-list">
-            {% for album in page_obj.items %}
-                <div class="album-item">
-                    <a href="{{ album.img_url }}" target="_blank"><img src="{{ album.img_url }}"
-                                                                       alt="{{ album.img_name }}"></a>
-                </div>
-            {% endfor %}
-            <div class="paginator">
+{% block path %}
+    <ol class="breadcrumb">
+        <li><a href="/">主页</a></li>
+        <li class="active">图册</li>
+    </ol>
+{% endblock %}
+
+{% block main %}
+    <div class="images">
+        {% for album in page_obj.items %}
+            <div class="image-box">
+                <a href="{{ album.img_url }}" class="img-view"><img src="{{ album.img_url }}"></a>
+                <span class="image-title">{{ album.img_name }}</span>
+                <span class="date">{{ album.upload_date }}</span>
+            </div>
+        {% endfor %}
+        <div class="paginator">
+            <ul class="pagination">
                 {% if page_obj.has_prev %}
-                    <a href="/album/{{ page_obj.page - 1 }}">&lt;前页</a>
+                    <li><a href="/blog/{{ page_obj.page - 1 }}"> <span>前页</span> </a></li>
                 {% else %}
-                    <span class="previous  disabled">&lt;前页</span>
+                    <li class="disabled"><a href="#"> <span>前页</span> </a></li>
                 {% endif %}
 
                 {% for x in range(1,page_obj.pages + 1) %}
                     {% if x == page_obj.page %}
-                        <span class="current-page">{{ x }}</span>
+                        <li class="active"><a href="#">{{ x }}</a></li>
                     {% else %}
-                        <a href="/album/{{ x }}">{{ x }}</a>
+                        <li><a href="/blog/{{ x }}">{{ x }}</a></li>
                     {% endif %}
                 {% endfor %}
 
                 {% if page_obj.has_next %}
-                    <a href="/album/{{ page_obj.page + 1 }}">后页&gt;</a>
+                    <li><a href="/blog/{{ page_obj.page + 1 }}"> <span>后页</span> </a></li>
                 {% else %}
-                    <span class="next  disabled">后页&gt;</span>
+                    <li class="disabled"><a href="#"> <span>后页</span> </a></li>
                 {% endif %}
-
-            </div>
+            </ul>
         </div>
     </div>
+{% endblock %}
+{% block jscript %}
+    <script src="{{ url_for('.static', filename = 'js/jquery.magnific-popup.min.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            $(".img-view").magnificPopup({type: 'image'});
+        });
+    </script>
 {% endblock %}

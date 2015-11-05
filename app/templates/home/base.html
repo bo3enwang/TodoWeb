@@ -2,38 +2,56 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Zovven</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link rel="shortcut icon" href="{{ url_for('.static', filename = 'assets/images/homeicon.png') }}"/>
-    <link href="{{ url_for('.static', filename = 'assets/css/home.css') }}" rel="stylesheet">
-
-    {% block csscontent %}
+    <title></title>
+    <link href="{{ url_for('.static', filename = 'assets/css/blog.css') }}" rel="stylesheet">
+    <script src="{{ url_for('.static', filename = 'js/jquery-1.11.3.min.js') }}"></script>
+    <script src="{{ url_for('.static', filename = 'assets/js/blog.js') }}"></script>
+    {% block style %}
     {% endblock %}
 </head>
 <body>
-<div id="main">
-    <div id="header">
-        <div id="logo">
-            <div id="logo_text">
-                <!-- class="logo_colour", allows you to change the colour of the text -->
-                <h1><a href="/">Z<span class="logo_colour">ovven</span></a></h1>
-
-                <h2>The numbers lead a dance</h2>
-            </div>
+<div class="site">
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <a href="#"><h1 class="logo-text-large">Z<span class="logo-text-small">ovven</span></h1></a>
+            <span class="brief-text">The numbers lead a dance </span>
         </div>
-        <div id="menubar">
-            {% block nav %}
+        <div class="sidebar-content">
+            <ul class="nav">
+                <li class="nav-item"><a href="/blog">博客</a></li>
+                <li class="nav-item"><a href="/album">图册</a></li>
+                <li class="nav-item"><a href="#">关于</a></li>
+            </ul>
+        </div>
+        <div class="sidebar-footer">
+            <a></a>
+        </div>
+    </div>
+    <div id="content" class="content">
+        <div class="path">
+            {% block path %}
             {% endblock %}
         </div>
+        <div class="content-main">
+            {% block main %}
+            {% endblock %}
+        </div>
+        <div class="content-guide">
+            <div class="guide-box">
+                {% block guide %}
+                {% endblock %}
+            </div>
+        </div>
+        <div class="page-scrollTop" data-toggle="tooltip" data-placement="top" title="Top">
+            <a href="javascript:void(0);">
+                <div class="arrow"></div>
+                <div class="stick"></div>
+            </a>
+        </div>
     </div>
-    <div id="site_content">
-        {% block content %}
-        {% endblock %}
-    </div>
-    <div id="footer">
-        <p>Copyright &copy; Zovven </p>
-    </div>
-    <p>&nbsp;</p>
+
 </div>
+{% block jscript %}
+{% endblock %}
 </body>
 </html>
