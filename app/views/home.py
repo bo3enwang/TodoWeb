@@ -52,7 +52,7 @@ def tag_view(slug, page=1):
 @home.route("/album")
 @home.route("/album/<int:page>/")
 def album_list(page=1):
-    page_obj = Album.query.sort_by_date().as_list().paginate(page, per_page=6)
+    page_obj = Album.query.filter(Album.type > 0).sort_by_date().as_list().paginate(page, per_page=6)
     return render_template("home/album.html", page_obj=page_obj)
 
 
