@@ -72,8 +72,8 @@
                             <thead>
                             <tr>
                                 <th style="width: 18%">图片名</th>
-                                <th style="width: 36%">地址</th>
-                                <th style="width: 25%">创建日期</th>
+                                <th style="width: 30%">地址</th>
+                                <th style="width: 22%">创建日期</th>
                                 <th style="width: 6%">类型</th>
                                 <th style="width: 15%">操作</th>
                             </tr>
@@ -82,7 +82,7 @@
                             {% for album in albums %}
                                 <tr>
                                     <td>{{ album.img_name }}</td>
-                                    <td><a href="{{ album.img_url }}">{{ album.img_url }}</a></td>
+                                    <td><p>{{ album.img_url }}</p></td>
                                     <td>{{ album.upload_date }}</td>
                                     <td>{% if album.type == 0 %}
                                         私有
@@ -94,12 +94,12 @@
                                                 data-imgurl="{{ album.img_url }}"
                                                 data-toggle="modal"
                                                 data-target="#imgView">
-                                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 预览
+                                            <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span> 预览
                                         </button>
 
                                         <button type="button" class="btn btn-default btn-xs a-delete"
                                                 albumid="{{ album.id }}">
-                                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 删除
+                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> 删除
                                         </button>
                                     </td>
 
@@ -114,7 +114,6 @@
             </div>
         </div>
     </section>
-
     <!-- Modal -->
     <div class="modal fade" id="imgView" tabindex="-1" role="dialog" aria-labelledby="imgLabel">
         <div class="modal-dialog modal-lg" role="document">
@@ -214,12 +213,9 @@
                 // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
                 var modal = $(this);
                 modal.find('#modalImage').attr('src', imgurl);
-                var windowWidth = $(window).width();
-                modal.find('.modal-content').css('width', windowWidth / 2);
-                modal.find('#modalImage').css('width', windowWidth / 2 - 35);
+                modal.find('#modalImage').css('max-width', "99%");
             })
         }
-
 
     </script>
 {% endblock %}

@@ -44,19 +44,19 @@ def index():
 
 
 # 注册
-@account.route('/register', methods=("GET", "POST"))
-def register():
-    form = RegisterForm()
-    if request.method == 'POST' and form.validate_on_submit():
-        u = User()
-        u.username = form.username.data
-        u.password = form.password.data
-        u.email = form.email.data
-        db.session.add(u)
-        db.session.commit()
-        flash("注册成功,请登录", "error")
-        return redirect(url_for('login', type='register'))
-    return render_template('account/register.html', form=form)
+# @account.route('/register', methods=("GET", "POST"))
+# def register():
+#     form = RegisterForm()
+#     if request.method == 'POST' and form.validate_on_submit():
+#         u = User()
+#         u.username = form.username.data
+#         u.password = form.password.data
+#         u.email = form.email.data
+#         db.session.add(u)
+#         db.session.commit()
+#         flash("注册成功,请登录", "error")
+#         return redirect(url_for('login', type='register'))
+#     return render_template('account/register.html', form=form)
 
 
 # 用户名重复验证

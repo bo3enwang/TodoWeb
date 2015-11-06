@@ -16,7 +16,7 @@ album = Module(__name__)
 @album.route('/list')
 @login_required
 def album_list():
-    albums = Album.query.all()
+    albums = Album.query.order_by(Album.upload_date.desc()).order_by(Album.type.desc()).all()
     return render_template('album/list.html', albums=albums)
 
 
