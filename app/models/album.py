@@ -36,4 +36,4 @@ class Album(db.Model):
     img_url = db.Column(db.String(255))
     img_key = db.Column(db.String(255))
     type = db.Column(db.Integer, default=0)
-    upload_date = db.Column(db.DateTime, default=datetime.utcnow)
+    upload_date = db.Column(db.DateTime, default=datetime.now)
