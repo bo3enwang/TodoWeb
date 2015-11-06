@@ -6,24 +6,20 @@ $(document).ready(function () {
     backToTop();
 });
 /**
- * »Øµ½¶¥²¿
+ * æ»‘åŠ¨åˆ°é¡¶éƒ¨
  */
 function backToTop() {
     var st = $(".page-scrollTop");
     var $window = $("#content");
-    var topOffset;
-    //¹öÒ³Ãæ²ÅÏÔÊ¾·µ»Ø¶¥²¿
     $window.scroll(function () {
         var currnetTopOffset = $window.scrollTop();
-        if (currnetTopOffset > 300 && topOffset > currnetTopOffset) {
+        if (currnetTopOffset > 300 ) {
             st.fadeIn(500);
         } else {
             st.fadeOut(500);
         }
-        topOffset = currnetTopOffset;
     });
 
-    //µã»÷»Øµ½¶¥²¿
     st.click(function () {
         $window.animate({
             scrollTop: "0"

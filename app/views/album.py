@@ -36,6 +36,7 @@ def album_add():
             al = Album(img_name=img_name + '_' + str(i), img_key=img_key, img_url=img_url, type=album_type)
             db.session.add(al)
             i += 1
+            print img_key
         db.session.commit()
         flash("新增图片成功", "success")
         return redirect(url_for('album.album_list'))

@@ -134,6 +134,11 @@
                             }
                         }
                     }
+                }).on('success.form.bv', function (e) {
+                    var $form = $(e.target);
+                    if ($form.data('remote') && $.rails !== undefined) {
+                        e.preventDefault();
+                    }
                 });
             });
         }

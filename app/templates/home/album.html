@@ -21,7 +21,7 @@
         <div class="paginator">
             <ul class="pagination">
                 {% if page_obj.has_prev %}
-                    <li><a href="/blog/{{ page_obj.page - 1 }}"> <span>前页</span> </a></li>
+                    <li><a href="/album/{{ page_obj.page - 1 }}"> <span>前页</span> </a></li>
                 {% else %}
                     <li class="disabled"><a href="#"> <span>前页</span> </a></li>
                 {% endif %}
@@ -30,12 +30,12 @@
                     {% if x == page_obj.page %}
                         <li class="active"><a href="#">{{ x }}</a></li>
                     {% else %}
-                        <li><a href="/blog/{{ x }}">{{ x }}</a></li>
+                        <li><a href="/album/{{ x }}">{{ x }}</a></li>
                     {% endif %}
                 {% endfor %}
 
                 {% if page_obj.has_next %}
-                    <li><a href="/blog/{{ page_obj.page + 1 }}"> <span>后页</span> </a></li>
+                    <li><a href="/album/{{ page_obj.page + 1 }}"> <span>后页</span> </a></li>
                 {% else %}
                     <li class="disabled"><a href="#"> <span>后页</span> </a></li>
                 {% endif %}
