@@ -9,6 +9,7 @@ from flask import jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import timeutils
 from sqlalchemy import func
+import random
 
 manager = Manager(create_app())
 
@@ -123,21 +124,23 @@ def add_album():
 
 @manager.command
 def add_plan():
-    plan = Plan()
-    plan.plan_name = 'hehe'
-    plan.plan_day = 3
-    db.session.add(plan)
+    for x in range(5):
+        plan = Plan()
+        plan.plan_name = 'test plan' + str(x)
+        plan.plan_day = 3
+        db.session.add(plan)
     db.session.commit()
 
 
 @manager.command
 def add_plan_record():
-    plan = Plan.query.first()
-    for x in range(5):
-        plan_record = PlanRecord()
-        plan_record.plan = plan
-        plan_record.record_point = x * 3
-        db.session.add(plan_record)
+    plans = Plan.query.all()
+    for plan in plans:
+        for x in range(random.randint(1, 6)):
+            plan_record = PlanRecord()
+            plan_record.plan = plan
+            plan_record.record_point = x * random.randint(1, 11)
+            db.session.add(plan_record)
     db.session.commit()
 
 
@@ -145,7 +148,8 @@ def add_plan_record():
 def query_plan_num():
     plan = Plan.query.first()
     # a = db.session.query(func.sum(PlanRecord.record_point)).filter(PlanRecord.plan_id == 2).scalar()
-    print plan.id
+    print plan.plan_remain_day
+
 
 if __name__ == '__main__':
     manager.run()

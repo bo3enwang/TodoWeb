@@ -31,23 +31,23 @@
 </nav>
 <div id="container" class="fixed-header">
     <div id="sidebar" class="sidebar-fixed">
-        <div id="sidebar-content">
+        <div id="sidebar_content">
 
             <ul id="nav">
-                <li class="current">
+                <li id="nav_overview">
                     <a href="#">
                         <span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>
                         概览
                     </a>
                 </li>
-                <li>
+                <li id="nav_todo">
                     <a href="#">
                         <span class="glyphicon glyphicon-check" aria-hidden="true"></span>
                         待办
                     </a>
                 </li>
-                <li>
-                    <a href="#">
+                <li id="nav_plan">
+                    <a href="/admin/plan/status/progress">
                         <span class="glyphicon glyphicon-hourglass" aria-hidden="true"></span>
                         计划
                     </a>
@@ -95,7 +95,26 @@
     $(function () {
         $('[data-toggle="popover"]').popover()
     });
+
 </script>
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <script>
+                $(document).ready(function () {
+                    postInfoMessage
+                });
+                function postInfoMessage() {
+                    $.globalMessenger().post({
+                        message: '{{ message }}',
+                        type: 'info',
+                        showCloseButton: true
+                    });
+                }
+            </script>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
 {% block javascript_cotent %}
 {% endblock %}
 </body>

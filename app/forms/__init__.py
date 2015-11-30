@@ -2,6 +2,6 @@
 __author__ = 'Zovven'
 
 from .account import *
-from .project import *
+from .plan import *
 from .todo import *
 from .post import *

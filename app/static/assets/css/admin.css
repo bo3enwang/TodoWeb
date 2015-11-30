@@ -62,7 +62,7 @@
 }
 
 /*content sidebar sidebar-content */
-#sidebar #sidebar-content {
+#sidebar #sidebar_content {
     float: left;
     width: 100% !important;
 }
@@ -202,29 +202,34 @@
 .widget.box .widget-content {
     position: relative;
     background-color: #fff;
+    padding: 5px;
 }
 
 .table-header {
     padding: 12px 15px;
     border-bottom: 1px solid #ddd;
     background-color: #fafafa;
-
+    margin-bottom: 5px;
+    overflow:hidden
 }
 
-.table-header > .left-tool {
+.left-tool {
     float: left;
 }
 
-.table-header > .right-tool {
+.right-tool {
     float: right;
 }
 
-.table-footer {
-    height: 100%;
-    width: 100%;
+.type-select{
+    margin-right: 20px;
+    display: inline-block;
 }
 
-.pagination {
-    margin: 5px 10px;
+.form-control{
+    border-radius: 0;
 }
 
+.progress {
+    margin-bottom: 0;
+}

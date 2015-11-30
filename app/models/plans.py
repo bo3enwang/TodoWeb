@@ -35,10 +35,11 @@ class Plan(db.Model):
     TYPE_LEARN = 0
     TYPE_READ = 1
     TYPE_PROJECT = 2
+    TYPE_OTHER = 3
 
-    STATUS_START = 0
+    STATUS_CREATE = 0
     STATUS_PROGRESS = 1
-    STATUS_END = 2
+    STATUS_FINISH = 2
 
     id = db.Column(db.Integer, primary_key=True)
     plan_name = db.Column(db.String(80))
@@ -53,10 +54,10 @@ class Plan(db.Model):
 
     @property
     def plan_remain_day(self):
-        if self.status == Plan.STATUS_END or self.plan_start_date is None or self.plan_day is None:
+        if self.plan_status != Plan.STATUS_PROGRESS or self.plan_start_date is None or self.plan_day is None:
             return 0
-        remain_day = self.plan_day - (timeutils.today() - self.plan_start_date)
-        return remain_day.days
+        remain_day = self.plan_day - (timeutils.today() - self.plan_start_date).days
+        return remain_day
 
     @property
     def plan_point(self):

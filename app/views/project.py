@@ -1,7 +1,7 @@
 # -*- coding:utf8 -*-
 from flask.ext.login import login_required
 from flask import Module, render_template, flash, redirect, url_for, request, g, jsonify
-from app.forms import ProjectAddForm
+from app.forms import PlanAddForm
 from app.models import db, Project, ProjectHistory
 from app import timeutils
 
@@ -28,14 +28,14 @@ def project_data():
 @project.route('/p/<pstatus>')
 @login_required
 def project_query(pstatus):
-    form = ProjectAddForm()
+    form = PlanAddForm()
     return render_template('project/project.html', form=form, pstatus=pstatus)
 
 
 @project.route('/add', methods=("post",))
 @login_required
 def project_add():
-    form = ProjectAddForm()
+    form = PlanAddForm()
     result = -1
     if form.validate_on_submit():
         p = Project()
