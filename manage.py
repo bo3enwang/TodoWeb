@@ -2,12 +2,13 @@ __author__ = 'Zovven'
 from flask.ext.script import Manager
 from app import create_app
 from app.models import db
-from app.models import User, Project, ProjectHistory, Todo, Post, Tag, post_tags, Album
+from app.models import User, Project, ProjectHistory, Todo, Post, Tag, post_tags, Album, PlanRecord, Plan
 import json
 from app.jsonutil import TimeEncoder
 from flask import jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import timeutils
+from sqlalchemy import func
 
 manager = Manager(create_app())
 
@@ -119,6 +120,32 @@ def add_album():
         db.session.add(al)
     db.session.commit()
 
+
+@manager.command
+def add_plan():
+    plan = Plan()
+    plan.plan_name = 'hehe'
+    plan.plan_day = 3
+    db.session.add(plan)
+    db.session.commit()
+
+
+@manager.command
+def add_plan_record():
+    plan = Plan.query.first()
+    for x in range(5):
+        plan_record = PlanRecord()
+        plan_record.plan = plan
+        plan_record.record_point = x * 3
+        db.session.add(plan_record)
+    db.session.commit()
+
+
+@manager.command
+def query_plan_num():
+    plan = Plan.query.first()
+    # a = db.session.query(func.sum(PlanRecord.record_point)).filter(PlanRecord.plan_id == 2).scalar()
+    print plan.id
 
 if __name__ == '__main__':
     manager.run()

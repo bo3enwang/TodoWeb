@@ -7,3 +7,4 @@ from .project import project
 from .todo import todo
 from .post import post
 from .album import album
+from .plan import plan

@@ -22,6 +22,8 @@ DEFAULT_MODULES = (
     (views.todo, "/admin/todo"),
     (views.post, "/admin/post"),
     (views.album, "/admin/album"),
+    (views.plan, "/admin"),
+
 )
 
 
