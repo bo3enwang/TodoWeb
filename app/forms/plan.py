@@ -7,10 +7,15 @@ from wtforms.validators import DataRequired, Length, NumberRange
 
 
 class PlanAddForm(Form):
-    plan_type = IntegerField("Project type", validators=[NumberRange(min=0, max=5)])
+    plan_type = IntegerField("计划类型", validators=[NumberRange(min=0, max=5)])
 
-    plan_name = StringField("Project name", validators=[DataRequired(), Length(min=1, max=30)])
+    plan_name = StringField("计划名", validators=[DataRequired(), Length(min=1, max=30)])
 
-    plan_total = IntegerField("Project length", validators=[DataRequired(), NumberRange(min=10, max=9999)])
+    plan_total = IntegerField("计划总长", validators=[DataRequired(), NumberRange(min=10, max=9999)])
 
-    plan_day = IntegerField("Project day", validators=[DataRequired(), NumberRange(min=3, max=999)])
+    plan_day = IntegerField("计划完成天数", validators=[DataRequired(), NumberRange(min=3, max=999)])
+
+
+class PlanRecordForm(Form):
+    plan_id = IntegerField("计划ID", validators=[DataRequired()])
+    record_point = IntegerField("记录点数", validators=[DataRequired()])

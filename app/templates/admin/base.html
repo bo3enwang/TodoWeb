@@ -102,15 +102,12 @@
         {% for message in messages %}
             <script>
                 $(document).ready(function () {
-                    postInfoMessage
-                });
-                function postInfoMessage() {
                     $.globalMessenger().post({
                         message: '{{ message }}',
                         type: 'info',
                         showCloseButton: true
                     });
-                }
+                });
             </script>
         {% endfor %}
     {% endif %}

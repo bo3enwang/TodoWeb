@@ -124,17 +124,18 @@ def add_album():
 
 @manager.command
 def add_plan():
-    for x in range(5):
+    for x in range(20):
         plan = Plan()
         plan.plan_name = 'test plan' + str(x)
-        plan.plan_day = 3
+        plan.plan_day = random.randint(3, 999)
+        plan.plan_total = random.randint(10, 9999)
         db.session.add(plan)
     db.session.commit()
 
 
 @manager.command
 def add_plan_record():
-    plans = Plan.query.all()
+    plans = Plan.query.filter(Plan.id > 6).all()
     for plan in plans:
         for x in range(random.randint(1, 6)):
             plan_record = PlanRecord()
@@ -145,10 +146,18 @@ def add_plan_record():
 
 
 @manager.command
+def change_plan():
+    plans = Plan.query.all()
+    for plan in plans:
+        plan.plan_type = random.randint(0, 3)
+    db.session.commit()
+
+
+@manager.command
 def query_plan_num():
-    plan = Plan.query.first()
+    _plan = Plan.query.filter(Plan.id == 1).first()
     # a = db.session.query(func.sum(PlanRecord.record_point)).filter(PlanRecord.plan_id == 2).scalar()
-    print plan.plan_remain_day
+    print _plan.plan_total
 
 
 if __name__ == '__main__':
