@@ -9,7 +9,7 @@ from app.forms import PlanAddForm, PlanRecordForm
 plan = Module(__name__)
 
 
-@plan.route("/plan/status/<string:plan_status>")
+@plan.route("/status/<string:plan_status>")
 def plan_list(plan_status):
     status_num_dict = {
         "create": Plan.STATUS_CREATE,
@@ -32,7 +32,7 @@ def plan_list(plan_status):
                            record_form=record_form, plan_status=plan_status)
 
 
-@plan.route("/plan/add", methods=("post",))
+@plan.route("/add", methods=("post",))
 def play_add():
     add_form = PlanAddForm()
     if add_form.validate_on_submit():
@@ -46,7 +46,7 @@ def play_add():
     return redirect(url_for("plan_list", plan_status="create"))
 
 
-@plan.route("/plan/record", methods=("post",))
+@plan.route("/record", methods=("post",))
 def play_record():
     record_form = PlanRecordForm()
     if record_form.validate_on_submit():
@@ -63,7 +63,7 @@ def play_record():
     return redirect(url_for("plan_list", plan_status="progress"))
 
 
-@plan.route("/plan/<int:plan_id>/delete/", methods=("post",))
+@plan.route("/<int:plan_id>/delete/", methods=("post",))
 def play_delete(plan_id):
     _plan = Plan.query.get_or_404(plan_id)
     db.session.delete(_plan)
@@ -73,7 +73,7 @@ def play_delete(plan_id):
                    redirect_url=url_for('plan_list', plan_status="progress"))
 
 
-@plan.route("/plan/<int:plan_id>/activation/", methods=("post",))
+@plan.route("/<int:plan_id>/activation/", methods=("post",))
 def play_activation(plan_id):
     _plan = Plan.query.get_or_404(plan_id)
     _plan.plan_status = Plan.STATUS_PROGRESS

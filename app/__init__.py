@@ -19,10 +19,10 @@ DEFAULT_MODULES = (
     (views.home, ""),
     (views.account, "/admin/account"),
     (views.project, "/admin/project"),
-    (views.todo, "/admin/todo"),
     (views.post, "/admin/post"),
     (views.album, "/admin/album"),
-    (views.plan, "/admin"),
+    (views.plan, "/admin/plan"),
+    (views.todo, "/admin/todo"),
 
 )
 

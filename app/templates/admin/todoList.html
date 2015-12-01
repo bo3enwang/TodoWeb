@@ -1,0 +1,261 @@
+{% extends 'admin/base.html' %}
+{% block main_content %}
+    <script>
+        $(document).ready(function () {
+            $("#nav_todo").addClass("current");
+        });
+    </script>
+
+    <div class="container">
+        <div class="crumbs">
+            <ol class="breadcrumb">
+                <li>主页</li>
+                <li class="active">待办</li>
+            </ol>
+        </div>
+        <div class="todo-tool-bar">
+            <label id="date_text" class="date_text">2015-10-5</label>
+            <div class="date-wrapper">
+                <span class="glyphicon glyphicon-menu-left" id="date_pre"></span>
+                <span class="glyphicon glyphicon-menu-right" id="date_next"></span>
+            </div>
+            <div class="date-btn">
+                <button class="btn btn-primary btn-sm">今天</button>
+                <div class="btn-group" role="group" aria-label="...">
+                    <button type="button" class="btn btn-default btn-sm">日</button>
+                    <button type="button" class="btn btn-default btn-sm">周</button>
+                    <button type="button" class="btn btn-default btn-sm">月</button>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="widget box">
+                    <div class="widget-header">
+                        <h4>
+                            Todo
+                        </h4>
+
+                        <div class="toolbar no-padding">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default btn-xs"
+                                        onclick="addTodoLi(5,0,0,'ewqewqewq','2015/12/12')">
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                    新建
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget-content">
+                        <div class="todo-list">
+                            <ul id="todo_none">
+                                <li>
+                                    <span class="label label-info todo-type">计划</span>
+                                    <span class="desc">Add slider home to creative template</span>
+                                    <span class="operation pull-right">
+                                        <button class="btn btn-default btn-sm">完成</button>
+                                        <button class="btn btn-default btn-sm">删除</button>
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="label label-info todo-type">计划</span>
+                                    <span class="desc">Add slider home to creative template</span>
+                                    <span class="operation pull-right">
+                                        <button class="btn btn-default btn-sm">完成</button>
+                                        <button class="btn btn-default btn-sm">删除</button>
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="widget box">
+                    <div class="widget-header">
+                        <h4>
+                            Finish
+                        </h4>
+
+                        <div class="toolbar no-padding">
+                        </div>
+                    </div>
+                    <div class="widget-content">
+                        <div class="todo-list">
+                            <ul id="todo_completed">
+                                <li class="done">
+                                    <span class="label label-info todo-type">计划</span>
+                                    <span class="desc">Add slider home to creative template</span>
+                                    <span class="operation pull-right">
+                                        <button class="btn btn-default btn-sm">删除</button>
+                                    </span>
+                                    <span class="time pull-right">耗时:20min</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- 模态框（Modal） 新增待办 -->
+    <div class="modal fade" id="modal_todo_add" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        新增计划
+                    </h4>
+                </div>
+                <form id="form_todo_add" action="/admin/plan/add" method="post">
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label class="control-label">类型</label>
+                            <select class="form-control" name="todo_type">
+                                <option value="">-请选择类型-</option>
+                                <option value="3">普通</option>
+                                <option value="2">优先</option>
+                                <option value="1">紧急</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="todo_desc">计划名</label>
+                            <input type="text" class="form-control" name="todo_desc" id="todo_desc"
+                                   placeholder="请输入1~30个字符">
+                            <!-- /input-group -->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default"
+                                data-dismiss="modal">关闭
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            确认
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal -->
+    </div>
+    <!-- 模态框（Modal） 新增计划 结束 -->
+
+
+    <script>
+        function addTodoLi(id, todo_status, todo_type, todo_desc, todo_time) {
+            var typeStr = {};
+            typeStr[1] = "紧急";
+            typeStr[2] = "优先";
+            typeStr[3] = "普通";
+            var typeCLass = {};
+            typeCLass[1] = "label-danger";
+            typeCLass[2] = "label-primary";
+            typeCLass[3] = "label-default";
+            var appendLocation;
+            var li = $("<li></li>");
+            var checkBoxContainer = $("<label></label>", {class: 'custom-checkbox-item pull-left'});
+            var checkBoxInput = $("<input>", {type: 'checkBox', class: 'custom-checkbox'});
+            var checkBoxSpan = $("<span></span>", {class: 'custom-checkbox-mark'});
+            var spanDesc = $("<span></span>", {class: 'desc'});
+            var spanType = $("<span></span>", {class: 'label todo-type'});
+            var spanOperation = $("<span></span>", {class: 'operation pull-right'});
+            var btnDelete = $("<button></button>", {class: 'btn btn-default btn-sm'});
+            checkBoxInput.attr('data-id', id);
+            checkBoxInput.change(function () {
+                if ($(this).is(":checked")) {
+                    var checkDom = $(this);
+                    alert(checkDom.attr("data-id"));
+                } else {
+                    alert("qqq");
+                }
+            });
+            btnDelete.attr('data-id', id);
+            btnDelete.text("删除");
+            todoAddDeleteConfirm(btnDelete, id);
+
+            if (todo_status == 1) {
+                li.addClass("done");
+                checkBoxInput.attr("disabled", "")
+                appendLocation = $("#todo_completed");
+            } else {
+                appendLocation = $("#todo_none");
+            }
+            if (todo_type == 1) {
+                spanType.addClass("label-info");
+                spanType.text("计划");
+            } else {
+                spanType.addClass("label-default");
+                spanType.text("普通");
+            }
+            spanOperation.append(btnDelete);
+            checkBoxContainer.append(checkBoxInput);
+            checkBoxContainer.append(checkBoxSpan);
+            li.append(checkBoxContainer);
+            spanDesc.text(todo_desc);
+            li.append(spanDesc);
+            li.append(spanType);
+            li.append(spanOperation);
+            li.appendTo(appendLocation);
+        }
+
+        function todoChangeStatus(dom, id) {
+            console.log(dom);
+            console.log(id);
+        }
+        function todoAddDeleteConfirm(dom, id) {
+            dom.confirm({
+                text: "确定要删除待办事项?",
+                title: "删除待办事项",
+                confirm: function (button) {
+                    var todo_id = button.attr("data-id");
+                    $.ajax({
+                        type: 'post',
+                        contentType: "application/json; charset=UTF-8",
+                        url: '/admin/plan/' + todo_id + '/activation/',
+                        dataType: 'json',
+                        error: function (xhr, err) {
+                            console.log('请求错误' + err + '原因')
+                        },
+                        success: function (data, textStatus) {
+                            if (data.success) {
+                                if (data.redirect_url) {
+                                    window.location.href = data.redirect_url;
+                                } else if (data.reload) {
+                                    window.location.reload();
+                                }
+                            } else {
+                                $.globalMessenger().post({
+                                    message: '删除失败',
+                                    type: 'info',
+                                    showCloseButton: true
+                                });
+                            }
+                        }
+                    });
+                },
+                cancel: function (button) {
+                    // nothing to do
+                },
+                confirmButton: "确定",
+                cancelButton: "取消",
+                post: true,
+                confirmButtonClass: "btn-info",
+                cancelButtonClass: "btn-default",
+                dialogClass: "modal-dialog modal-xs" // Bootstrap classes for large modal
+            });
+        }
+    </script>
+
+{% endblock %}

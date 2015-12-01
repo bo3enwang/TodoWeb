@@ -93,7 +93,6 @@ function addFuntion() {
     $('.todo-list input[type=checkbox]').on('change', function () {
         var ele = $(this).parents("li").first();
         ele.toggleClass("done");
-        id = ele.find();
         if ($('input', ele).is(":checked")) {
             ajaxChange($(this).val(), 1);
         } else {

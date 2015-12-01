@@ -9,65 +9,61 @@ from app.forms import TodoAddForm
 todo = Module(__name__)
 
 
-@todo.route('/p/data', methods=("post",))
-@login_required
-def project_data():
-    jsondata = request.get_json()
-    t_date = jsondata.get('t_date')
-    tododata = Todo.query.query_day(t_date).restricted(g.user).jsonify()
-    return jsonify({"result": tododata})
+@todo.route('')
+def todo_list():
+    return render_template("admin/todoList.html")
 
 
-@todo.route('/add', methods=("post",))
-@login_required
-def todo_add():
-    form = TodoAddForm()
-    result = -1
-    if form.validate_on_submit():
-        t = Todo()
-        t.name = form.name.data
-        t.t_date = form.t_date.data
-        t.user = g.user
-        db.session.add(t)
-        db.session.commit()
-        result = 1
-    return jsonify({'result': result})
-
-
-@todo.route('/p')
-@login_required
-def index():
-    form = TodoAddForm()
-    return render_template('todo/todo.html', form=form)
-
-
-@todo.route('/change', methods=("post",))
-@login_required
-def change_todo_status():
-    result = -1
-    jsondata = request.get_json()
-    todoid = jsondata.get('id')
-    status = jsondata.get('status')
-    t = Todo.query.get(todoid)
-    if t:
-        if status == 1:
-            t.status = 1
-        else:
-            t.status = 0
-        db.session.commit()
-        result = 1
-    return jsonify({'result': result})
-
-
-@todo.route('/delete', methods=("post",))
-@login_required
-def delete_todo():
-    result = -1
-    jsondata = request.get_json()
-    todoid = jsondata.get('id')
-    t = Todo.query.get(todoid)
-    if t:
-        db.session.delete(t)
-        db.session.commit()
-        result = 1
-    return jsonify({'result': result})
+# @todo.route('/add', methods=("post",))
+# @login_required
+# def todo_add():
+#     form = TodoAddForm()
+#     result = -1
+#     if form.validate_on_submit():
+#         t = Todo()
+#         t.name = form.name.data
+#         t.t_date = form.t_date.data
+#         t.user = g.user
+#         db.session.add(t)
+#         db.session.commit()
+#         result = 1
+#     return jsonify({'result': result})
+#
+#
+# @todo.route('/p')
+# @login_required
+# def index():
+#     form = TodoAddForm()
+#     return render_template('todo/todo.html', form=form)
+#
+#
+# @todo.route('/change', methods=("post",))
+# @login_required
+# def change_todo_status():
+#     result = -1
+#     jsondata = request.get_json()
+#     todoid = jsondata.get('id')
+#     status = jsondata.get('status')
+#     t = Todo.query.get(todoid)
+#     if t:
+#         if status == 1:
+#             t.status = 1
+#         else:
+#             t.status = 0
+#         db.session.commit()
+#         result = 1
+#     return jsonify({'result': result})
+#
+#
+# @todo.route('/delete', methods=("post",))
+# @login_required
+# def delete_todo():
+#     result = -1
+#     jsondata = request.get_json()
+#     todoid = jsondata.get('id')
+#     t = Todo.query.get(todoid)
+#     if t:
+#         db.session.delete(t)
+#         db.session.commit()
+#         result = 1
+#     return jsonify({'result': result})

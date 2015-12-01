@@ -245,7 +245,7 @@ function confirmAdd() {
         confirmButton: "确定",
         cancelButton: "取消",
         post: true,
-        confirmButtonClass: "btn-danger",
+        confirmButtonClass: "btn-info",
         cancelButtonClass: "btn-default",
         dialogClass: "modal-dialog modal-xs" // Bootstrap classes for large modal
     });

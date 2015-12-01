@@ -12,11 +12,11 @@ from app import timeutils, jsonutil
 
 
 class TodoQuery(BaseQuery):
-    def jsonify(self):
-        jsonarry = []
-        for project in self.all():
-            jsonarry.append(project.json)
-        return json.dumps(jsonarry, cls=jsonutil.TimeEncoder)
+    # def jsonify(self):
+    #     jsonarry = []
+    #     for project in self.all():
+    #         jsonarry.append(project.json)
+    #     return json.dumps(jsonarry, cls=jsonutil.TimeEncoder)
 
     def query_day(self, t_date):
         return self.filter(Todo.t_date == t_date)
@@ -31,17 +31,14 @@ class Todo(db.Model):
     STATUS_DONE = 1
     STATUS_NOT_DONE = 0
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80))
-    t_date = db.Column(db.Date)
-    status = db.Column(db.Integer, default=0)
-    user = db.relation(User, innerjoin=True, lazy="joined")
-    user_id = db.Column(db.Integer, db.ForeignKey(User.id, ondelete='CASCADE'))
+    TYPE_URGENT_IMPORTANT = 1
+    TYPE_URGENT = 2
+    TYPE_IMPORTANT = 3
+    TYPE_NONE = 4
 
-    @cached_property
-    def json(self):
-        return dict(id=self.id,
-                    name=self.name,
-                    t_date=self.t_date,
-                    status=self.status,
-                    user_id=self.user_id)
+    id = db.Column(db.Integer, primary_key=True)
+    todo_desc = db.Column(db.String(80))
+    todo_date = db.Column(db.Date)
+    todo_status = db.Column(db.Integer, default=0)
+    todo_type = db.Column(db.Integer, default=4)
+    todo_time = db.Column(db.Integer)
