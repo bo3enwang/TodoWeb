@@ -7,8 +7,7 @@
     <script>
         $(document).ready(function () {
             $("#nav_plan").addClass("current");
-            var btn_status = $('#status_{{ plan_status }}');
-            console.log(btn_status);
+            var btn_status = $("#status_{{ plan_status }}");
             btn_status.removeClass("btn-default");
             btn_status.addClass("btn-primary");
         });
@@ -16,14 +15,13 @@
     <div class="container">
         <div class="crumbs">
             <ol class="breadcrumb">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Library</a></li>
-                <li class="active">Data</li>
+                <li>主页</li>
+                <li class="active">计划</li>
             </ol>
         </div>
         <div class="widget box">
             <div class="widget-header">
-                <h4><span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>Todo</h4>
+                <h4><span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>计划</h4>
             </div>
             <div class="widget-content">
                 <div class="table-header">
@@ -82,6 +80,11 @@
                                         <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                                         记录
                                     </button>
+                                    <button type="button" class="btn btn-default btn-xs plan_to_todo"
+                                            data-name="{{ plan.plan_name }}" aria-label="Left Align">
+                                        <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                                        加入待办
+                                    </button>
                                 {% endif %}
                                 {% if plan.plan_status == 0 %}
                                     <button type="button" class="btn btn-default btn-xs plan_activation"
@@ -92,7 +95,7 @@
                                 {% endif %}
                                 <button type="button" class="btn btn-default btn-xs plan_delete" data-id="{{ plan.id }}"
                                         aria-label="Left Align">
-                                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                                     删除
                                 </button>
                             </td>
@@ -209,6 +212,7 @@
         <!-- /.modal -->
     </div>
     <!-- 模态框（Modal） 记录计划 结束 -->
+
 {% endblock %}
 {% block javascript_cotent %}
     <script src="{{ url_for('.static', filename = 'js/ion.rangeSlider.min.js') }}"></script>

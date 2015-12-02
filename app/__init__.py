@@ -18,9 +18,9 @@ DEFAULT_APP_NAME = "app"
 DEFAULT_MODULES = (
     (views.home, ""),
     (views.account, "/admin/account"),
-    (views.project, "/admin/project"),
     (views.post, "/admin/post"),
     (views.album, "/admin/album"),
+    (views.dashboard, "/admin"),
     (views.plan, "/admin/plan"),
     (views.todo, "/admin/todo"),
 
@@ -109,5 +109,5 @@ def configure_errorhandlers(app):
     def unauthorized(error):
         if request.is_xhr:
             return jsonify(error="Login required")
-        flash(("Please login to see this page"), "error")
+        flash("Please login to see this page", "error")
         return redirect(url_for("account.login", next=request.path))

@@ -4,10 +4,12 @@
 
 function addTodoLi(id, todo_status, todo_type, todo_desc, todo_date, todo_time) {
     var typeStr = {};
+    typeStr[0] = "计划";
     typeStr[1] = "紧急";
     typeStr[2] = "优先";
     typeStr[3] = "普通";
     var typeCLass = {};
+    typeCLass[0] = "label-success";
     typeCLass[1] = "label-danger";
     typeCLass[2] = "label-primary";
     typeCLass[3] = "label-default";

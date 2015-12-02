@@ -1,0 +1,101 @@
+{% extends 'admin/base.html' %}
+
+{% block main_content %}
+    <script>
+        $(document).ready(function () {
+            $("#nav_dashboard").addClass("current");
+        });
+    </script>
+    <div class="container">
+        <div class="crumbs">
+            <ol class="breadcrumb">
+                <li>主页</li>
+                <li class="active">计划</li>
+            </ol>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="widget box">
+                    <div class="widget-header">
+                        <h4>
+                            <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>Todo
+                        </h4>
+
+                        <div class="toolbar no-padding">
+                            <div class="btn-group">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget-content">
+                        <div id="main" style="height:400px"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascript_cotent %}
+    <script src="{{ url_for('.static', filename = 'js/echarts-all.js') }}"></script>
+
+    <script>
+        // 基于准备好的dom，初始化echarts图表
+        var myChart = echarts.init(document.getElementById('main'));
+
+        option = {
+            title: {
+                text: '某站点用户访问来源',
+                subtext: '纯属虚构',
+                x: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                orient: 'vertical',
+                x: 'left',
+                data: ['计划', '紧急', '优先', '普通']
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    mark: {show: true},
+                    dataView: {show: true, readOnly: false},
+                    magicType: {
+                        show: true,
+                        type: ['pie', 'funnel'],
+                        option: {
+                            funnel: {
+                                x: '25%',
+                                width: '50%',
+                                funnelAlign: 'left',
+                                max: 1548
+                            }
+                        }
+                    },
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
+            },
+            calculable: true,
+            series: [
+                {
+                    name: '待办完成情况',
+                    type: 'pie',
+                    radius: '55%',
+                    center: ['50%', '60%'],
+                    data: [
+                        {value: 335, name: '计划'},
+                        {value: 310, name: '紧急'},
+                        {value: 234, name: '优先'},
+                        {value: 135, name: '普通'}
+                    ]
+                }
+            ]
+        };
+
+        // 为echarts对象加载数据
+        myChart.setOption(option);
+    </script>
+{% endblock %}}

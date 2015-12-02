@@ -28,16 +28,16 @@ class Todo(db.Model):
     STATUS_DONE = 1
     STATUS_NOT_DONE = 0
 
+    TYPE_PLAN = 0
     TYPE_URGENT_IMPORTANT = 1
     TYPE_URGENT = 2
-    TYPE_IMPORTANT = 3
-    TYPE_NONE = 4
+    TYPE_NORMAL = 3
 
     id = db.Column(db.Integer, primary_key=True)
     todo_desc = db.Column(db.String(80))
     todo_date = db.Column(db.Date, default=date.today())
     todo_status = db.Column(db.Integer, default=0)
-    todo_type = db.Column(db.Integer, default=4)
+    todo_type = db.Column(db.Integer, default=3)
     todo_time = db.Column(db.Integer)
 
     @cached_property

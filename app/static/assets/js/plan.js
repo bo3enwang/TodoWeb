@@ -169,6 +169,50 @@ function recordSliderAdd(plan_point, plan_total, plan_remain) {
     });
 }
 function confirmAdd() {
+
+    $(".plan_to_todo").confirm({
+        text: "确定要添加到今日待办?",
+        title: "添加到待办",
+        confirm: function (button) {
+            var todo_desc = button.attr("data-name");
+            $.ajax({
+                type: 'post',
+                contentType: "application/json; charset=UTF-8",
+                url: '/admin/todo/api/add',
+                dataType: 'json',
+                data: JSON.stringify({
+                    'todo_desc': todo_desc,
+                }),
+                error: function (xhr, err) {
+                    console.log('请求错误' + err + '原因')
+                },
+                success: function (data, textStatus) {
+                    if (data.success) {
+                        $.globalMessenger().post({
+                            message: '添加 ' + todo_desc + ' 到今日待办成功!',
+                            type: 'info',
+                            showCloseButton: true
+                        });
+                    } else {
+                        $.globalMessenger().post({
+                            message: '添加失败',
+                            type: 'info',
+                            showCloseButton: true
+                        });
+                    }
+                }
+            });
+        },
+        cancel: function (button) {
+            // nothing to do
+        },
+        confirmButton: "确定",
+        cancelButton: "取消",
+        post: true,
+        confirmButtonClass: "btn-primary",
+        cancelButtonClass: "btn-default",
+        dialogClass: "modal-dialog modal-xs" // Bootstrap classes for large modal
+    });
     $(".plan_delete").confirm({
         text: "确定要删除计划?",
         title: "删除计划",

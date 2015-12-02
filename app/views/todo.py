@@ -42,14 +42,26 @@ def todo_add():
 @todo.route('/complete', methods=("post",))
 def todo_complete():
     complete_form = TodoCompeteForm()
-    print complete_form.todo_id.data
-    print complete_form.todo_time.data
     if complete_form.validate_on_submit():
         _todo = Todo.query.get_or_404(complete_form.todo_id.data)
         _todo.todo_status = Todo.STATUS_DONE
         complete_form.populate_obj(_todo)
         db.session.commit()
         return jsonify(success=True, todo=_todo.json)
+    return jsonify(success=False)
+
+
+@todo.route('/api/add', methods=("post",))
+def todo_add_from_plan():
+    json_data = request.get_json()
+    todo_desc = json_data.get('todo_desc')
+    if todo_desc is not None:
+        _todo = Todo()
+        _todo.todo_desc = todo_desc
+        _todo.todo_type = Todo.TYPE_PLAN
+        db.session.add(_todo)
+        db.session.commit()
+        return jsonify(success=True)
     return jsonify(success=False)
 
 
