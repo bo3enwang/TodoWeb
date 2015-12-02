@@ -78,5 +78,5 @@ class PlanRecord(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     plan = db.relation(Plan, innerjoin=True, lazy="joined")
     plan_id = db.Column(db.Integer, db.ForeignKey('plan.id', ondelete='CASCADE'))
-    record_date = db.Column(db.Date, default=datetime.now())
+    record_date = db.Column(db.Date, default=date.today())
     record_point = db.Column(db.Integer)

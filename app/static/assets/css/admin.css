@@ -477,11 +477,16 @@
 .todo-list ul li .desc {
     display: inline-block;
     margin-top: 3px;
+    margin-left: 10px;
 }
 
 .todo-list ul li .operation {
     display: inline-block;
     margin-top: 3px;
+}
+
+.todo-list ul li .operation button{
+    margin-right: 5px;
 }
 
 .todo-list ul li .time {
@@ -550,6 +555,6 @@
     margin-left: 30px;
 }
 
-.todo-tool-bar .btn-group {
-    margin-left: 15px;
+.todo-tool-bar .todo-tool-right {
+    margin-right: 15px;
 }

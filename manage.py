@@ -9,117 +9,10 @@ from flask import jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import timeutils
 from sqlalchemy import func
+from datetime import date, datetime, timedelta
 import random
 
 manager = Manager(create_app())
-
-
-@manager.command
-def saveuser():
-    user = User(username='zo', email='ewq@qq.com')
-    user.password = '123'
-    db.session.add(user)
-    db.session.commit()
-    db.session.close()
-
-
-@manager.command
-def bathaddp():
-    user = User.query.get(1)
-    for i in range(10):
-        p = Project()
-        p.user = user
-        p.name = "ehhe" + str(i)
-        p.p_all = 50 + i * 10
-        p.p_day = 3 + i * 3
-        db.session.add(p)
-        db.session.commit()
-
-
-@manager.command
-def bathaddto():
-    user = User.query.get(1)
-    for i in range(20):
-        t = Todo()
-        t.user = user
-        t.t_date = timeutils.today()
-        t.name = "ehhe" + str(i)
-        db.session.add(t)
-        db.session.commit()
-
-
-@manager.command
-def findp():
-    user = User.query.get(1)
-    print user.id
-    pjs = Project.query.start().restricted(user)
-    for p in pjs:
-        print p.name
-
-
-@manager.command
-def qpj():
-    user = User.query.get(1)
-    jsondata = Project.query.progress().restricted(user).jsonify()
-    print json.dumps(jsondata, cls=TimeEncoder)
-
-
-@manager.command
-def ph():
-    project = Project.query.first()
-    ph = ProjectHistory()
-    ph.project = project
-    ph.progress = 55
-    db.session.add(ph)
-    db.session.commit()
-
-
-@manager.command
-def addtodo():
-    user = User.query.get(1)
-    todo = Todo()
-    todo.user = user
-    todo.name = "hehehehe"
-    todo.t_date = timeutils.today()
-    todo.status = 0
-    db.session.add(todo)
-    db.session.commit()
-
-
-@manager.command
-def addPost():
-    user = User.query.get(1)
-    for x in range(10):
-        post = Post()
-        post.user = user
-        post.tags = 'java,ruby'
-        post.title = 'test' + str(x)
-        post.content = '#bad'
-        db.session.add(post)
-    db.session.commit()
-
-
-@manager.command
-def queryPost():
-    # page_obj = Post.query.sort_by_date().just_title().paginate(1, per_page=3)
-    # print page_obj.page
-    # for p_num in range(page_obj.pages):
-    #     print p_num
-    # tags = db.session.query_property(Post)
-    # for tag in tags:
-    #     print tag.name
-    post = Post.query.first()
-    for x in post.linked_taglist:
-        print x[0]
-
-
-@manager.command
-def add_album():
-    for x in range(10):
-        al = Album(img_name="testpic-1",
-                   img_url='http://b.hiphotos.baidu.com/image/pic/item/adaf2edda3cc7cd9d4dc1dec3d01213fb80e9115.jpg')
-        db.session.add(al)
-    db.session.commit()
 
 
 @manager.command
@@ -158,6 +51,23 @@ def query_plan_num():
     _plan = Plan.query.filter(Plan.id == 1).first()
     # a = db.session.query(func.sum(PlanRecord.record_point)).filter(PlanRecord.plan_id == 2).scalar()
     print _plan.plan_total
+
+
+@manager.command
+def add_todo():
+    for x in range(10):
+        todo = Todo()
+        todo.todo_desc = 'test plan--' + str(x) + str(x) + str(x)
+        todo.todo_status = random.randint(0, 1)
+        todo.todo_type = random.randint(1, 3)
+        db.session.add(todo)
+    db.session.commit()
+
+
+@manager.command
+def query_todo():
+    todos = Todo.query.search_date(date.today(), date.today())
+    print list(todos.jsonify())
 
 
 if __name__ == '__main__':

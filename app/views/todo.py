@@ -9,10 +9,28 @@ from app.forms import TodoAddForm
 todo = Module(__name__)
 
 
+@todo.route('/json', methods=("post",))
+def todo_json():
+    post_data = request.get_json()
+    start_date = post_data.get('start_date')
+    end_date = post_data.get('end_date')
+    json_data = Todo.query.search_date(start_date, end_date).sort_by_type()
+    return jsonify(success=True, result=list(json_data.jsonify()))
+
+
 @todo.route('')
 def todo_list():
     return render_template("admin/todoList.html")
 
+
+@todo.route("/<int:todo_id>/delete/", methods=("post",))
+def todo_delete(todo_id):
+    # _todo = Todo.query.get_or_404(todo_id)
+    # db.session.delete(_todo)
+    # db.session.commit()
+    # flash("删除成功", "success")
+    print todo_id
+    return jsonify(success=True, redirect_url=url_for('todo_list'))
 
 # @todo.route('/add', methods=("post",))
 # @login_required
