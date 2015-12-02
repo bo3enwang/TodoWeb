@@ -14,29 +14,27 @@
             </ol>
         </div>
         <div class="todo-tool-bar">
-            <label id="date_text" class="date_text" data-type="1">2015-10-5</label>
+            <label id="date_label" class="date_label" data-type="1"></label>
 
             <div class="date-wrapper">
                 <span class="glyphicon glyphicon-menu-left" id="date_pre"></span>
                 <span class="glyphicon glyphicon-menu-right" id="date_next"></span>
             </div>
             <div class="date-btn">
-                <button id="btn_today" class="btn btn-default btn-sm btn-primary" onclick="setDate('today')">今天</button>
+                <button id="btn_today" class="btn btn-default btn-sm btn-primary">今天</button>
                 <div id="btn_date_type" class="btn-group" role="group">
                     <button type="button" id="type_day" class="btn btn-default btn-sm btn-primary" data-type="1">日
                     </button>
-                    <button type="button" id="type_week" class="btn btn-default btn-sm" data-type="2">周</button>
-                    <button type="button" id="type_month" class="btn btn-default btn-sm" data-type="3">月</button>
+                    <button type="button" class="btn btn-default btn-sm" data-type="2">周</button>
+                    <button type="button" class="btn btn-default btn-sm" data-type="3">月</button>
                 </div>
             </div>
             <div class="todo-tool-right pull-right">
-                <button type="button" class="btn btn-default"
-                        onclick="ajaxPostTodoData()">
-                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal_todo_add">
+                    <span class="glyphicon glyphicon-plus"></span>
                     新建
                 </button>
             </div>
-
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -67,7 +65,7 @@
                 <div class="widget box">
                     <div class="widget-header">
                         <h4>
-                            Finish
+                            Completed
                         </h4>
 
                         <div class="toolbar no-padding">
@@ -98,9 +96,9 @@
                         新增计划
                     </h4>
                 </div>
-                <form id="form_todo_add" action="/admin/plan/add" method="post">
+                <form id="form_todo_add" action="/admin/todo/add" method="post">
                     <div class="modal-body">
-
+                        {{ add_form.hidden_tag() if add_form.hidden_tag }}
                         <div class="form-group">
                             <label class="control-label">类型</label>
                             <select class="form-control" name="todo_type">
@@ -111,7 +109,7 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="todo_desc">计划名</label>
+                            <label for="todo_desc">待办描述</label>
                             <input type="text" class="form-control" name="todo_desc" id="todo_desc"
                                    placeholder="请输入1~30个字符">
                             <!-- /input-group -->
@@ -133,7 +131,7 @@
     </div>
     <!-- 模态框（Modal） 新增计划 结束 -->
 
-    <!-- 模态框（Modal） 新增待办 -->
+    <!-- 模态框（Modal） 完成待办 -->
     <div class="modal fade" id="modal_todo_complete" tabindex="-1" role="dialog"
          aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -147,12 +145,15 @@
                         确认完成
                     </h4>
                 </div>
-                <form id="form_todo_complete" action="/admin/plan/add" method="post">
+                <form id="form_todo_complete" action="/admin/todo/complete" method="post">
                     <div class="modal-body">
+                        {{ complete_form.hidden_tag() if complete_form.hidden_tag }}
+                        <input id="todo_id" name="todo_id" type="hidden">
+
                         <div class="form-group">
                             <label for="todo_time">完成耗时</label>
                             <input type="text" class="form-control" name="todo_time" id="todo_time"
-                                   placeholder="请输入1~30个字符">
+                                   placeholder="单位为分钟">
                             <!-- /input-group -->
                         </div>
                     </div>
@@ -172,163 +173,6 @@
     </div>
     <!-- 模态框（Modal） 新增计划 结束 -->
 
-    <script>
-        function addTodoLi(id, todo_status, todo_type, todo_desc, todo_time) {
-            var typeStr = {};
-            typeStr[1] = "紧急";
-            typeStr[2] = "优先";
-            typeStr[3] = "普通";
-            var typeCLass = {};
-            typeCLass[1] = "label-danger";
-            typeCLass[2] = "label-primary";
-            typeCLass[3] = "label-default";
-
-            var appendLocation;
-            var li = $("<li></li>");
-            var spanType = $("<span></span>", {class: 'label todo-type'});
-            var spanDesc = $("<span></span>", {class: 'desc'});
-            var spanTime = $("<span></span>", {class: 'time'});
-            var spanOperation = $("<span></span>", {class: 'operation pull-right'});
-            var btnComplete = $("<button></button>", {class: 'btn btn-default btn-sm'});
-            var btnDelete = $("<button></button>", {class: 'btn btn-default btn-sm'});
-
-            spanType.addClass(typeCLass[todo_type]);
-            spanType.text(typeStr[todo_type]);
-            li.append(spanType);
-
-            spanDesc.text(todo_desc);
-            li.append(spanDesc);
-
-            btnDelete.text("删除");
-            btnDelete.confirm({
-                text: "确定要删除待办事项?",
-                title: "删除待办事项",
-                confirm: function (button) {
-                    $.ajax({
-                        type: 'post',
-                        contentType: "application/json; charset=UTF-8",
-                        url: '/admin/todo/' + id + '/delete/',
-                        dataType: 'json',
-                        error: function (xhr, err) {
-                            $.globalMessenger().post({
-                                message: '删除失败',
-                                type: 'info',
-                                showCloseButton: true
-                            });
-                        },
-                        success: function (data, textStatus) {
-                            if (data.success) {
-                                button.parent().parent().remove();
-                                $.globalMessenger().post({
-                                    message: '删除成功',
-                                    type: 'info',
-                                    showCloseButton: true
-                                });
-                            } else {
-                                $.globalMessenger().post({
-                                    message: '删除失败',
-                                    type: 'info',
-                                    showCloseButton: true
-                                });
-                            }
-                        }
-                    });
-                },
-                cancel: function (button) {
-                    // nothing to do
-                },
-                confirmButton: "确定",
-                cancelButton: "取消",
-                post: true,
-                confirmButtonClass: "btn-danger",
-                cancelButtonClass: "btn-default",
-                dialogClass: "modal-dialog modal-xs" // Bootstrap classes for large modal
-            });
-            spanOperation.append(btnDelete);
-            li.append(spanOperation);
-
-            if (todo_status == 1) {
-                li.addClass("done");
-                appendLocation = $("#todo_completed");
-                spanTime.text("耗时: " + todo_time + " min");
-                spanTime.appendTo(spanDesc);
-            } else {
-                appendLocation = $("#todo_none");
-                btnComplete.text("完成");
-                btnComplete.attr("data-toggle", "modal");
-                btnComplete.attr("data-target", "#modal_todo_complete");
-                btnComplete.attr("data-id", id);
-                btnDelete.before(btnComplete);
-            }
-            li.appendTo(appendLocation);
-        }
-        function ajaxPostTodoData(start_date, end_date) {
-            $.ajax({
-                type: 'post',
-                contentType: "application/json; charset=UTF-8",
-                url: '/admin/todo/json',
-                dataType: 'json',
-                data: JSON.stringify({
-                    'start_date': start_date,
-                    'end_date': end_date
-                }),
-                error: function (xhr, err) {
-                    $.globalMessenger().post({
-                        message: '请求数据失败,请重试!',
-                        type: 'info',
-                        showCloseButton: true
-                    });
-                },
-                success: function (data, textStatus) {
-                    if (data.success) {
-                        $("#todo_none").empty();
-                        $("#todo_completed").empty();
-                        $.each(data.result, function () {
-                            addTodoLi(this.id, this.todo_status, this.todo_type, this.todo_desc, this.todo_time);
-                        });
-                    } else {
-                        $.globalMessenger().post({
-                            message: '请求数据失败,请重试!',
-                            type: 'info',
-                            showCloseButton: true
-                        });
-                    }
-                }
-            });
-        }
-        $(document).ready(function () {
-            $("#btn_date_type").find("button").click(function () {
-                var btn = $(this);
-                var btn_type = btn.attr("data-type");
-                var date_text = $("#date_text");
-                if (btn_type == date_text.attr("data-type")) {
-                    return;
-                }
-                $("#btn_date_type").find("button").removeClass("btn-primary");
-                btn.addClass("btn-primary");
-                if (btn_type == 0) {
-                    date_text.attr("data-type", btn_type);
-                }
-            });
-        });
-        function setDate(op) {
-            var btn_today = $("#btn_today");
-            btn_today.removeClass("btn-primary");
-            $("#btn_date_type").find("button").removeClass("btn-primary");
-            var text_date;
-            var date_text = $("#date_text");
-
-            switch (op) {
-                case 'today':
-                    btn_today.addClass("btn-primary");
-
-                    $("#type_day").addClass("btn-primary");
-                    text_date = moment().format("YYYY-MM-DD");
-                    break;
-            }
-            date_text.text(text_date);
-        }
-
-    </script>
+    <script src="{{ url_for('.static', filename = 'assets/js/todo.js') }}"></script>
 
 {% endblock %}

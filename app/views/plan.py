@@ -36,9 +36,9 @@ def plan_list(plan_status):
 def play_add():
     add_form = PlanAddForm()
     if add_form.validate_on_submit():
-        p = Plan()
-        add_form.populate_obj(p)
-        db.session.add(p)
+        _plan = Plan()
+        add_form.populate_obj(_plan)
+        db.session.add(_plan)
         db.session.commit()
         flash("新增计划成功", "success")
         return redirect(url_for("plan_list", plan_status="create"))

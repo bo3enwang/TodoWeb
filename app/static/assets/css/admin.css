@@ -478,6 +478,21 @@
     display: inline-block;
     margin-top: 3px;
     margin-left: 10px;
+    font-size: 15px;
+}
+
+.todo-list ul li .date {
+    display: inline-block;
+    margin-top: 3px;
+    margin-left: 8px;
+    font-size: 10px;
+}
+
+.todo-list ul li .time {
+    display: inline-block;
+    margin-top: 3px;
+    margin-left: 8px;
+    font-size: 10px;
 }
 
 .todo-list ul li .operation {
@@ -489,11 +504,6 @@
     margin-right: 5px;
 }
 
-.todo-list ul li .time {
-    display: inline-block;
-    margin-top: 3px;
-    margin-right: 8px;
-}
 
 .todo-list ul li .todo-type {
     margin-right: 5px;
@@ -545,9 +555,10 @@
     color: #0d7d77;
 }
 
-.todo-tool-bar .date_text {
-    width: 80px;
+.todo-tool-bar .date_label {
+    width: 120px;
     margin-left: 10px;
+    margin-right: 10px;
 }
 
 .todo-tool-bar .date-btn {

@@ -55,11 +55,12 @@ def query_plan_num():
 
 @manager.command
 def add_todo():
-    for x in range(10):
+    for x in range(100):
         todo = Todo()
         todo.todo_desc = 'test plan--' + str(x) + str(x) + str(x)
         todo.todo_status = random.randint(0, 1)
         todo.todo_type = random.randint(1, 3)
+        todo.todo_date = date(2015, random.randint(1, 12), random.randint(1, 27))
         db.session.add(todo)
     db.session.commit()
 

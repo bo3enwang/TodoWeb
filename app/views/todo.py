@@ -4,7 +4,7 @@ from flask import Module, render_template, flash, redirect, session, url_for, re
 from flask.ext.login import login_user, logout_user, current_user, login_required
 
 from app.models import Todo, db
-from app.forms import TodoAddForm
+from app.forms import TodoAddForm, TodoCompeteForm
 
 todo = Module(__name__)
 
@@ -20,17 +20,45 @@ def todo_json():
 
 @todo.route('')
 def todo_list():
-    return render_template("admin/todoList.html")
+    add_form = TodoAddForm()
+    complete_form = TodoCompeteForm()
+    return render_template("admin/todoList.html", add_form=add_form, complete_form=complete_form)
+
+
+@todo.route('/add', methods=("post",))
+def todo_add():
+    add_form = TodoAddForm()
+    if add_form.validate_on_submit():
+        _todo = Todo()
+        add_form.populate_obj(_todo)
+        db.session.add(_todo)
+        db.session.commit()
+        flash("新增待办成功", "success")
+        return redirect(url_for("todo_list"))
+    flash("新增待办失败", "success")
+    return redirect(url_for("todo_list"))
+
+
+@todo.route('/complete', methods=("post",))
+def todo_complete():
+    complete_form = TodoCompeteForm()
+    print complete_form.todo_id.data
+    print complete_form.todo_time.data
+    if complete_form.validate_on_submit():
+        _todo = Todo.query.get_or_404(complete_form.todo_id.data)
+        _todo.todo_status = Todo.STATUS_DONE
+        complete_form.populate_obj(_todo)
+        db.session.commit()
+        return jsonify(success=True, todo=_todo.json)
+    return jsonify(success=False)
 
 
 @todo.route("/<int:todo_id>/delete/", methods=("post",))
 def todo_delete(todo_id):
-    # _todo = Todo.query.get_or_404(todo_id)
-    # db.session.delete(_todo)
-    # db.session.commit()
-    # flash("删除成功", "success")
-    print todo_id
-    return jsonify(success=True, redirect_url=url_for('todo_list'))
+    _todo = Todo.query.get_or_404(todo_id)
+    db.session.delete(_todo)
+    db.session.commit()
+    return jsonify(success=True)
 
 # @todo.route('/add', methods=("post",))
 # @login_required

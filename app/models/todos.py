@@ -41,9 +41,14 @@ class Todo(db.Model):
     todo_time = db.Column(db.Integer)
 
     @cached_property
+    def json_date(self):
+        return self.todo_date.strftime('%Y-%m-%d')
+
+    @cached_property
     def json(self):
         return dict(id=self.id,
                     todo_desc=self.todo_desc,
                     todo_status=self.todo_status,
                     todo_type=self.todo_type,
+                    todo_date=self.json_date,
                     todo_time=self.todo_time)

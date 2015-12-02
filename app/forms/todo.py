@@ -8,5 +8,10 @@ from wtforms.validators import DataRequired, Length, NumberRange
 
 
 class TodoAddForm(Form):
-    t_date = DateField("Todo Date", validators=[DataRequired()])
-    name = StringField("Todo name", validators=[DataRequired(), Length(min=1, max=30)])
+    todo_type = IntegerField("Todo 类型", validators=[NumberRange(min=0, max=5)])
+    todo_desc = StringField("Todo 描述", validators=[DataRequired(), Length(min=1, max=30)])
+
+
+class TodoCompeteForm(Form):
+    todo_id = IntegerField("Todo Id", validators=[DataRequired()])
+    todo_time = IntegerField("Todo 用时", validators=[NumberRange(min=1, max=1200)])
