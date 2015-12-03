@@ -124,6 +124,7 @@ function ajaxPostTodoData(start_date, end_date) {
             if (data.success) {
                 $("#todo_none").empty();
                 $("#todo_completed").empty();
+                console.log(data.result);
                 $.each(data.result, function () {
                     addTodoLi(this.id, this.todo_status, this.todo_type, this.todo_desc, this.todo_date, this.todo_time);
                 });

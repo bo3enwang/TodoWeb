@@ -13,8 +13,9 @@
                 <li class="active">计划</li>
             </ol>
         </div>
+
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="widget box">
                     <div class="widget-header">
                         <h4>
@@ -28,7 +29,56 @@
                         </div>
                     </div>
                     <div class="widget-content">
-                        <div id="main" style="height:400px"></div>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <ul class="list-group">
+                                    <li class="list-group-item list-group-header">
+                                        <span class="badge">5</span>
+                                        今日待办事项
+                                    </li>
+                                    <li class="list-group-item">Dapibus ac facilisis in</li>
+                                    <li class="list-group-item">Morbi leo risus</li>
+                                    <li class="list-group-item">Porta ac consectetur ac</li>
+                                    <li class="list-group-item">Vestibulum at eros</li>
+                                </ul>
+                                <ul class="list-group">
+                                    <li class="list-group-item list-group-header">
+                                        <span class="badge">5</span>
+                                        今日已经完成待办事项
+                                    </li>
+                                    <li class="list-group-item">Dapibus ac facilisis in</li>
+                                    <li class="list-group-item">Morbi leo risus</li>
+                                    <li class="list-group-item">Porta ac consectetur ac</li>
+                                    <li class="list-group-item">Vestibulum at eros</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-7">
+                                <div id="main" style="height:400px"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="widget box">
+                    <div class="widget-header">
+                        <h4>
+                            <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>Todo
+                        </h4>
+
+                        <div class="toolbar no-padding">
+                            <div class="btn-group">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget-content">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div id="plan_chart" style="height:400px"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -37,65 +87,92 @@
 {% endblock %}
 {% block javascript_cotent %}
     <script src="{{ url_for('.static', filename = 'js/echarts-all.js') }}"></script>
+    <script src="{{ url_for('.static', filename = 'assets/js/charts.js') }}"></script>
 
     <script>
         // 基于准备好的dom，初始化echarts图表
         var myChart = echarts.init(document.getElementById('main'));
 
-        option = {
+        plan_option = {
             title: {
-                text: '某站点用户访问来源',
-                subtext: '纯属虚构',
-                x: 'center'
+                text: '本周计划完成情况',
+                subtext: '纯属虚构'
             },
             tooltip: {
-                trigger: 'item',
-                formatter: "{a} <br/>{b} : {c} ({d}%)"
+                trigger: 'axis'
             },
             legend: {
-                orient: 'vertical',
-                x: 'left',
-                data: ['计划', '紧急', '优先', '普通']
+                data: ['Java', 'Spring', 'Redis']
             },
             toolbox: {
                 show: true,
                 feature: {
                     mark: {show: true},
                     dataView: {show: true, readOnly: false},
-                    magicType: {
-                        show: true,
-                        type: ['pie', 'funnel'],
-                        option: {
-                            funnel: {
-                                x: '25%',
-                                width: '50%',
-                                funnelAlign: 'left',
-                                max: 1548
-                            }
-                        }
-                    },
+                    magicType: {show: true, type: ['line', 'bar']},
                     restore: {show: true},
                     saveAsImage: {show: true}
                 }
             },
             calculable: true,
+            xAxis: [
+                {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: ['周日', '周二', '周三', '周四', '周五', '周六', '周一']
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: '{value} Point'
+                    }
+                }
+            ],
             series: [
                 {
-                    name: '待办完成情况',
-                    type: 'pie',
-                    radius: '55%',
-                    center: ['50%', '60%'],
-                    data: [
-                        {value: 335, name: '计划'},
-                        {value: 310, name: '紧急'},
-                        {value: 234, name: '优先'},
-                        {value: 135, name: '普通'}
-                    ]
+                    name: 'Java',
+                    type: 'line',
+                    data: [11, 11, 15, 13, 12, 13],
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最大值'},
+                            {type: 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
+                },
+                {
+                    name: 'Spring',
+                    type: 'line',
+                    data: [1, -2, 2, 5, 3, 2],
+                    markPoint: {
+                        data: [
+                            {name: '周最低', value: -2, xAxis: 1, yAxis: -1.5}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
                 }
             ]
         };
 
+
+        var plan_chart = echarts.init(document.getElementById('plan_chart'));
+
+        var option = lineChartMaker.todoChart();
+        console.log(option);
+
         // 为echarts对象加载数据
         myChart.setOption(option);
+        plan_chart.setOption(plan_option);
     </script>
 {% endblock %}}

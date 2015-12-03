@@ -113,6 +113,29 @@
     border-color: #F1F1F1;
 }
 
+.list-group-item:first-child, .list-group-item:last-child {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0
+}
+
+.list-group-item.no-padding {
+    padding: 0
+}
+
+a.list-group-item.active {
+    border-color: #446785;
+    background-color: #4d7496
+}
+
+.list-group-header {
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 11px;
+    background-color: #f9f9f9
+}
+
+
 /*checkbox style*/
 .custom-checkbox-item {
     display: block;
@@ -301,6 +324,7 @@
 #sidebar ul#nav li a span {
     padding-right: 10px;
 }
+
 
 /* content */
 #content {

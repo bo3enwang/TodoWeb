@@ -1,14 +1,15 @@
+# -*- coding:utf8 -*-
 __author__ = 'Zovven'
 from flask.ext.script import Manager
 from app import create_app
 from app.models import db
 from app.models import User, Project, ProjectHistory, Todo, Post, Tag, post_tags, Album, PlanRecord, Plan
 import json
-from app.jsonutil import TimeEncoder
+from app.jsonutil import TimeEncoder, DecimalEncoder
 from flask import jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import timeutils
-from sqlalchemy import func
+from sqlalchemy import func, and_
 from datetime import date, datetime, timedelta
 import random
 
@@ -69,6 +70,26 @@ def add_todo():
 def query_todo():
     todos = Todo.query.search_date(date.today(), date.today())
     print list(todos.jsonify())
+
+
+@manager.command
+def complex_query():
+    rs = db.session.query(Todo.todo_type, func.sum(Todo.todo_time)).filter(
+        and_(Todo.todo_date >= "2015-01-01", Todo.todo_date <= "2015-12-01")).group_by(Todo.todo_type).all()
+
+    type_dict = {
+        "0": "计划",
+        "1": "紧急",
+        "2": "优先",
+        "3": "普通",
+    }
+    json_list = list()
+    for row in rs:
+        json_dict = dict()
+        json_dict['value'] = long(row[1])
+        json_dict['name'] = type_dict[str(row[0])]
+        json_list.append(json_dict)
+    print json_list
 
 
 if __name__ == '__main__':

@@ -2,9 +2,11 @@
 __author__ = 'Zovven'
 from flask import Module, render_template, flash, redirect, session, url_for, request, g, jsonify
 from flask.ext.login import login_user, logout_user, current_user, login_required
-
+from sqlalchemy import func, and_
 from app.models import Todo, db
 from app.forms import TodoAddForm, TodoCompeteForm
+import json
+from app.jsonutil import DecimalEncoder
 
 todo = Module(__name__)
 
@@ -72,56 +74,24 @@ def todo_delete(todo_id):
     db.session.commit()
     return jsonify(success=True)
 
-# @todo.route('/add', methods=("post",))
-# @login_required
-# def todo_add():
-#     form = TodoAddForm()
-#     result = -1
-#     if form.validate_on_submit():
-#         t = Todo()
-#         t.name = form.name.data
-#         t.t_date = form.t_date.data
-#         t.user = g.user
-#         db.session.add(t)
-#         db.session.commit()
-#         result = 1
-#     return jsonify({'result': result})
-#
-#
-# @todo.route('/p')
-# @login_required
-# def index():
-#     form = TodoAddForm()
-#     return render_template('todo/todo.html', form=form)
-#
-#
-# @todo.route('/change', methods=("post",))
-# @login_required
-# def change_todo_status():
-#     result = -1
-#     jsondata = request.get_json()
-#     todoid = jsondata.get('id')
-#     status = jsondata.get('status')
-#     t = Todo.query.get(todoid)
-#     if t:
-#         if status == 1:
-#             t.status = 1
-#         else:
-#             t.status = 0
-#         db.session.commit()
-#         result = 1
-#     return jsonify({'result': result})
-#
-#
-# @todo.route('/delete', methods=("post",))
-# @login_required
-# def delete_todo():
-#     result = -1
-#     jsondata = request.get_json()
-#     todoid = jsondata.get('id')
-#     t = Todo.query.get(todoid)
-#     if t:
-#         db.session.delete(t)
-#         db.session.commit()
-#         result = 1
-#     return jsonify({'result': result})
+
+@todo.route('/chart/pie', methods=("post",))
+def todo_chart_json():
+    post_data = request.get_json()
+    start_date = post_data.get('start_date')
+    end_date = post_data.get('end_date')
+    rs = db.session.query(Todo.todo_type, func.sum(Todo.todo_time)).filter(
+        and_(Todo.todo_date >= start_date, Todo.todo_date <= end_date)).group_by(Todo.todo_type).all()
+    type_dict = {
+        "0": "计划",
+        "1": "紧急",
+        "2": "优先",
+        "3": "普通",
+    }
+    json_list = list()
+    for row in rs:
+        json_dict = dict()
+        json_dict['value'] = long(row[1])
+        json_dict['name'] = type_dict[str(row[0])]
+        json_list.append(json_dict)
+    return jsonify(success=True, result=json_list)

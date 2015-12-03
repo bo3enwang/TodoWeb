@@ -2,6 +2,7 @@
 __author__ = 'Zovven'
 import json
 from datetime import datetime, date
+import decimal
 
 
 class TimeEncoder(json.JSONEncoder):
@@ -14,3 +15,10 @@ class TimeEncoder(json.JSONEncoder):
             return obj.strftime('%Y-%m-%d')
         else:
             return json.JSONEncoder.default(self, obj)
+
+
+class DecimalEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, decimal.Decimal):
+            return float(o)
+        return super(DecimalEncoder, self).default(o)

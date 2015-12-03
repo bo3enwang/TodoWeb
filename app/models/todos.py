@@ -29,8 +29,8 @@ class Todo(db.Model):
     STATUS_NOT_DONE = 0
 
     TYPE_PLAN = 0
-    TYPE_URGENT_IMPORTANT = 1
-    TYPE_URGENT = 2
+    TYPE_URGENT = 1
+    TYPE_PRIOR = 2
     TYPE_NORMAL = 3
 
     id = db.Column(db.Integer, primary_key=True)
