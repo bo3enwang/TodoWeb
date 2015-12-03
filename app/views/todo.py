@@ -81,7 +81,7 @@ def todo_chart_json():
     start_date = post_data.get('start_date')
     end_date = post_data.get('end_date')
     rs = db.session.query(Todo.todo_type, func.sum(Todo.todo_time)).filter(
-        and_(Todo.todo_date >= start_date, Todo.todo_date <= end_date)).group_by(Todo.todo_type).all()
+        and_(Todo.todo_date >= start_date, Todo.todo_date <= end_date)).all()
     type_dict = {
         "0": "计划",
         "1": "紧急",
@@ -91,7 +91,7 @@ def todo_chart_json():
     json_list = list()
     for row in rs:
         json_dict = dict()
-        json_dict['value'] = long(row[1])
         json_dict['name'] = type_dict[str(row[0])]
+        json_dict['value'] = long(row[1])
         json_list.append(json_dict)
     return jsonify(success=True, result=json_list)

@@ -53,7 +53,7 @@
                                 </ul>
                             </div>
                             <div class="col-md-7">
-                                <div id="main" style="height:400px"></div>
+                                <div id="todo_wrap" style="height:400px"></div>
                             </div>
                         </div>
                     </div>
@@ -88,11 +88,9 @@
 {% block javascript_cotent %}
     <script src="{{ url_for('.static', filename = 'js/echarts-all.js') }}"></script>
     <script src="{{ url_for('.static', filename = 'assets/js/charts.js') }}"></script>
+    <script src="{{ url_for('.static', filename = 'assets/js/dashboard.js') }}"></script>
 
     <script>
-        // 基于准备好的dom，初始化echarts图表
-        var myChart = echarts.init(document.getElementById('main'));
-
         plan_option = {
             title: {
                 text: '本周计划完成情况',
@@ -164,15 +162,7 @@
                 }
             ]
         };
-
-
         var plan_chart = echarts.init(document.getElementById('plan_chart'));
-
-        var option = lineChartMaker.todoChart();
-        console.log(option);
-
-        // 为echarts对象加载数据
-        myChart.setOption(option);
         plan_chart.setOption(plan_option);
     </script>
 {% endblock %}}
