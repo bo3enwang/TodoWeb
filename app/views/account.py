@@ -31,7 +31,7 @@ def login():
         if user and authenticated:
             remember = form.remember.data
             login_user(user, remember)
-            return redirect(url_for('todo.index'))
+            return redirect(url_for('dashboard.dashboard_main'))
         else:
             flash("对不起, 用户名或密码错误", "error")
     return render_template('account/login.html', form=form)

@@ -1,7 +1,7 @@
 /**
  * Created by Zovven on 2015/12/3.
  */
-function getAjaxData() {
+function getAjaxData(start_date,end_date) {
     var json_data;
     $.ajax({
         type: 'post',
@@ -10,8 +10,8 @@ function getAjaxData() {
         url: '/admin/todo/chart/pie',
         dataType: 'json',
         data: JSON.stringify({
-            'start_date': "2015-01-01",
-            'end_date': "2015-12-01"
+            'start_date': start_date,
+            'end_date': end_date
         }),
         error: function (xhr, err) {
             $.globalMessenger().post({

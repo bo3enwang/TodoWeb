@@ -9,8 +9,10 @@ from app.forms import PlanAddForm, PlanRecordForm
 plan = Module(__name__)
 
 
+@plan.route("")
 @plan.route("/status/<string:plan_status>")
-def plan_list(plan_status):
+@login_required
+def plan_list(plan_status='progress'):
     status_num_dict = {
         "create": Plan.STATUS_CREATE,
         "progress": Plan.STATUS_PROGRESS,
@@ -33,7 +35,8 @@ def plan_list(plan_status):
 
 
 @plan.route("/add", methods=("post",))
-def play_add():
+@login_required
+def plan_add():
     add_form = PlanAddForm()
     if add_form.validate_on_submit():
         _plan = Plan()
@@ -47,7 +50,8 @@ def play_add():
 
 
 @plan.route("/record", methods=("post",))
-def play_record():
+@login_required
+def plan_record():
     record_form = PlanRecordForm()
     if record_form.validate_on_submit():
         _plan = Plan.query.get_or_404(record_form.plan_id.data)
@@ -64,7 +68,8 @@ def play_record():
 
 
 @plan.route("/<int:plan_id>/delete/", methods=("post",))
-def play_delete(plan_id):
+@login_required
+def plan_delete(plan_id):
     _plan = Plan.query.get_or_404(plan_id)
     db.session.delete(_plan)
     db.session.commit()
@@ -74,7 +79,8 @@ def play_delete(plan_id):
 
 
 @plan.route("/<int:plan_id>/activation/", methods=("post",))
-def play_activation(plan_id):
+@login_required
+def plan_activation(plan_id):
     _plan = Plan.query.get_or_404(plan_id)
     _plan.plan_status = Plan.STATUS_PROGRESS
     db.session.commit()

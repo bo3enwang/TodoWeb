@@ -1,0 +1,108 @@
+{% extends 'admin/base.html' %}
+{% block style_content %}
+    <link href="{{ url_for('.static', filename = 'css/fileinput.min.css') }}" rel="stylesheet">
+{% endblock %}
+{% block main_content %}
+    <script>
+        $(document).ready(function () {
+            $("#nav_image").addClass("current");
+        });
+    </script>
+    <div class="container">
+        <div class="crumbs">
+            <ol class="breadcrumb">
+                <li>主页</li>
+                <li class="active">图片管理</li>
+            </ol>
+        </div>
+        <div class="widget box" style="margin-top: 5px;">
+            <div class="widget-header">
+                <h4><span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>新增图片</h4>
+            </div>
+            <div class="widget-content">
+                <form id="fileForm" role="form" action="/admin/image/add" method="post"
+                      enctype="multipart/form-data">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="title">图片名</label>
+                            <input type="text" class="form-control" id="img_name" name="img_name" autocomplete="off"
+                                   placeholder="请输入图片名">
+                        </div>
+                        <div class="form-group">
+                            <label for="title">类型</label>
+                            <select name="type" class="form-control">
+                                <option value="0">私有</option>
+                                <option value="1">开放</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="tags">图片</label>
+                            <input type="file" class="form-control" multiple="" id="file" name="file">
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary">提交</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascript_cotent %}
+    <script src="{{ url_for('.static', filename = 'js/canvas-to-blob.min.js') }}"></script>
+    <script src="{{ url_for('.static', filename = 'js/fileinput.min.js') }}"></script>
+    <script src="{{ url_for('.static', filename = 'js/language/fileinput_locale_zh.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            $("#file").fileinput({
+                maxFileCount: 15,
+                allowedFileExtensions: ["jpg", "gif", "png"],
+                showRemove: false,
+                showUpload: false
+            });
+            $('#fileForm').bootstrapValidator({
+                message: 'This value is not valid',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    img_name: {
+                        message: '验证不通过',
+                        validators: {
+                            notEmpty: {
+                                message: '文件名不能为空'
+                            },
+                            stringLength: {
+                                min: 1,
+                                max: 80,
+                                message: '请输入1~80个字符'
+                            }
+                        }
+                    },
+                    file: {
+                        validators: {
+                            notEmpty: {
+                                message: '请选择要上传的图片'
+                            },
+                            file: {
+                                extension: 'jpeg,jpg,png,gif',
+                                type: 'image/jpeg,image/png,image/gif',
+                                message: '请上传图片文件'
+                            }
+                        }
+                    }
+                }
+            }).on('success.form.bv', function (e) {
+                var $form = $(e.target);
+                if ($form.data('remote') && $.rails !== undefined) {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+{% endblock %}

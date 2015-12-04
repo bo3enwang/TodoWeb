@@ -14,6 +14,120 @@
             </ol>
         </div>
 
+        <div class="page-header">
+            <div class="page-title">
+                <h3>
+                    控制台
+                </h3>
+              <span>
+                早上好, Zovven!
+              </span>
+            </div>
+            <ul class="page-stats">
+                <li>
+                    <div class="summary">
+                        <span>未完成事项</span>
+
+                        <h3>
+                            2
+                        </h3>
+                    </div>
+                </li>
+                <li>
+                    <div class="summary">
+                        <span>进行中计划</span>
+
+                        <h3>
+                            11
+                        </h3>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="row row-bg">
+            <div class="col-sm-6 col-md-3">
+                <div class="statbox widget box box-shadow">
+                    <div class="widget-content">
+                        <div class="visual cyan">
+                            <div class="statbox-sparkline">
+                                <span class="glyphicon glyphicon-flash" aria-hidden="true"></span>
+                            </div>
+                        </div>
+                        <div class="title">
+                            本月完成Todo用时
+                        </div>
+                        <div class="value">
+                            4 501
+                        </div>
+                        <a class="more" href="javascript:void(0);">
+                            查看更多
+                            <span class="glyphicon glyphicon-eye-open pull-right" aria-hidden="true"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="statbox widget box box-shadow">
+                    <div class="widget-content">
+                        <div class="visual green">
+                            <div class="statbox-sparkline">
+                                <span class="glyphicon glyphicon-record" aria-hidden="true"></span>
+                            </div>
+                        </div>
+                        <div class="title">
+                            本月已完成计划
+                        </div>
+                        <div class="value">
+                            714
+                        </div>
+                        <a class="more" href="javascript:void(0);">
+                            查看更多
+                            <span class="glyphicon glyphicon-eye-open pull-right" aria-hidden="true"></span>
+
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3 hidden-xs">
+                <div class="statbox widget box box-shadow">
+                    <div class="widget-content">
+                        <div class="visual yellow">
+                            <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
+                        </div>
+                        <div class="title">
+                            总博客文章数
+                        </div>
+                        <div class="value">
+                            $42,512.61
+                        </div>
+                        <a class="more" href="javascript:void(0);">
+                            查看更多
+                            <span class="glyphicon glyphicon-eye-open pull-right" aria-hidden="true"></span>
+
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3 hidden-xs">
+                <div class="statbox widget box box-shadow">
+                    <div class="widget-content">
+                        <div class="visual red">
+                            <span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
+                        </div>
+                        <div class="title">
+                            总图片数
+                        </div>
+                        <div class="value">
+                            0
+                        </div>
+                        <a class="more" href="javascript:void(0);">
+                            查看更多
+                            <span class="glyphicon glyphicon-eye-open pull-right" aria-hidden="true"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="widget box">
@@ -33,27 +147,34 @@
                             <div class="col-md-5">
                                 <ul class="list-group">
                                     <li class="list-group-item list-group-header">
-                                        <span class="badge">5</span>
+                                        <span class="badge">{{ todos|length }}</span>
                                         今日待办事项
                                     </li>
-                                    <li class="list-group-item">Dapibus ac facilisis in</li>
-                                    <li class="list-group-item">Morbi leo risus</li>
-                                    <li class="list-group-item">Porta ac consectetur ac</li>
-                                    <li class="list-group-item">Vestibulum at eros</li>
+                                    {% for todo in todos %}
+                                        <li class="list-group-item">
+                                            <span class="label {{ type_style[todo.todo_type] }}">
+                                                {{ type_dict[todo.todo_type] }}
+                                            </span>{{ todo.todo_desc }}
+                                        </li>
+                                    {% endfor %}
+
                                 </ul>
                                 <ul class="list-group">
                                     <li class="list-group-item list-group-header">
-                                        <span class="badge">5</span>
+                                        <span class="badge">{{ completeds|length }}</span>
                                         今日已经完成待办事项
                                     </li>
-                                    <li class="list-group-item">Dapibus ac facilisis in</li>
-                                    <li class="list-group-item">Morbi leo risus</li>
-                                    <li class="list-group-item">Porta ac consectetur ac</li>
-                                    <li class="list-group-item">Vestibulum at eros</li>
+                                    {% for completed in completeds %}
+                                        <li class="list-group-item">
+                                            <span class="label {{ type_style[completed.todo_type] }}">
+                                                {{ type_dict[completed.todo_type] }}
+                                            </span>{{ completed.todo_desc }}
+                                        </li>
+                                    {% endfor %}
                                 </ul>
                             </div>
                             <div class="col-md-7">
-                                <div id="todo_wrap" style="height:400px"></div>
+                                <div id="todo_wrap" style="height:350px"></div>
                             </div>
                         </div>
                     </div>
@@ -91,6 +212,7 @@
     <script src="{{ url_for('.static', filename = 'assets/js/dashboard.js') }}"></script>
 
     <script>
+
         plan_option = {
             title: {
                 text: '本周计划完成情况',

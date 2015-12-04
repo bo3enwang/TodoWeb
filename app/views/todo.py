@@ -12,6 +12,7 @@ todo = Module(__name__)
 
 
 @todo.route('/json', methods=("post",))
+@login_required
 def todo_json():
     post_data = request.get_json()
     start_date = post_data.get('start_date')
@@ -21,6 +22,7 @@ def todo_json():
 
 
 @todo.route('')
+@login_required
 def todo_list():
     add_form = TodoAddForm()
     complete_form = TodoCompeteForm()
@@ -28,6 +30,7 @@ def todo_list():
 
 
 @todo.route('/add', methods=("post",))
+@login_required
 def todo_add():
     add_form = TodoAddForm()
     if add_form.validate_on_submit():
@@ -42,6 +45,7 @@ def todo_add():
 
 
 @todo.route('/complete', methods=("post",))
+@login_required
 def todo_complete():
     complete_form = TodoCompeteForm()
     if complete_form.validate_on_submit():
@@ -54,6 +58,7 @@ def todo_complete():
 
 
 @todo.route('/api/add', methods=("post",))
+@login_required
 def todo_add_from_plan():
     json_data = request.get_json()
     todo_desc = json_data.get('todo_desc')
@@ -68,6 +73,7 @@ def todo_add_from_plan():
 
 
 @todo.route("/<int:todo_id>/delete/", methods=("post",))
+@login_required
 def todo_delete(todo_id):
     _todo = Todo.query.get_or_404(todo_id)
     db.session.delete(_todo)
@@ -76,12 +82,14 @@ def todo_delete(todo_id):
 
 
 @todo.route('/chart/pie', methods=("post",))
+@login_required
 def todo_chart_json():
     post_data = request.get_json()
     start_date = post_data.get('start_date')
     end_date = post_data.get('end_date')
     rs = db.session.query(Todo.todo_type, func.sum(Todo.todo_time)).filter(
-        and_(Todo.todo_date >= start_date, Todo.todo_date <= end_date)).all()
+        and_(Todo.todo_date >= start_date, Todo.todo_date <= end_date, Todo.todo_status == Todo.STATUS_DONE)).group_by(
+        Todo.todo_type).all()
     type_dict = {
         "0": "计划",
         "1": "紧急",
@@ -90,8 +98,10 @@ def todo_chart_json():
     }
     json_list = list()
     for row in rs:
+        if row[0] is None:
+            continue
         json_dict = dict()
+        json_dict['value'] = long(row[1] or 0)
         json_dict['name'] = type_dict[str(row[0])]
-        json_dict['value'] = long(row[1])
         json_list.append(json_dict)
     return jsonify(success=True, result=json_list)

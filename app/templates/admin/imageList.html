@@ -1,0 +1,153 @@
+{% extends 'admin/base.html' %}
+{% block main_content %}
+    <script>
+        $(document).ready(function () {
+            $("#nav_image").addClass("current");
+        });
+    </script>
+    <div class="container">
+        <div class="crumbs">
+            <ol class="breadcrumb">
+                <li>主页</li>
+                <li class="active">图片</li>
+            </ol>
+        </div>
+        <div class="todo-tool-bar">
+            <div class="todo-tool-right pull-right">
+                <a class="btn btn-sm btn-default" href="/admin/image/add">
+                    新增图片
+                </a>
+            </div>
+        </div>
+        <div class="widget box">
+            <div class="widget-header">
+                <h4><span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>文章</h4>
+            </div>
+            <div class="widget-content">
+                <table id="dataTable" class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th style="width: 18%">图片名</th>
+                        <th style="width: 30%">地址</th>
+                        <th style="width: 22%">创建日期</th>
+                        <th style="width: 6%">类型</th>
+                        <th style="width: 15%">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for image in images %}
+                        <tr>
+                            <td>{{ image.img_name }}</td>
+                            <td><p>{{ image.img_url }}</p></td>
+                            <td>{{ image.upload_date }}</td>
+                            <td>{% if image.type == 0 %}
+                                私有
+                            {% elif image.type ==1 %}
+                                公开
+                            {% endif %} </td>
+                            <td>
+                                <button type="button" class="btn btn-default btn-xs"
+                                        data-imgurl="{{ image.img_url }}"
+                                        data-toggle="modal"
+                                        data-target="#imgView">
+                                    <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span> 预览
+                                </button>
+
+                                <button type="button" class="btn btn-default btn-xs img-delete"
+                                        data-id="{{ image.id }}">
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> 删除
+                                </button>
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="imgView" tabindex="-1" role="dialog" aria-labelledby="imgLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="imgLabel">图片预览</h4>
+                </div>
+                <div class="modal-body">
+                    <img id="modalImage">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascript_cotent %}
+    <script>
+        $(document).ready(function () {
+            $(".img-delete").confirm({
+                text: "确定要删除图片?",
+                title: "删除图片",
+                confirm: function (button) {
+                    var img_id = button.attr("data-id");
+                    $.ajax({
+                        type: 'post',
+                        contentType: "application/json; charset=UTF-8",
+                        url: '/admin/image/' + img_id + '/delete/',
+                        dataType: 'json',
+                        error: function (xhr, err) {
+                            console.log('请求错误' + err + '原因')
+                        },
+                        success: function (data, textStatus) {
+                            if (data.success) {
+                                if (data.redirect_url) {
+                                    window.location.href = data.redirect_url;
+                                } else if (data.reload) {
+                                    window.location.reload();
+                                }
+                            } else {
+                                $.globalMessenger().post({
+                                    message: '删除失败',
+                                    type: 'info',
+                                    showCloseButton: true
+                                });
+                            }
+                        }
+                    });
+                },
+                cancel: function (button) {
+                    // nothing to do
+                },
+                confirmButton: "确定",
+                cancelButton: "取消",
+                post: true,
+                confirmButtonClass: "btn-danger",
+                cancelButtonClass: "btn-default",
+                dialogClass: "modal-dialog modal-xs" // Bootstrap classes for large modal
+            });
+            var table = $('#dataTable').DataTable({
+                "order": [[2, "desc"]],
+                columnDefs: [
+                    {orderable: false, targets: 0},
+                    {orderable: false, targets: 1},
+                    {orderable: false, targets: 3},
+                    {orderable: false, targets: 4}
+                ],
+                "searching": true,//本地搜索
+                "lengthChange": false//是否允许用户自定义显示数量
+            });
+            $('#imgView').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget); // Button that triggered the modal
+                var imgurl = button.data('imgurl'); // Extract info from data-* attributes
+                // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+                // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+                var modal = $(this);
+                modal.find('#modalImage').attr('src', imgurl);
+                modal.find('#modalImage').css('max-width', "99%");
+            });
+        });
+    </script>
+{% endblock %}

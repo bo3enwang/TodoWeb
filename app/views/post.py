@@ -10,11 +10,11 @@ from app import timeutils
 post = Module(__name__)
 
 
-@post.route('/list')
+@post.route('')
 @login_required
 def post_list():
     posts = Post.query.all()
-    return render_template('post/post.html', posts=posts)
+    return render_template('admin/postList.html', posts=posts)
 
 
 @post.route("/<int:post_id>/edit/", methods=("GET", "POST"))
@@ -28,7 +28,7 @@ def post_edit(post_id):
         flash("更新文章成功", "success")
         return redirect(url_for("post.post_list"))
 
-    return render_template('post/edit.html', post=p, form=form, acurl="/admin/post/" + str(post_id) + "/edit/")
+    return render_template('admin/postEdit.html', post=p, form=form, acurl="/admin/post/" + str(post_id) + "/edit/")
 
 
 @post.route("/add", methods=("GET", "POST"))
@@ -42,7 +42,7 @@ def post_add():
         db.session.commit()
         flash("新增文章成功", "success")
         return redirect(url_for("post_list"))
-    return render_template("post/edit.html", form=form, acurl='/admin/post/add')
+    return render_template("admin/postEdit.html", form=form, acurl='/admin/post/add')
 
 
 @post.route("/<int:post_id>/delete/", methods=("POST",))

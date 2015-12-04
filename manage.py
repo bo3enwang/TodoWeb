@@ -74,23 +74,30 @@ def query_todo():
 
 @manager.command
 def complex_query():
-    rs = db.session.query(Todo.todo_type, func.sum(Todo.todo_time)).filter(
-        and_(Todo.todo_date >= "2015-01-01", Todo.todo_date <= "2015-12-01")).all()
-
-    type_dict = {
-        "0": "计划",
-        "1": "紧急",
-        "2": "优先",
-        "3": "普通",
-    }
-    print rs
-    json_list = list()
+    # rs = db.session.query(Todo.todo_type, func.sum(Todo.todo_time)).filter(
+    #     and_(Todo.todo_date >= "2015-12-04", Todo.todo_date <= "2015-12-04",
+    #          Todo.todo_status == Todo.STATUS_DONE)).all()
+    # print rs
+    #
+    # type_dict = {
+    #     "0": "计划",
+    #     "1": "紧急",
+    #     "2": "优先",
+    #     "3": "普通",
+    # }
+    # print rs
+    # json_list = list()
     # for row in rs:
+    #     if row[0] is None:
+    #         continue
     #     json_dict = dict()
-    #     json_dict['value'] = long(row[1])
+    #     json_dict['value'] = long(row[1] or 0)
     #     json_dict['name'] = type_dict[str(row[0])]
     #     json_list.append(json_dict)
     # print json_list
+    _todos = Todo.query.search_date(timeutils.today(), timeutils.today()).filter(
+        Todo.todo_status == Todo.STATUS_NOT_DONE).sort_by_type().all()
+    print len(_todos)
 
 
 if __name__ == '__main__':

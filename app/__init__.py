@@ -18,12 +18,11 @@ DEFAULT_APP_NAME = "app"
 DEFAULT_MODULES = (
     (views.home, ""),
     (views.account, "/admin/account"),
-    (views.post, "/admin/post"),
-    (views.album, "/admin/album"),
     (views.dashboard, "/admin"),
     (views.plan, "/admin/plan"),
     (views.todo, "/admin/todo"),
-
+    (views.post, "/admin/post"),
+    (views.image, "/admin/image"),
 )
 
 

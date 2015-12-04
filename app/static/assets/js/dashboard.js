@@ -11,7 +11,7 @@ todo_option = {
     },
     tooltip: {
         trigger: 'item',
-        formatter: "{a} <br/>{b} : {c} ({d}%)"
+        formatter: "{a} <br/>{b} : {c} min ({d}%)"
     },
     legend: {
         orient: 'vertical',
@@ -42,7 +42,7 @@ todo_option = {
     calculable: true,
     series: [
         {
-            name: '待办完成情况',
+            name: '完成用时',
             type: 'pie',
             radius: '55%',
             center: ['50%', '60%'],
@@ -50,5 +50,5 @@ todo_option = {
         }
     ]
 };
-todo_option.series[0].data = getAjaxData();
+todo_option.series[0].data = getAjaxData(moment().format("YYYY-MM-DD"),moment().format("YYYY-MM-DD"));
 todoChart.setOption(todo_option);

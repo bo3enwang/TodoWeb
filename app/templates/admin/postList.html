@@ -1,0 +1,118 @@
+{% extends 'admin/base.html' %}
+{% block main_content %}
+    <script>
+        $(document).ready(function () {
+            $("#nav_post").addClass("current");
+        });
+    </script>
+    <div class="container">
+        <div class="crumbs">
+            <ol class="breadcrumb">
+                <li>主页</li>
+                <li class="active">文章</li>
+            </ol>
+        </div>
+        <div class="todo-tool-bar">
+            <div class="todo-tool-right pull-right">
+                <a class="btn btn-sm btn-default" href="/admin/post/add">
+                    新增文章
+                </a>
+            </div>
+        </div>
+        <div class="widget box">
+            <div class="widget-header">
+                <h4><span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>文章</h4>
+            </div>
+            <div class="widget-content">
+                <table id="dataTable" class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th style="width: 40%">标题</th>
+                        <th style="width: 20%">创建日期</th>
+                        <th style="width: 25%">标签</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for post in posts %}
+                        <tr>
+                            <td>{{ post.title }}</td>
+                            <td>{{ post.date_created }}</td>
+                            <td>{{ post.tags }}</td>
+                            <td>
+                                <a type="button" class="btn btn-default btn-xs"
+                                   href="{{ url_for('post.post_edit', post_id=post.id) }}">
+                                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 编辑
+                                </a>
+                                <button type="button" class="btn btn-default btn-xs p-delete"
+                                        data-id="{{ post.id }}">
+                                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span> 删除
+                                </button>
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascript_cotent %}
+    <script>
+        function confirmAdd() {
+            $(".p-delete").confirm({
+                text: "确定要删除文章?",
+                title: "删除文章",
+                confirm: function (button) {
+                    var post_id = button.attr("data-id");
+                    $.ajax({
+                        type: 'post',
+                        contentType: "application/json; charset=UTF-8",
+                        url: '/admin/post/' + post_id + '/delete/',
+                        dataType: 'json',
+                        error: function (xhr, err) {
+                            console.log('请求错误' + err + '原因')
+                        },
+                        success: function (data, textStatus) {
+                            if (data.success) {
+                                if (data.redirect_url) {
+                                    window.location.href = data.redirect_url;
+                                } else if (data.reload) {
+                                    window.location.reload();
+                                }
+                            } else {
+                                $.globalMessenger().post({
+                                    message: '删除失败',
+                                    type: 'info',
+                                    showCloseButton: true
+                                });
+                            }
+                        }
+                    });
+                },
+                cancel: function (button) {
+                    // nothing to do
+                },
+                confirmButton: "确定",
+                cancelButton: "取消",
+                post: true,
+                confirmButtonClass: "btn-danger",
+                cancelButtonClass: "btn-default",
+                dialogClass: "modal-dialog modal-xs" // Bootstrap classes for large modal
+            });
+        }
+
+        var table = $('#dataTable').DataTable({
+            "order": [[1, "desc"]],
+            columnDefs: [
+                {orderable: false, targets: 0},
+                {orderable: false, targets: 2},
+                {orderable: false, targets: 3}
+            ],
+            "searching": true,//本地搜索
+            "lengthChange": false//是否允许用户自定义显示数量
+        });
+    </script>
+{% endblock %}

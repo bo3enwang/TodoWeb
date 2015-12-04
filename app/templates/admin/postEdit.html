@@ -1,0 +1,68 @@
+{% extends 'admin/base.html' %}
+{% block style_content %}
+    <link href="{{ url_for('.static', filename = 'css/bootstrap-tagsinput.css') }}" rel="stylesheet">
+{% endblock %}
+{% block main_content %}
+    <script>
+        $(document).ready(function () {
+            $("#nav_post").addClass("current");
+        });
+    </script>
+    <div class="container">
+        <div class="crumbs">
+            <ol class="breadcrumb">
+                <li>主页</li>
+                <li class="active">修改文章</li>
+            </ol>
+        </div>
+        <div class="widget box" style="margin-top: 5px;">
+            <div class="widget-header">
+                <h4><span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>修改文章</h4>
+            </div>
+            <div class="widget-content">
+                <form role="form" action="{{ acurl }}" method="post">
+                    {{ form.hidden_tag() if form.hidden_tag }}
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="title">标题</label>
+                            <input type="text" class="form-control" id="title" name="title" autocomplete="off"
+                                    {% if post %} value="{{ post.title }}"{% endif %}
+                                   placeholder="请输入标题">
+                        </div>
+                        <div class="form-group">
+                            <label for="tags">标签</label>
+                            <input type="text" class="form-control" id="tags" name="tags"
+                                    {% if post %}  value="{{ post.tags }}"  {% endif %} >
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputFile">内容</label>
+                                <textarea id="post_content" name="content" class="form-control" style="resize:none"
+                                          rows="12">{% if post %}{{ post.content }}{% endif %}</textarea>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary">提交</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascript_cotent %}
+    <script src="{{ url_for('.static', filename = 'js/bootstrap-tagsinput.min.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#tags').tagsinput({
+                maxChars: 15,
+                maxTags: 3
+            });
+            var h = $(window).height();
+            var rows = Math.ceil(h / 65);
+            var post_content = $("#post_content");
+            post_content.attr("rows", rows);
+        });
+    </script>
+{% endblock %}

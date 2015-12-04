@@ -22,9 +22,8 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Dashboard</a></li>
-                <li><a href="#">Settings</a></li>
-                <li><a href="#">Profile</a></li>
+                <li><a id="navbar_today"></a></li>
+                <li><a href="/admin/account/logout">退出</a></li>
             </ul>
         </div>
     </div>
@@ -52,14 +51,14 @@
                         计划
                     </a>
                 </li>
-                <li>
-                    <a href="#">
+                <li id="nav_post">
+                    <a href="/admin/post">
                         <span class="glyphicon glyphicon-book" aria-hidden="true"></span>
                         博客文章
                     </a>
                 </li>
-                <li>
-                    <a href="#">
+                <li id="nav_image">
+                    <a href="/admin/image">
                         <span class="glyphicon glyphicon-sunglasses" aria-hidden="true"></span>
                         图片
                     </a>
@@ -91,11 +90,10 @@
             extraClasses: 'messenger-fixed messenger-on-bottom messenger-on-left',
             theme: 'ice'
         };
-    });
-    $(function () {
-        $('[data-toggle="popover"]').popover()
-    });
+        $('[data-toggle="popover"]').popover();
+        $("#navbar_today").text(moment().format("dddd, MMMM Do YYYY"));
 
+    });
 </script>
 {% with messages = get_flashed_messages() %}
     {% if messages %}
