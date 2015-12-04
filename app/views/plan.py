@@ -18,7 +18,7 @@ def plan_list(plan_status='progress'):
         "progress": Plan.STATUS_PROGRESS,
         "finish": Plan.STATUS_FINISH,
     }
-    if not status_num_dict.has_key(plan_status):
+    if plan_status not in status_num_dict:
         return render_template('errors/404.html'), 404
 
     type_dict = {
@@ -51,7 +51,7 @@ def plan_add():
 
 @plan.route("/record", methods=("post",))
 @login_required
-def plan_record():
+def plan_recording():
     record_form = PlanRecordForm()
     if record_form.validate_on_submit():
         _plan = Plan.query.get_or_404(record_form.plan_id.data)

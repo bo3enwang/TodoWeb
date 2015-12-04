@@ -2,11 +2,16 @@
 __author__ = 'Zovven'
 
 import sys
+import os
 import views
-from localconfig import DefaultConfig
+
 from flask import Flask, request, g, jsonify, redirect, url_for, flash, render_template
 from app import views
 
+if 'SERVER_SOFTWARE' in os.environ:
+    from saeconfig import DefaultConfig
+else:
+    from localconfig import DefaultConfig
 
 
 # convert python's encoding to utf8

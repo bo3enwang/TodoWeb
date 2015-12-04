@@ -172,7 +172,5 @@ def get_today_month(n=0):
 
 if __name__ == "__main__":
     print today()
-    print get_day_of_day(20)
-    print get_day_of_day(-3)
-    print get_today_month(-3)
-    print get_today_month(3)
+    print get_firstday_month(-2)
+    print get_lastday_month(-2)

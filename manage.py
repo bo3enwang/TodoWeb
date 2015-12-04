@@ -3,7 +3,7 @@ __author__ = 'Zovven'
 from flask.ext.script import Manager
 from app import create_app
 from app.models import db
-from app.models import User, Project, ProjectHistory, Todo, Post, Tag, post_tags, Album, PlanRecord, Plan
+from app.models import User, Todo, Post, Tag, post_tags, Album, PlanRecord, Plan, Image
 import json
 from app.jsonutil import TimeEncoder, DecimalEncoder
 from flask import jsonify
@@ -98,6 +98,20 @@ def complex_query():
     _todos = Todo.query.search_date(timeutils.today(), timeutils.today()).filter(
         Todo.todo_status == Todo.STATUS_NOT_DONE).sort_by_type().all()
     print len(_todos)
+
+
+@manager.command
+def advanced_query():
+    # month_todo_time = db.session.query(func.sum(Todo.todo_time)).filter(
+    #     and_(Todo.todo_date >= timeutils.get_firstday_month(), Todo.todo_date <= timeutils.get_lastday_month(),
+    #          Todo.todo_status == Todo.STATUS_DONE)).scalar()
+
+    # month_plan = db.session.query(func.count(Plan.id)).filter(
+    #     and_(Plan.plan_end_date >= timeutils.get_firstday_month(), Plan.plan_end_date <= timeutils.get_lastday_month(),
+    #          Plan.plan_status == Plan.STATUS_FINISH)).scalar()
+
+    post_count = db.session.query(func.count(Image.id)).scalar()
+    print post_count
 
 
 if __name__ == '__main__':

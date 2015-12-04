@@ -14,36 +14,6 @@
             </ol>
         </div>
 
-        <div class="page-header">
-            <div class="page-title">
-                <h3>
-                    控制台
-                </h3>
-              <span>
-                早上好, Zovven!
-              </span>
-            </div>
-            <ul class="page-stats">
-                <li>
-                    <div class="summary">
-                        <span>未完成事项</span>
-
-                        <h3>
-                            2
-                        </h3>
-                    </div>
-                </li>
-                <li>
-                    <div class="summary">
-                        <span>进行中计划</span>
-
-                        <h3>
-                            11
-                        </h3>
-                    </div>
-                </li>
-            </ul>
-        </div>
         <div class="row row-bg">
             <div class="col-sm-6 col-md-3">
                 <div class="statbox widget box box-shadow">
@@ -54,12 +24,12 @@
                             </div>
                         </div>
                         <div class="title">
-                            本月完成Todo用时
+                            进行中计划
                         </div>
                         <div class="value">
-                            4 501
+                            {{ overview_data['progress_plan'] }}
                         </div>
-                        <a class="more" href="javascript:void(0);">
+                        <a class="more" href="/admin/plan/status/progress">
                             查看更多
                             <span class="glyphicon glyphicon-eye-open pull-right" aria-hidden="true"></span>
                         </a>
@@ -78,9 +48,9 @@
                             本月已完成计划
                         </div>
                         <div class="value">
-                            714
+                            {{ overview_data['month_finish_plan'] }}
                         </div>
-                        <a class="more" href="javascript:void(0);">
+                        <a class="more" href="/admin/plan/status/finish">
                             查看更多
                             <span class="glyphicon glyphicon-eye-open pull-right" aria-hidden="true"></span>
 
@@ -98,9 +68,9 @@
                             总博客文章数
                         </div>
                         <div class="value">
-                            $42,512.61
+                            {{ overview_data['post_count'] }}
                         </div>
-                        <a class="more" href="javascript:void(0);">
+                        <a class="more" href="/admin/post">
                             查看更多
                             <span class="glyphicon glyphicon-eye-open pull-right" aria-hidden="true"></span>
 
@@ -118,9 +88,9 @@
                             总图片数
                         </div>
                         <div class="value">
-                            0
+                            {{ overview_data['img_count'] }}
                         </div>
-                        <a class="more" href="javascript:void(0);">
+                        <a class="more" href="/admin/image">
                             查看更多
                             <span class="glyphicon glyphicon-eye-open pull-right" aria-hidden="true"></span>
                         </a>
