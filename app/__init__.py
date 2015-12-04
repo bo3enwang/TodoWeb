@@ -52,6 +52,7 @@ def create_app(config=None, app_name=None, modules=None):
     configure_g_user(app)
     register_db(app)
     register_lm(app)
+    register_cache(app)
     return app
 
 
@@ -67,6 +68,11 @@ def configure_app(app, config):
 def configure_modules(app, modules):
     for module, url_prefix in modules:
         app.register_module(module, url_prefix=url_prefix)
+
+
+def register_cache(app):
+    from app.helps import cache
+    cache.init_app(app, config={'CACHE_TYPE': 'memcached'})
 
 
 def register_db(app):

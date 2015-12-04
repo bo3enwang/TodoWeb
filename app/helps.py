@@ -3,8 +3,11 @@ __author__ = 'Zovven'
 
 import re
 from unidecode import unidecode
+from flask.ext.cache import Cache
 
 _punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
+
+cache = Cache()
 
 
 def slugify(text, delim=u'-'):

@@ -5,42 +5,52 @@ from app.models import Todo, Plan, Post, Image, db
 from app import timeutils
 from flask.ext.login import login_required
 from sqlalchemy import func, and_
-# import pylibmc as memcache
+from app.helps import cache
+
+
+def _create_memcache_client():
+    try:
+        import pylibmc
+        return pylibmc.Client()
+    except ImportError:
+        import memcache
+        return memcache.Client(['127.0.0.1:11211'])
+
+
+mem_cache = _create_memcache_client()
 
 dashboard = Module(__name__)
-
-
-# mc = memcache.Client()
 
 
 @dashboard.route("")
 @dashboard.route("/dashboard")
 @login_required
+@cache.cached(60)
 def dashboard_main():
-    if not mc.get('month_finish_plan'):
+    if not mem_cache.get('month_finish_plan'):
         month_finish_plan = db.session.query(func.count(Plan.id)).filter(
             and_(Plan.plan_end_date >= timeutils.get_firstday_month(),
                  Plan.plan_end_date <= timeutils.get_lastday_month(),
                  Plan.plan_status == Plan.STATUS_FINISH)).scalar()
-        mc.set("month_finish_plan", month_finish_plan)
+        mem_cache.set("month_finish_plan", month_finish_plan)
 
-    if not mc.get('progress_plan'):
+    if not mem_cache.get('progress_plan'):
         progress_plan = db.session.query(func.count(Plan.id)).filter(
             Plan.plan_status == Plan.STATUS_PROGRESS).scalar()
-        mc.set("progress_plan", progress_plan)
+        mem_cache.set("progress_plan", progress_plan)
 
-    if not mc.get('post_count'):
+    if not mem_cache.get('post_count'):
         post_count = db.session.query(func.count(Post.id)).scalar()
-        mc.set("post_count", post_count)
+        mem_cache.set("post_count", post_count)
 
-    if not mc.get('img_count'):
+    if not mem_cache.get('img_count'):
         img_count = db.session.query(func.count(Image.id)).scalar()
-        mc.set("img_count", img_count)
+        mem_cache.set("img_count", img_count)
     overview_data = {
-        'progress_plan': mc.get("progress_plan"),
-        'month_finish_plan': mc.get("month_finish_plan"),
-        'post_count': mc.get("post_count"),
-        'img_count': mc.get("img_count"),
+        'progress_plan': mem_cache.get("progress_plan"),
+        'month_finish_plan': mem_cache.get("month_finish_plan"),
+        'post_count': mem_cache.get("post_count"),
+        'img_count': mem_cache.get("img_count"),
     }
     type_dict = {
         Todo.TYPE_PLAN: "计划",

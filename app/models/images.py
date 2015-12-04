@@ -6,7 +6,7 @@ from flask_sqlalchemy import BaseQuery
 from datetime import date, datetime, timedelta
 
 
-class AlbumQuery(BaseQuery):
+class ImageQuery(BaseQuery):
     def sort_by_date(self):
         return self.order_by(Image.upload_date.desc())
 
@@ -21,6 +21,7 @@ class AlbumQuery(BaseQuery):
 
 
 class Image(db.Model):
+    query_class = ImageQuery
     TYPE_PRIVATE = 0
     TYPE_PUBLIC = 1
 
